@@ -43,6 +43,8 @@ const ID: Dict = {
   privacyLabel: "Privasi:",
   privacyBody:
     "file diproses di memori dan tidak disimpan. Yang dikirim ke AI hanya ringkasan statistik (bukan baris data mentah).",
+  previewInsight: "Pendapatan naik tren ~18% per kuartal, dengan lonjakan tiap Desember.",
+  previewBadge: "contoh tampilan",
   capTitle: "Apa yang bisa dilakukan",
   capEda: "EDA & statistik otomatis",
   capClean: "Pembersihan data (kode + AI)",
@@ -352,6 +354,8 @@ const EN: Dict = {
   privacyLabel: "Privacy:",
   privacyBody:
     "files are processed in memory and never stored. Only the statistics summary is sent to the AI (never raw data rows).",
+  previewInsight: "Revenue is trending up ~18% per quarter, with a spike every December.",
+  previewBadge: "preview",
   capTitle: "What it can do",
   capEda: "Automatic EDA & statistics",
   capClean: "Data cleaning (code + AI)",
