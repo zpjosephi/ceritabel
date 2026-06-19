@@ -3,15 +3,25 @@
 import { useCallback, useRef, useState } from "react";
 import { useLang } from "./LanguageProvider";
 
+export interface SampleDataset {
+  file: string; // public path
+  name: string; // download/display name
+  icon: string;
+  labelKey: string;
+  descKey: string;
+}
+
 interface FileUploadProps {
   onFile: (file: File) => void;
-  /** Optional: load a bundled sample dataset instead of uploading. */
-  onSample?: () => void;
+  /** Optional: bundled sample datasets the user can load with one click. */
+  samples?: SampleDataset[];
+  onSample?: (s: SampleDataset) => void;
   disabled?: boolean;
 }
 
 export default function FileUpload({
   onFile,
+  samples,
   onSample,
   disabled = false,
 }: FileUploadProps) {
@@ -107,16 +117,35 @@ export default function FileUpload({
         <p className="mt-3 text-sm text-negative">{localError}</p>
       ) : null}
 
-      {onSample ? (
-        <div className="mt-4 text-center">
-          <button
-            type="button"
-            onClick={onSample}
-            disabled={disabled}
-            className="text-sm text-accent-strong underline-offset-4 hover:underline disabled:opacity-50"
-          >
-            {t("sampleLink")}
-          </button>
+      {samples && samples.length > 0 && onSample ? (
+        <div className="mt-5">
+          <p className="mb-2.5 text-center text-xs uppercase tracking-wider text-muted">
+            {t("sampleTitle")}
+          </p>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+            {samples.map((s) => (
+              <button
+                key={s.file}
+                type="button"
+                onClick={() => onSample(s)}
+                disabled={disabled}
+                className="group flex items-center gap-3 rounded-xl border border-border bg-surface p-3 text-left transition hover:border-accent hover:bg-surface-2 disabled:opacity-50 sm:flex-col sm:items-start sm:gap-1.5"
+              >
+                <span
+                  aria-hidden
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-accent/15 text-lg transition group-hover:bg-accent/25"
+                >
+                  {s.icon}
+                </span>
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-medium text-foreground">
+                    {t(s.labelKey)}
+                  </span>
+                  <span className="block text-xs text-muted">{t(s.descKey)}</span>
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
       ) : null}
     </div>

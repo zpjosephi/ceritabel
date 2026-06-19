@@ -13,7 +13,7 @@ import {
   type CleaningChange,
 } from "@/lib/cleaning";
 import type { AIInsight, ColumnKind, ParsedDataset } from "@/lib/types";
-import FileUpload from "@/components/FileUpload";
+import FileUpload, { type SampleDataset } from "@/components/FileUpload";
 import DatasetOverview from "@/components/DatasetOverview";
 import ColumnSummary from "@/components/ColumnSummary";
 import CorrelationHeatmap from "@/components/CorrelationHeatmap";
@@ -42,6 +42,30 @@ import type { CodegenOptions } from "@/lib/codegen";
 import { DEFAULT_MODEL_ID } from "@/lib/config";
 
 type Stage = "upload" | "analyzing" | "sheets" | "result";
+
+const SAMPLES: SampleDataset[] = [
+  {
+    file: "/sample-data.csv",
+    name: "contoh-siswa.csv",
+    icon: "📋",
+    labelKey: "sampleCross",
+    descKey: "sampleCrossDesc",
+  },
+  {
+    file: "/contoh-timeseries.csv",
+    name: "contoh-timeseries.csv",
+    icon: "📈",
+    labelKey: "sampleTs",
+    descKey: "sampleTsDesc",
+  },
+  {
+    file: "/contoh-panel.csv",
+    name: "contoh-panel.csv",
+    icon: "📊",
+    labelKey: "samplePanel",
+    descKey: "samplePanelDesc",
+  },
+];
 
 /** Guess a sensible default dependent variable for regression. */
 function guessTarget(names: string[]): string {
@@ -189,22 +213,25 @@ export default function AnalyzePage() {
     [startWith, t],
   );
 
-  const handleSample = useCallback(async () => {
-    setParseError(null);
-    setFileName("contoh-data.csv");
-    setStage("analyzing");
-    try {
-      const res = await fetch("/sample-data.csv");
-      const text = await res.text();
-      const file = new File([text], "contoh-data.csv", { type: "text/csv" });
-      const result = await parseUpload(file);
-      setExportMeta({ fileName: "contoh-data.csv", isExcel: false });
-      startWith(result.sheets[0].dataset);
-    } catch {
-      setStage("upload");
-      setParseError(t("sampleFail"));
-    }
-  }, [startWith, t]);
+  const handleSample = useCallback(
+    async (s: SampleDataset) => {
+      setParseError(null);
+      setFileName(s.name);
+      setStage("analyzing");
+      try {
+        const res = await fetch(s.file);
+        const text = await res.text();
+        const file = new File([text], s.name, { type: "text/csv" });
+        const result = await parseUpload(file);
+        setExportMeta({ fileName: s.name, isExcel: false });
+        startWith(result.sheets[0].dataset);
+      } catch {
+        setStage("upload");
+        setParseError(t("sampleFail"));
+      }
+    },
+    [startWith, t],
+  );
 
   const pickSheet = (sheet: SheetData) => {
     setFileName(sheet.name);
@@ -306,7 +333,11 @@ export default function AnalyzePage() {
           <div className="mx-auto max-w-2xl py-10">
             <h1 className="mb-2 text-2xl font-semibold">{t("uploadTitle")}</h1>
             <p className="mb-6 text-muted">{t("uploadDesc")}</p>
-            <FileUpload onFile={handleFile} onSample={handleSample} />
+            <FileUpload
+              onFile={handleFile}
+              samples={SAMPLES}
+              onSample={handleSample}
+            />
             {parseError ? (
               <p className="mt-4 text-sm text-negative">{parseError}</p>
             ) : null}

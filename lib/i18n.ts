@@ -91,6 +91,13 @@ const ID: Dict = {
   errSize: "Ukuran file maksimal 25 MB.",
   excelNoData: "File Excel tidak punya sheet berisi data.",
   sampleLink: "atau coba dengan data contoh →",
+  sampleTitle: "atau coba dengan data contoh",
+  sampleCross: "Nilai siswa",
+  sampleCrossDesc: "cross-sectional",
+  sampleTs: "Penjualan bulanan",
+  sampleTsDesc: "time series",
+  samplePanel: "GDP ASEAN",
+  samplePanelDesc: "panel · negara × tahun",
 
   // sections
   secHighlights: "Sorotan",
@@ -383,6 +390,13 @@ const EN: Dict = {
   errSize: "Maximum file size is 25 MB.",
   excelNoData: "The Excel file has no sheets with data.",
   sampleLink: "or try with sample data →",
+  sampleTitle: "or try a sample dataset",
+  sampleCross: "Student scores",
+  sampleCrossDesc: "cross-sectional",
+  sampleTs: "Monthly sales",
+  sampleTsDesc: "time series",
+  samplePanel: "ASEAN GDP",
+  samplePanelDesc: "panel · country × year",
 
   secHighlights: "Highlights",
   secHighlightsHint: "Quick at-a-glance summary",
