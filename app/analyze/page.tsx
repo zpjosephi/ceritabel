@@ -540,7 +540,8 @@ function Results({
 
   return (
     <div className="space-y-5">
-      {/* Data shape — one global control above everything */}
+      {/* Global scope controls (shape + variables) — they affect every tab,
+          so they live above the tabs where they're always discoverable. */}
       <div className="rounded-xl border border-border bg-surface p-4">
         <ShapeSelector
           value={shape}
@@ -548,6 +549,23 @@ function Results({
           onChange={setShapeOverride}
         />
       </div>
+
+      {baseColumns.length > 1 ? (
+        <div>
+          <div className="mb-1.5 flex flex-wrap items-center gap-x-2 px-1">
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted">
+              {t("secVars")}
+            </span>
+            <span className="text-xs text-muted/70">{t("secVarsHint")}</span>
+          </div>
+          <ColumnSelector
+            columns={baseColumns}
+            excluded={excluded}
+            onToggle={onToggleColumn}
+            onUseAll={onUseAllColumns}
+          />
+        </div>
+      ) : null}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_380px]">
         {/* LEFT: tabbed content (progressive disclosure — one group at a time) */}
@@ -700,17 +718,6 @@ function Results({
             {/* ---------- Data & cleaning ---------- */}
             {tab === "data" ? (
               <>
-                {baseColumns.length > 1 ? (
-                  <section>
-                    <SectionTitle hint={t("secVarsHint")}>{t("secVars")}</SectionTitle>
-                    <ColumnSelector
-                      columns={baseColumns}
-                      excluded={excluded}
-                      onToggle={onToggleColumn}
-                      onUseAll={onUseAllColumns}
-                    />
-                  </section>
-                ) : null}
                 <section>
                   <SectionTitle hint={t("secQualityHint")}>
                     {t("secQuality")}
