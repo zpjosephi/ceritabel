@@ -1,26 +1,67 @@
 @import "tailwindcss";
 
+/*
+  ceritabel — dark dashboard theme, single violet accent.
+  Dark mode is the DEFAULT (no prefers-color-scheme toggle); the whole app
+  is designed around a dark data-dashboard aesthetic.
+*/
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0f;       /* near-black canvas */
+  --surface: #14141c;          /* cards / panels */
+  --surface-2: #1c1c27;        /* nested surfaces, table headers */
+  --border: #2a2a38;           /* hairline borders */
+  --foreground: #ededf2;       /* primary text */
+  --muted: #9a9aab;            /* secondary text */
+  --accent: #7c5cfc;           /* the single accent */
+  --accent-soft: #7c5cfc22;    /* accent tint for backgrounds */
+  --accent-strong: #9a80ff;    /* hover / emphasis */
+  --positive: #34d399;
+  --negative: #fb7185;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-positive: var(--positive);
+  --color-negative: var(--negative);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: dark;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle accent glow used behind hero / headings */
+.glow-accent {
+  background:
+    radial-gradient(60rem 30rem at 50% -10%, var(--accent-soft), transparent 70%);
+}
+
+/* Thin custom scrollbar to match the dashboard feel */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
 }
