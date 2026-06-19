@@ -186,11 +186,12 @@ export default function AnalyzePage() {
       setBaseDataset(ds);
       setActions([]);
       setExcluded(new Set());
+      setInsight(null); // AI insight is opt-in (manual) to save quota
+      setAiError(null);
+      setInsightStale(false);
       setStage("result");
-      // Initial analysis has no cleaning actions yet.
-      fetchInsight(analyzeDataset(ds), modelId);
     },
-    [fetchInsight, modelId],
+    [],
   );
 
   const handleFile = useCallback(
@@ -297,7 +298,8 @@ export default function AnalyzePage() {
 
   const handleModelChange = (id: string) => {
     setModelId(id);
-    if (analysis) fetchInsight(analysis, id);
+    // Only regenerate if the user has already opted into AI (insight exists).
+    if (analysis && insight) fetchInsight(analysis, id);
   };
   const refreshInsight = () => {
     if (analysis) fetchInsight(analysis, modelId);

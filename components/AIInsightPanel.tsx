@@ -52,6 +52,18 @@ export default function AIInsightPanel({
         </div>
       ) : null}
 
+      {!loading && !error && !insight ? (
+        <div className="py-2">
+          <p className="mb-3 text-sm text-muted">{t("aiIdleDesc")}</p>
+          <button
+            onClick={onRetry}
+            className="w-full rounded-lg bg-gradient-to-r from-accent to-accent-strong px-3 py-2.5 text-sm font-semibold text-white shadow-lg shadow-accent/20 transition hover:brightness-110"
+          >
+            {t("aiGenerate")}
+          </button>
+        </div>
+      ) : null}
+
       {loading ? <LoadingState /> : null}
 
       {!loading && error ? (
