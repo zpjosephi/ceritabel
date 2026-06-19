@@ -21,10 +21,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Body bukan JSON yang valid." }, { status: 400 });
   }
 
-  const { message, email, page } = (body ?? {}) as {
+  const { message, email, page, category, mood } = (body ?? {}) as {
     message?: string;
     email?: string;
     page?: string;
+    category?: string;
+    mood?: string;
   };
 
   if (!message || typeof message !== "string" || !message.trim()) {
@@ -45,6 +47,9 @@ export async function POST(req: Request) {
   const from =
     typeof email === "string" && email.trim() ? email.trim().slice(0, 200) : "anonim";
   const where = typeof page === "string" ? page.slice(0, 200) : "";
+  const cat = typeof category === "string" ? category.slice(0, 40) : "";
+  const moodStr = typeof mood === "string" ? mood.slice(0, 16) : "";
+  const title = `${moodStr ? moodStr + " " : ""}💬 Feedback baru${cat ? ` · ${cat}` : ""}`;
 
   try {
     const res = await fetch(webhook, {
@@ -54,7 +59,7 @@ export async function POST(req: Request) {
         username: "ceritabel feedback",
         embeds: [
           {
-            title: "💬 Feedback baru",
+            title: title.slice(0, 250),
             description: message.trim().slice(0, 1500),
             color: 0x7c5cfc,
             fields: [
