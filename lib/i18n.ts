@@ -100,6 +100,12 @@ const ID: Dict = {
   samplePanelDesc: "panel · negara × tahun",
 
   // sections
+  tabOverview: "Ringkasan",
+  tabCharts: "Grafik",
+  tabTests: "Uji & Model",
+  tabData: "Data & Bersihkan",
+  tabExport: "Export",
+  tabTestsEmpty: "Butuh ≥ 2 kolom numerik untuk uji & regresi.",
   secHighlights: "Sorotan",
   secHighlightsHint: "Ringkasan cepat sekali lihat",
   hlShape: "Bentuk data",
@@ -398,6 +404,12 @@ const EN: Dict = {
   samplePanel: "ASEAN GDP",
   samplePanelDesc: "panel · country × year",
 
+  tabOverview: "Overview",
+  tabCharts: "Charts",
+  tabTests: "Tests & models",
+  tabData: "Data & cleaning",
+  tabExport: "Export",
+  tabTestsEmpty: "Need ≥ 2 numeric columns for tests & regression.",
   secHighlights: "Highlights",
   secHighlightsHint: "Quick at-a-glance summary",
   hlShape: "Data shape",

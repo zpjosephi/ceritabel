@@ -67,6 +67,15 @@ const SAMPLES: SampleDataset[] = [
   },
 ];
 
+const RESULT_TABS = [
+  { id: "overview", icon: "📌", label: "tabOverview" },
+  { id: "charts", icon: "📊", label: "tabCharts" },
+  { id: "tests", icon: "🧪", label: "tabTests" },
+  { id: "data", icon: "🧹", label: "tabData" },
+  { id: "export", icon: "⬇️", label: "tabExport" },
+] as const;
+type TabId = (typeof RESULT_TABS)[number]["id"];
+
 /** Guess a sensible default dependent variable for regression. */
 function guessTarget(names: string[]): string {
   const re = /value|price|harga|target|sales|revenue|gdp|score|rating|salary|gaji/i;
@@ -476,6 +485,7 @@ function Results({
   const detected = useMemo(() => detectShape(dataset, analysis), [dataset, analysis]);
   const [shapeOverride, setShapeOverride] = useState<DataShape | null>(null);
   const shape = shapeOverride ?? detected.shape;
+  const [tab, setTab] = useState<TabId>("overview");
 
   // Sensible defaults when a shape is forced but wasn't auto-detected.
   const firstCategorical =
@@ -524,172 +534,231 @@ function Results({
     severity: i.severity,
   }));
 
+  const hasNumeric2 = numericFields.length >= 2;
+
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_380px]">
-      {/* LEFT: statistics */}
-      <div className="min-w-0 space-y-8">
-        <div className="rounded-xl border border-border bg-surface p-4">
-          <ShapeSelector
-            value={shape}
-            detected={detected.shape}
-            onChange={setShapeOverride}
-          />
-        </div>
-
-        <section>
-          <SectionTitle hint={t("secHighlightsHint")}>
-            {t("secHighlights")}
-          </SectionTitle>
-          <SummaryCard analysis={analysis} shape={shape} quality={qualityReport} />
-        </section>
-
-        <section>
-          <SectionTitle hint={fileName}>{t("secDataset")}</SectionTitle>
-          <DatasetOverview analysis={analysis} />
-        </section>
-
-        {baseColumns.length > 1 ? (
-          <section>
-            <SectionTitle hint={t("secVarsHint")}>{t("secVars")}</SectionTitle>
-            <ColumnSelector
-              columns={baseColumns}
-              excluded={excluded}
-              onToggle={onToggleColumn}
-              onUseAll={onUseAllColumns}
-            />
-          </section>
-        ) : null}
-
-        <section>
-          <SectionTitle hint={t("secPreviewHint")}>{t("secPreview")}</SectionTitle>
-          <DataPreview dataset={dataset} fileName={fileName} />
-        </section>
-
-        <section>
-          <SectionTitle hint={t("secQualityHint")}>
-            {t("secQuality")}
-          </SectionTitle>
-          <div className="space-y-3">
-            <CleaningBar
-              changes={changes}
-              recommendedCount={recommendedCount}
-              onAuto={onAuto}
-              onUndo={onUndo}
-              onReset={onReset}
-            />
-            <DataQualityPanel report={qualityReport} onAction={onAction} />
-            <CleanAdvisor
-              summary={analysis.summary}
-              problems={problems}
-              modelId={modelId}
-              onApply={onApplyActions}
-            />
-          </div>
-        </section>
-
-        {shape === "panel" ? (
-          <section>
-            <SectionTitle hint={t("secPanelHint")}>{t("secPanel")}</SectionTitle>
-            <PanelAnalysis
-              key={`${panelEntity}|${panelTime}`}
-              dataset={dataset}
-              analysis={analysis}
-              entityCol={panelEntity}
-              timeCol={panelTime}
-            />
-          </section>
-        ) : null}
-
-        {shape === "timeseries" ? (
-          <section>
-            <SectionTitle hint={t("secTsHint")}>{t("secTs")}</SectionTitle>
-            <TimeSeriesAnalysis
-              key={tsTime}
-              dataset={dataset}
-              analysis={analysis}
-              timeCol={tsTime}
-            />
-          </section>
-        ) : null}
-
-        {numericFields.length >= 2 ? (
-          <section>
-            <SectionTitle hint={t("secCorrHint")}>{t("secCorr")}</SectionTitle>
-            <Card>
-              <CorrelationHeatmap cm={analysis.correlation} />
-            </Card>
-          </section>
-        ) : null}
-
-        {numericFields.length >= 2 ? (
-          <section>
-            <SectionTitle hint={t("secScatterHint")}>
-              {t("secScatter")}
-            </SectionTitle>
-            <Card>
-              <ScatterPlot dataset={dataset} numericFields={numericFields} />
-            </Card>
-          </section>
-        ) : null}
-
-        {analysis.columns.length >= 2 ? (
-          <section>
-            <SectionTitle hint={t("secHypoHint")}>{t("secHypo")}</SectionTitle>
-            <HypothesisTest
-              key={analysis.columns.map((c) => c.name).join("|")}
-              dataset={dataset}
-              columns={analysis.columns.map((c) => ({
-                name: c.name,
-                type: c.type,
-              }))}
-              modelId={modelId}
-            />
-          </section>
-        ) : null}
-
-        {numericFields.length >= 2 ? (
-          <section>
-            <SectionTitle hint={t("secRegHint")}>{t("secReg")}</SectionTitle>
-            <MultipleRegression
-              dataset={dataset}
-              numericCols={numericFields}
-              target={regTarget}
-              onTargetChange={setRegTargetOverride}
-              modelId={modelId}
-              panelEntity={shape === "panel" ? panelEntity : undefined}
-              panelTime={shape === "panel" ? panelTime : undefined}
-            />
-          </section>
-        ) : null}
-
-        <section>
-          <SectionTitle hint={t("secColumnsHint", { n: analysis.columnCount })}>
-            {t("secColumns")}
-          </SectionTitle>
-          <ColumnSummary analysis={analysis} dataset={dataset} />
-        </section>
-
-        <section>
-          <SectionTitle hint={t("secExportHint")}>{t("secExport")}</SectionTitle>
-          <ExportPanel opts={codegenOpts} />
-        </section>
+    <div className="space-y-5">
+      {/* Data shape — one global control above everything */}
+      <div className="rounded-xl border border-border bg-surface p-4">
+        <ShapeSelector
+          value={shape}
+          detected={detected.shape}
+          onChange={setShapeOverride}
+        />
       </div>
 
-      {/* RIGHT: AI panel — sticky with its OWN scroll on desktop, so reading
-          the insight/chat never scrolls the charts (and chat never gets cut
-          off). On mobile it just stacks below the stats. */}
-      <div className="space-y-6 lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:self-start lg:overflow-y-auto lg:pr-1">
-        <AIInsightPanel
-          insight={insight}
-          loading={aiLoading}
-          error={aiError}
-          stale={insightStale}
-          onRetry={onRetry}
-          onRefresh={onRefresh}
-          modelId={modelId}
-          onModelChange={onModelChange}
-        />
-        <ChatPanel summary={analysis.summary} modelId={modelId} />
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_380px]">
+        {/* LEFT: tabbed content (progressive disclosure — one group at a time) */}
+        <div className="min-w-0">
+          <div
+            role="tablist"
+            className="mb-6 flex gap-1 overflow-x-auto border-b border-border"
+          >
+            {RESULT_TABS.map((tb) => (
+              <button
+                key={tb.id}
+                role="tab"
+                aria-selected={tab === tb.id}
+                onClick={() => setTab(tb.id)}
+                className={`flex shrink-0 items-center gap-1.5 border-b-2 px-3.5 py-2.5 text-sm font-medium transition ${
+                  tab === tb.id
+                    ? "border-accent text-foreground"
+                    : "border-transparent text-muted hover:text-foreground"
+                }`}
+              >
+                <span aria-hidden>{tb.icon}</span>
+                {t(tb.label)}
+              </button>
+            ))}
+          </div>
+
+          <div className="space-y-8">
+            {/* ---------- Overview ---------- */}
+            {tab === "overview" ? (
+              <>
+                <section>
+                  <SectionTitle hint={t("secHighlightsHint")}>
+                    {t("secHighlights")}
+                  </SectionTitle>
+                  <SummaryCard
+                    analysis={analysis}
+                    shape={shape}
+                    quality={qualityReport}
+                  />
+                </section>
+                <section>
+                  <SectionTitle hint={fileName}>{t("secDataset")}</SectionTitle>
+                  <DatasetOverview analysis={analysis} />
+                </section>
+                <section>
+                  <SectionTitle hint={t("secPreviewHint")}>
+                    {t("secPreview")}
+                  </SectionTitle>
+                  <DataPreview dataset={dataset} fileName={fileName} />
+                </section>
+              </>
+            ) : null}
+
+            {/* ---------- Charts ---------- */}
+            {tab === "charts" ? (
+              <>
+                {shape === "panel" ? (
+                  <section>
+                    <SectionTitle hint={t("secPanelHint")}>
+                      {t("secPanel")}
+                    </SectionTitle>
+                    <PanelAnalysis
+                      key={`${panelEntity}|${panelTime}`}
+                      dataset={dataset}
+                      analysis={analysis}
+                      entityCol={panelEntity}
+                      timeCol={panelTime}
+                    />
+                  </section>
+                ) : null}
+                {shape === "timeseries" ? (
+                  <section>
+                    <SectionTitle hint={t("secTsHint")}>{t("secTs")}</SectionTitle>
+                    <TimeSeriesAnalysis
+                      key={tsTime}
+                      dataset={dataset}
+                      analysis={analysis}
+                      timeCol={tsTime}
+                    />
+                  </section>
+                ) : null}
+                {hasNumeric2 ? (
+                  <section>
+                    <SectionTitle hint={t("secCorrHint")}>
+                      {t("secCorr")}
+                    </SectionTitle>
+                    <Card>
+                      <CorrelationHeatmap cm={analysis.correlation} />
+                    </Card>
+                  </section>
+                ) : null}
+                {hasNumeric2 ? (
+                  <section>
+                    <SectionTitle hint={t("secScatterHint")}>
+                      {t("secScatter")}
+                    </SectionTitle>
+                    <Card>
+                      <ScatterPlot dataset={dataset} numericFields={numericFields} />
+                    </Card>
+                  </section>
+                ) : null}
+                <section>
+                  <SectionTitle hint={t("secColumnsHint", { n: analysis.columnCount })}>
+                    {t("secColumns")}
+                  </SectionTitle>
+                  <ColumnSummary analysis={analysis} dataset={dataset} />
+                </section>
+              </>
+            ) : null}
+
+            {/* ---------- Tests & models ---------- */}
+            {tab === "tests" ? (
+              <>
+                {analysis.columns.length >= 2 ? (
+                  <section>
+                    <SectionTitle hint={t("secHypoHint")}>
+                      {t("secHypo")}
+                    </SectionTitle>
+                    <HypothesisTest
+                      key={analysis.columns.map((c) => c.name).join("|")}
+                      dataset={dataset}
+                      columns={analysis.columns.map((c) => ({
+                        name: c.name,
+                        type: c.type,
+                      }))}
+                      modelId={modelId}
+                    />
+                  </section>
+                ) : null}
+                {hasNumeric2 ? (
+                  <section>
+                    <SectionTitle hint={t("secRegHint")}>{t("secReg")}</SectionTitle>
+                    <MultipleRegression
+                      dataset={dataset}
+                      numericCols={numericFields}
+                      target={regTarget}
+                      onTargetChange={setRegTargetOverride}
+                      modelId={modelId}
+                      panelEntity={shape === "panel" ? panelEntity : undefined}
+                      panelTime={shape === "panel" ? panelTime : undefined}
+                    />
+                  </section>
+                ) : null}
+                {!hasNumeric2 && analysis.columns.length < 2 ? (
+                  <p className="text-sm text-muted">{t("tabTestsEmpty")}</p>
+                ) : null}
+              </>
+            ) : null}
+
+            {/* ---------- Data & cleaning ---------- */}
+            {tab === "data" ? (
+              <>
+                {baseColumns.length > 1 ? (
+                  <section>
+                    <SectionTitle hint={t("secVarsHint")}>{t("secVars")}</SectionTitle>
+                    <ColumnSelector
+                      columns={baseColumns}
+                      excluded={excluded}
+                      onToggle={onToggleColumn}
+                      onUseAll={onUseAllColumns}
+                    />
+                  </section>
+                ) : null}
+                <section>
+                  <SectionTitle hint={t("secQualityHint")}>
+                    {t("secQuality")}
+                  </SectionTitle>
+                  <div className="space-y-3">
+                    <CleaningBar
+                      changes={changes}
+                      recommendedCount={recommendedCount}
+                      onAuto={onAuto}
+                      onUndo={onUndo}
+                      onReset={onReset}
+                    />
+                    <DataQualityPanel report={qualityReport} onAction={onAction} />
+                    <CleanAdvisor
+                      summary={analysis.summary}
+                      problems={problems}
+                      modelId={modelId}
+                      onApply={onApplyActions}
+                    />
+                  </div>
+                </section>
+              </>
+            ) : null}
+
+            {/* ---------- Export ---------- */}
+            {tab === "export" ? (
+              <section>
+                <SectionTitle hint={t("secExportHint")}>
+                  {t("secExport")}
+                </SectionTitle>
+                <ExportPanel opts={codegenOpts} />
+              </section>
+            ) : null}
+          </div>
+        </div>
+
+        {/* RIGHT: AI panel — persistent across tabs so there's always context. */}
+        <div className="space-y-6 lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:self-start lg:overflow-y-auto lg:pr-1">
+          <AIInsightPanel
+            insight={insight}
+            loading={aiLoading}
+            error={aiError}
+            stale={insightStale}
+            onRetry={onRetry}
+            onRefresh={onRefresh}
+            modelId={modelId}
+            onModelChange={onModelChange}
+          />
+          <ChatPanel summary={analysis.summary} modelId={modelId} />
+        </div>
       </div>
     </div>
   );
