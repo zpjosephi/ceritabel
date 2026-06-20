@@ -1,12 +1,13 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import type { Icon } from "@phosphor-icons/react";
 import { useLang } from "./LanguageProvider";
 
 export interface SampleDataset {
   file: string; // public path
   name: string; // download/display name
-  icon: string;
+  Icon: Icon;
   labelKey: string;
   descKey: string;
 }
@@ -110,7 +111,7 @@ export default function FileUpload({
           {t("dropTitle")}
         </p>
         <p className="mt-1 text-sm text-muted">{t("dropOr")}</p>
-        <p className="mt-3 text-xs text-muted/70">{t("dropPrivacy")}</p>
+        <p className="mt-3 text-xs text-muted">{t("dropPrivacy")}</p>
       </div>
 
       {localError ? (
@@ -133,9 +134,9 @@ export default function FileUpload({
               >
                 <span
                   aria-hidden
-                  className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-accent/15 text-lg transition group-hover:bg-accent/25"
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-accent/15 text-accent transition group-hover:bg-accent/25"
                 >
-                  {s.icon}
+                  <s.Icon size={18} weight="duotone" />
                 </span>
                 <span className="min-w-0">
                   <span className="block truncate text-sm font-medium text-foreground">

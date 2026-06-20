@@ -31,14 +31,14 @@ export default function ShapeSelector({
             aria-pressed={value === s}
             className={`relative rounded-md px-3 py-1 font-medium transition ${
               value === s
-                ? "bg-accent text-white"
+                ? "bg-accent text-accent-ink"
                 : "text-muted hover:text-foreground"
             }`}
           >
             {t(LABEL[s])}
             {detected === s ? (
               <span
-                className={`ml-1 text-[10px] ${value === s ? "text-white/70" : "text-accent-strong"}`}
+                className={`ml-1 text-[10px] ${value === s ? "text-accent-ink/70" : "text-accent-strong"}`}
               >
                 ({t("shapeAuto")})
               </span>

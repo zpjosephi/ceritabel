@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { TrendUp, TrendDown, ArrowRight } from "@phosphor-icons/react";
 import {
   CartesianGrid,
   Line,
@@ -16,8 +17,7 @@ import type { FullAnalysis } from "@/lib/stats";
 import type { ParsedDataset } from "@/lib/types";
 import { Card, Badge } from "./ui";
 import { useLang } from "./LanguageProvider";
-
-const ACCENT = "#7c5cfc";
+import { useAccentColors } from "./AccentPicker";
 
 export default function TimeSeriesAnalysis({
   dataset,
@@ -28,6 +28,7 @@ export default function TimeSeriesAnalysis({
   analysis: FullAnalysis;
   timeCol: string;
 }) {
+  const { accent: ACCENT, strong: ACCENT_STRONG } = useAccentColors();
   const { t } = useLang();
   const numericCols = analysis.numericStats
     .map((s) => s.name)
@@ -67,12 +68,21 @@ export default function TimeSeriesAnalysis({
         </label>
         {result ? (
           <Badge tone={result.trend === "flat" ? "neutral" : "accent"}>
-            {t("tsTrend")}:{" "}
-            {result.trend === "up"
-              ? `↗ ${t("tsUp")}`
-              : result.trend === "down"
-                ? `↘ ${t("tsDown")}`
-                : `→ ${t("tsFlat")}`}
+            <span className="inline-flex items-center gap-1">
+              {result.trend === "up" ? (
+                <TrendUp size={13} weight="bold" aria-hidden />
+              ) : result.trend === "down" ? (
+                <TrendDown size={13} weight="bold" aria-hidden />
+              ) : (
+                <ArrowRight size={13} weight="bold" aria-hidden />
+              )}
+              {t("tsTrend")}:{" "}
+              {result.trend === "up"
+                ? t("tsUp")
+                : result.trend === "down"
+                  ? t("tsDown")
+                  : t("tsFlat")}
+            </span>
           </Badge>
         ) : null}
       </div>
@@ -121,7 +131,7 @@ export default function TimeSeriesAnalysis({
                 type="monotone"
                 dataKey="ma"
                 name={t("tsMa", { n: result.maWindow })}
-                stroke="#9a80ff"
+                stroke={ACCENT_STRONG}
                 strokeWidth={1.5}
                 strokeDasharray="4 3"
                 dot={false}

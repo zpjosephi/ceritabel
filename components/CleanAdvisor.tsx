@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Sparkle } from "@phosphor-icons/react";
 import type { CleaningAction } from "@/lib/cleaning";
 import type { AdviceProblem } from "@/lib/prompt";
 import type { StatsSummary } from "@/lib/types";
@@ -100,7 +101,12 @@ export default function CleanAdvisor({
   return (
     <Card className="border-accent/30 bg-gradient-to-b from-accent/[0.07] to-surface">
       <div className="flex flex-wrap items-center gap-2">
-        <span aria-hidden className="text-base">🤖</span>
+        <Sparkle
+          aria-hidden
+          weight="duotone"
+          className="text-accent-strong"
+          size={16}
+        />
         <h3 className="text-sm font-semibold text-foreground">
           {t("advTitle")}
         </h3>
@@ -108,7 +114,7 @@ export default function CleanAdvisor({
           <button
             onClick={requestAdvice}
             disabled={status === "loading" || noProblems}
-            className="ml-auto rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-white transition hover:bg-accent-strong disabled:opacity-40"
+            className="ml-auto rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-accent-ink transition hover:bg-accent-strong disabled:opacity-40"
             title={noProblems ? t("advNoProblems") : undefined}
           >
             {status === "loading" ? t("advAnalyzing") : t("advAsk")}
@@ -129,7 +135,7 @@ export default function CleanAdvisor({
       {status === "done" ? (
         <div className="mt-4 space-y-3">
           {aiSummary ? (
-            <p className="rounded-lg border-l-2 border-accent/50 bg-surface-2/40 px-3 py-2 text-sm text-foreground/90">
+            <p className="rounded-lg border border-accent/20 bg-accent/[0.06] px-3.5 py-2.5 text-sm text-foreground/90">
               {aiSummary}
             </p>
           ) : null}
@@ -154,7 +160,7 @@ export default function CleanAdvisor({
                           return next;
                         })
                       }
-                      className="mt-1 accent-[#7c5cfc]"
+                      className="mt-1 accent-[var(--accent)]"
                     />
                     <div className="min-w-0 flex-1">
                       <div className="text-sm font-medium text-foreground">
@@ -172,7 +178,7 @@ export default function CleanAdvisor({
                 <button
                   onClick={applySelected}
                   disabled={selectedCount === 0}
-                  className="rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-white transition hover:bg-accent-strong disabled:opacity-40"
+                  className="rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-accent-ink transition hover:bg-accent-strong disabled:opacity-40"
                 >
                   {t("advApply", { n: selectedCount })}
                 </button>

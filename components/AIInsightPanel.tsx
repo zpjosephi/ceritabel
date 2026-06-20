@@ -1,5 +1,6 @@
 "use client";
 
+import { Sparkle } from "@phosphor-icons/react";
 import type { AIInsight } from "@/lib/types";
 import ModelPicker from "./ModelPicker";
 import { useLang } from "./LanguageProvider";
@@ -27,7 +28,12 @@ export default function AIInsightPanel({
   return (
     <div className="rounded-xl border border-accent/30 bg-gradient-to-b from-accent/10 to-surface p-5">
       <div className="mb-4 flex items-center gap-2">
-        <span aria-hidden className="text-lg">🤖</span>
+        <Sparkle
+          aria-hidden
+          weight="duotone"
+          className="text-accent-strong"
+          size={18}
+        />
         <h2 className="font-semibold text-foreground">{t("aiInsight")}</h2>
         <div className="ml-auto">
           <ModelPicker
@@ -57,8 +63,9 @@ export default function AIInsightPanel({
           <p className="mb-3 text-sm text-muted">{t("aiIdleDesc")}</p>
           <button
             onClick={onRetry}
-            className="w-full rounded-lg bg-gradient-to-r from-accent to-accent-strong px-3 py-2.5 text-sm font-semibold text-white shadow-lg shadow-accent/20 transition hover:brightness-110"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-3 py-2.5 text-sm font-semibold text-accent-ink shadow-[0_8px_24px_-6px_var(--accent-glow)] transition duration-200 hover:bg-accent-strong active:scale-[0.99]"
           >
+            <Sparkle weight="fill" size={16} aria-hidden />
             {t("aiGenerate")}
           </button>
         </div>
@@ -71,7 +78,7 @@ export default function AIInsightPanel({
           <p className="text-sm text-negative">{error}</p>
           <button
             onClick={onRetry}
-            className="rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-white hover:bg-accent-strong"
+            className="rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-accent-ink hover:bg-accent-strong"
           >
             {t("tryAgain")}
           </button>
@@ -124,8 +131,8 @@ function InsightBody({ insight }: { insight: AIInsight }) {
       {insight.summary ? (
         <section>
           <SectionLabel>{t("aiStory")}</SectionLabel>
-          {/* Lead paragraph, set apart with an accent rail. */}
-          <p className="rounded-lg border-l-2 border-accent/50 bg-surface-2/40 px-3 py-2.5 text-sm leading-relaxed text-foreground/90">
+          {/* Lead paragraph, set apart as a full accent-tinted callout. */}
+          <p className="rounded-lg border border-accent/20 bg-accent/[0.06] px-3.5 py-3 text-sm leading-relaxed text-foreground/90">
             {insight.summary}
           </p>
         </section>
@@ -157,7 +164,7 @@ function InsightBody({ insight }: { insight: AIInsight }) {
                 key={i}
                 className="group flex gap-3 rounded-lg border border-transparent bg-surface-2/40 px-3 py-2.5 text-sm leading-relaxed text-foreground/90 transition-all duration-150 hover:-translate-y-0.5 hover:border-accent/40 hover:bg-surface-2 hover:shadow-lg hover:shadow-accent/10"
               >
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent/15 text-xs font-semibold tabular-nums text-accent-strong transition-colors group-hover:bg-accent group-hover:text-white">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent/15 text-xs font-semibold tabular-nums text-accent-strong transition-colors group-hover:bg-accent group-hover:text-accent-ink">
                   {i + 1}
                 </span>
                 <span>{s}</span>

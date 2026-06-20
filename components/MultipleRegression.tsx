@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Sparkle, Check, Warning } from "@phosphor-icons/react";
 import {
   runRegression,
   fixedEffects,
@@ -142,7 +143,7 @@ export default function MultipleRegression({
                   key={m}
                   onClick={() => setMethod(m)}
                   className={`rounded-md px-2.5 py-1 text-xs font-medium transition ${
-                    method === m ? "bg-accent text-white" : "text-muted hover:text-foreground"
+                    method === m ? "bg-accent text-accent-ink" : "text-muted hover:text-foreground"
                   }`}
                 >
                   {m === "fe" ? t("regFE") : m === "re" ? t("regRE") : t("regPooled")}
@@ -276,12 +277,13 @@ export default function MultipleRegression({
               <button
                 onClick={explain}
                 disabled={explaining}
-                className="rounded-lg border border-accent/40 bg-accent/10 px-3 py-1.5 text-sm font-medium text-accent-strong transition hover:bg-accent/20 disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-accent/40 bg-accent/10 px-3 py-1.5 text-sm font-medium text-accent-strong transition hover:bg-accent/20 disabled:opacity-50"
               >
-                🤖 {explaining ? t("hypoExplaining") : t("hypoExplain")}
+                <Sparkle weight="fill" size={15} aria-hidden />
+                {explaining ? t("hypoExplaining") : t("hypoExplain")}
               </button>
             ) : (
-              <p className="rounded-lg border-l-2 border-accent/50 bg-surface-2/40 px-3 py-2.5 text-sm leading-relaxed text-foreground/90">
+              <p className="rounded-lg border border-accent/20 bg-accent/[0.06] px-3.5 py-3 text-sm leading-relaxed text-foreground/90">
                 {explanation}
               </p>
             )}
@@ -309,7 +311,14 @@ function AssumRow({
       <span className="font-medium text-foreground">{label}</span>
       <span className="text-xs text-muted">{detail}</span>
       <Badge tone={ok ? "accent" : "warn"}>
-        {ok ? `✓ ${t("assumPass")}` : `! ${t("assumFail")}`}
+        <span className="inline-flex items-center gap-1">
+          {ok ? (
+            <Check size={12} weight="bold" aria-hidden />
+          ) : (
+            <Warning size={12} weight="bold" aria-hidden />
+          )}
+          {ok ? t("assumPass") : t("assumFail")}
+        </span>
       </Badge>
     </li>
   );

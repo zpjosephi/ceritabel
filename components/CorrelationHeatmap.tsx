@@ -5,18 +5,16 @@ import { useLang } from "./LanguageProvider";
 
 /**
  * Diverging color for a Pearson r in [-1, 1]:
- *  negative → rose, 0 → neutral surface, positive → violet accent.
- * Returns an rgba background string.
+ *  negative → rose, 0 → neutral surface, positive → the live accent.
+ * Uses color-mix against the accent/negative CSS variables so the heatmap
+ * recolors instantly when the accent theme changes.
  */
 function colorFor(r: number | null): string {
   if (r === null) return "transparent";
   const mag = Math.min(1, Math.abs(r));
-  if (r >= 0) {
-    // violet accent (124, 92, 252)
-    return `rgba(124, 92, 252, ${0.12 + mag * 0.78})`;
-  }
-  // rose (251, 113, 133)
-  return `rgba(251, 113, 133, ${0.12 + mag * 0.78})`;
+  const pct = (0.12 + mag * 0.78) * 100;
+  const base = r >= 0 ? "var(--accent)" : "var(--negative)";
+  return `color-mix(in srgb, ${base} ${pct}%, transparent)`;
 }
 
 export default function CorrelationHeatmap({
@@ -65,7 +63,13 @@ export default function CorrelationHeatmap({
 
       <div className="mt-3 flex items-center gap-2 text-xs text-muted">
         <span>−1</span>
-        <span className="h-2 w-32 rounded-full bg-[linear-gradient(to_right,rgba(251,113,133,0.9),rgba(124,92,252,0.12),rgba(124,92,252,0.9))]" />
+        <span
+          className="h-2 w-32 rounded-full"
+          style={{
+            background:
+              "linear-gradient(to right, color-mix(in srgb, var(--negative) 90%, transparent), color-mix(in srgb, var(--accent) 12%, transparent), color-mix(in srgb, var(--accent) 90%, transparent))",
+          }}
+        />
         <span>+1</span>
         <span className="ml-2">{t("corrUndef")}</span>
       </div>

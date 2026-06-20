@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Sparkle } from "@phosphor-icons/react";
 import {
   runHypothesisTest,
   type ColType,
@@ -175,12 +176,13 @@ function ResultView({
           <button
             onClick={explain}
             disabled={explaining}
-            className="rounded-lg border border-accent/40 bg-accent/10 px-3 py-1.5 text-sm font-medium text-accent-strong transition hover:bg-accent/20 disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-accent/40 bg-accent/10 px-3 py-1.5 text-sm font-medium text-accent-strong transition hover:bg-accent/20 disabled:opacity-50"
           >
-            🤖 {explaining ? t("hypoExplaining") : t("hypoExplain")}
+            <Sparkle weight="fill" size={15} aria-hidden />
+            {explaining ? t("hypoExplaining") : t("hypoExplain")}
           </button>
         ) : (
-          <p className="rounded-lg border-l-2 border-accent/50 bg-surface-2/40 px-3 py-2.5 text-sm leading-relaxed text-foreground/90">
+          <p className="rounded-lg border border-accent/20 bg-accent/[0.06] px-3.5 py-3 text-sm leading-relaxed text-foreground/90">
             {explanation}
           </p>
         )}

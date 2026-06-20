@@ -12,7 +12,7 @@ import { useLang } from "./LanguageProvider";
 
 const SEV_STYLE: Record<IssueSeverity, { dot: string; chip: string }> = {
   high: { dot: "bg-negative", chip: "bg-negative/15 text-negative" },
-  medium: { dot: "bg-amber-400", chip: "bg-amber-400/15 text-amber-300" },
+  medium: { dot: "bg-warning", chip: "bg-warning/15 text-warning-strong" },
   low: { dot: "bg-muted", chip: "bg-surface-2 text-muted" },
 };
 
@@ -24,7 +24,7 @@ const SEV_KEY: Record<IssueSeverity, string> = {
 
 function scoreColor(score: number): string {
   if (score >= 80) return "text-positive";
-  if (score >= 50) return "text-amber-300";
+  if (score >= 50) return "text-warning-strong";
   return "text-negative";
 }
 
@@ -97,11 +97,23 @@ function ScoreRing({ score }: { score: number }) {
   const r = 26;
   const c = 2 * Math.PI * r;
   const offset = c * (1 - score / 100);
-  const stroke = score >= 80 ? "#34d399" : score >= 50 ? "#fbbf24" : "#fb7185";
+  const stroke =
+    score >= 80
+      ? "var(--positive)"
+      : score >= 50
+        ? "var(--warning)"
+        : "var(--negative)";
   return (
     <div className="relative h-16 w-16 shrink-0">
       <svg viewBox="0 0 64 64" className="h-16 w-16 -rotate-90">
-        <circle cx="32" cy="32" r={r} fill="none" stroke="#2a2a38" strokeWidth="6" />
+        <circle
+          cx="32"
+          cy="32"
+          r={r}
+          fill="none"
+          stroke="var(--chart-grid)"
+          strokeWidth="6"
+        />
         <circle
           cx="32"
           cy="32"

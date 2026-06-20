@@ -37,13 +37,13 @@ export default function DataPreview({
         </span>
         <button
           onClick={download}
-          className="ml-auto rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-white transition hover:bg-accent-strong"
+          className="ml-auto rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-accent-ink transition hover:bg-accent-strong"
         >
           {t("downloadCsv")}
         </button>
       </div>
 
-      <div className="overflow-auto rounded-lg border border-border">
+      <div className="overflow-auto rounded-lg">
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="bg-surface-2 text-left">

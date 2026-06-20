@@ -11,11 +11,11 @@ import {
 } from "recharts";
 import type { HistogramBin } from "@/lib/types";
 import { useLang } from "./LanguageProvider";
-
-const ACCENT = "#7c5cfc";
+import { useAccentColors } from "./AccentPicker";
 
 export default function Histogram({ bins }: { bins: HistogramBin[] }) {
   const { t } = useLang();
+  const { accent, soft } = useAccentColors();
   if (bins.length === 0) {
     return <p className="text-sm text-muted">{t("noNumeric")}</p>;
   }
@@ -38,7 +38,7 @@ export default function Histogram({ bins }: { bins: HistogramBin[] }) {
           tickLine={false}
         />
         <Tooltip
-          cursor={{ fill: "#7c5cfc22" }}
+          cursor={{ fill: soft }}
           contentStyle={{
             background: "#1c1c27",
             border: "1px solid #2a2a38",
@@ -51,7 +51,7 @@ export default function Histogram({ bins }: { bins: HistogramBin[] }) {
           }
           formatter={(value) => [value as number, t("count")]}
         />
-        <Bar dataKey="count" fill={ACCENT} radius={[3, 3, 0, 0]} />
+        <Bar dataKey="count" fill={accent} radius={[3, 3, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

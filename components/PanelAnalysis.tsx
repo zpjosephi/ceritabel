@@ -42,7 +42,9 @@ export default function PanelAnalysis({
 
       <div className="mb-4 flex flex-wrap items-end gap-3 text-sm">
         <ColSelect label={t("panelEntityLabel")} value={entity} cols={allCols} onChange={setEntity} />
-        <span className="pb-1.5 text-muted">×</span>
+        <span aria-hidden className="pb-1.5 text-muted">
+          ×
+        </span>
         <ColSelect label={t("panelTimeLabel")} value={time} cols={allCols} onChange={setTime} />
       </div>
 
