@@ -225,6 +225,29 @@ body::before {
   animation-delay: calc(var(--i, 0) * 70ms);
 }
 
+/* Rotating headline word — restrained slide+fade swap (motion conveys state,
+   not decoration). inline-grid keeps it on the text baseline; the global
+   reduced-motion rule below neutralizes the entry to a static word. */
+@keyframes rotate-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.rotating {
+  display: inline-grid;
+  vertical-align: baseline;
+}
+.rotating-word {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+  animation: rotate-in 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

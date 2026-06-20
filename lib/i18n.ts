@@ -20,7 +20,8 @@ const ID: Dict = {
   // landing
   heroBadge: "Auto-EDA + AI · gratis",
   heroTitleRest: "ngobrol sama data kamu",
-  heroH1: "Upload data kamu, pahami dalam bahasa biasa.",
+  heroLead: "Dari tabel ke",
+  heroRotate: "cerita,insight,jawaban,keputusan",
   heroLede:
     "Upload CSV atau Excel. Statistik yang benar dihitung di browser, lalu AI menjelaskan hasilnya dengan bahasa sederhana.",
   heroDesc:
@@ -343,7 +344,8 @@ const EN: Dict = {
 
   heroBadge: "Auto-EDA + AI · free",
   heroTitleRest: "chat with your data",
-  heroH1: "Upload your data, understand it in plain English.",
+  heroLead: "From table to",
+  heroRotate: "story,insight,answers,decisions",
   heroLede:
     "Upload a CSV or Excel file. Correct statistics are computed in your browser, then AI explains the results in plain language.",
   heroDesc:
