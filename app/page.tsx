@@ -103,11 +103,13 @@ export default function Home() {
               </span>
               <h1
                 style={{ "--i": 1 } as React.CSSProperties}
-                className="mt-5 max-w-xl text-balance text-4xl font-bold leading-[1.05] tracking-[-0.03em] sm:text-5xl lg:text-6xl"
+                className="mt-5 max-w-xl text-4xl font-bold leading-[1.05] tracking-[-0.03em] sm:text-5xl lg:text-6xl"
               >
-                {t("heroLead")}{" "}
-                <Rotating words={rotateWords} className="text-accent" />
-                <span className="text-accent">.</span>
+                <span className="block">{t("heroLead")}</span>
+                <span className="block">
+                  <Rotating words={rotateWords} className="text-accent" />
+                  <span className="text-accent">.</span>
+                </span>
               </h1>
               <p
                 style={{ "--i": 2 } as React.CSSProperties}
