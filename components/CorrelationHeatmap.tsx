@@ -3,17 +3,22 @@
 import type { CorrelationMatrix } from "@/lib/types";
 import { useLang } from "./LanguageProvider";
 
+/* Negative pole = a fixed cool blue (NOT the rose --negative, which is warm and
+   reads "all red" next to the warm brand accent). A blue↔accent diverging scale
+   keeps + and − visually distinct — the whole point of a correlation heatmap. */
+const CORR_NEG = "#3b82f6";
+
 /**
  * Diverging color for a Pearson r in [-1, 1]:
- *  negative → rose, 0 → neutral surface, positive → the live accent.
- * Uses color-mix against the accent/negative CSS variables so the heatmap
- * recolors instantly when the accent theme changes.
+ *  negative → cool blue, 0 → neutral surface, positive → the live accent.
+ * Positive stays tied to --accent so it still echoes the theme; negative is a
+ * fixed cool hue so the two poles always contrast.
  */
 function colorFor(r: number | null): string {
   if (r === null) return "transparent";
   const mag = Math.min(1, Math.abs(r));
   const pct = (0.12 + mag * 0.78) * 100;
-  const base = r >= 0 ? "var(--accent)" : "var(--negative)";
+  const base = r >= 0 ? "var(--accent)" : CORR_NEG;
   return `color-mix(in srgb, ${base} ${pct}%, transparent)`;
 }
 
@@ -66,8 +71,7 @@ export default function CorrelationHeatmap({
         <span
           className="h-2 w-32 rounded-full"
           style={{
-            background:
-              "linear-gradient(to right, color-mix(in srgb, var(--negative) 90%, transparent), color-mix(in srgb, var(--accent) 12%, transparent), color-mix(in srgb, var(--accent) 90%, transparent))",
+            background: `linear-gradient(to right, color-mix(in srgb, ${CORR_NEG} 90%, transparent), color-mix(in srgb, var(--accent) 12%, transparent), color-mix(in srgb, var(--accent) 90%, transparent))`,
           }}
         />
         <span>+1</span>
