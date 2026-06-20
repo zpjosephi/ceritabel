@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -14,6 +14,7 @@ import {
   type Icon,
 } from "@phosphor-icons/react";
 import Footer from "@/components/Footer";
+import Rotating from "@/components/Rotating";
 import LanguageToggle from "@/components/LanguageToggle";
 import AccentPicker from "@/components/AccentPicker";
 import Histogram from "@/components/Histogram";
@@ -34,6 +35,9 @@ function Mark({ className = "" }: { className?: string }) {
 
 export default function Home() {
   const { t } = useLang();
+  // Rotating payoff words for the hero headline (per-language, memoized so the
+  // interval in <Rotating> stays stable across renders).
+  const rotateWords = useMemo(() => t("heroRotate").split(","), [t]);
   // The hero already shows the primary CTA. To avoid two identical CTAs in the
   // first viewport, the nav CTA stays hidden until the hero scrolls out of view,
   // then fades in so it's still reachable from anywhere on the page.
@@ -101,7 +105,9 @@ export default function Home() {
                 style={{ "--i": 1 } as React.CSSProperties}
                 className="mt-5 max-w-xl text-balance text-4xl font-bold leading-[1.05] tracking-[-0.03em] sm:text-5xl lg:text-6xl"
               >
-                {t("heroH1")}
+                {t("heroLead")}{" "}
+                <Rotating words={rotateWords} className="text-accent" />
+                <span className="text-accent">.</span>
               </h1>
               <p
                 style={{ "--i": 2 } as React.CSSProperties}
