@@ -1,10 +1,9 @@
 "use client";
 
-import { GithubLogo, Envelope } from "@phosphor-icons/react";
+import { LinkedinLogo, Envelope } from "@phosphor-icons/react";
 import { useLang } from "./LanguageProvider";
 
-const REPO_URL = "https://github.com/zpjosephi/ceritabel";
-const PROFILE_URL = "https://github.com/zpjosephi";
+const LINKEDIN_URL = "https://www.linkedin.com/in/joseph-irawan";
 const EMAIL = "josephirawan07@gmail.com";
 
 export default function Footer() {
@@ -19,16 +18,16 @@ export default function Footer() {
           {t("footerThesis")}
         </p>
 
-        {/* Portfolio bridge: source + contact */}
+        {/* Contact */}
         <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm">
           <a
-            href={REPO_URL}
+            href={LINKEDIN_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-muted-strong transition hover:text-accent-strong"
           >
-            <GithubLogo size={16} weight="bold" aria-hidden />
-            {t("footerSource")}
+            <LinkedinLogo size={16} weight="bold" aria-hidden />
+            LinkedIn
           </a>
           <a
             href={`mailto:${EMAIL}`}
@@ -43,15 +42,8 @@ export default function Footer() {
         <p className="mt-6 text-xs text-muted">{t("footerTech")}</p>
         <p className="mt-1 text-xs text-muted">
           {t("footerMadeBy")}{" "}
-          <a
-            href={PROFILE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-medium text-accent-strong transition hover:text-accent"
-          >
-            Joseph Irawan
-          </a>{" "}
-          · © {year}
+          <span className="font-medium text-accent-strong">Joseph Irawan</span> ·
+          © {year}
         </p>
       </div>
     </footer>
