@@ -82,7 +82,6 @@ const ID: Dict = {
   footerTech: "Dibuat dengan Next.js, TypeScript & simple-statistics",
   footerThesis:
     "Semua statistik dihitung di browser-mu — AI hanya menjelaskannya, tidak pernah mengarang angkanya.",
-  footerSource: "Lihat source",
   footerMadeBy: "Dibuat oleh",
 
   // upload / analyze
@@ -406,7 +405,6 @@ const EN: Dict = {
   footerTech: "Built with Next.js, TypeScript & simple-statistics",
   footerThesis:
     "Every statistic is computed in your browser — the AI only explains it, never invents the numbers.",
-  footerSource: "View source",
   footerMadeBy: "Made by",
 
   uploadTitle: "Upload your data",
