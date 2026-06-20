@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Broom, ArrowCounterClockwise } from "@phosphor-icons/react";
 import type { CleaningChange } from "@/lib/cleaning";
 import { formatChange } from "@/lib/i18n";
 import { Card } from "./ui";
@@ -31,16 +32,17 @@ export default function CleaningBar({
         <button
           onClick={onAuto}
           disabled={busy || recommendedCount === 0}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-white transition hover:bg-accent-strong disabled:opacity-40"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-accent-ink transition hover:bg-accent-strong disabled:opacity-40"
           title={
             recommendedCount === 0
               ? t("cbAutoNone")
               : t("cbAutoTip", { n: recommendedCount })
           }
         >
-          ✨ {t("cbAuto")}
+          <Broom weight="bold" size={15} aria-hidden />
+          {t("cbAuto")}
           {recommendedCount > 0 ? (
-            <span className="rounded-full bg-white/20 px-1.5 text-xs tabular-nums">
+            <span className="rounded-full bg-accent-ink/15 px-1.5 text-xs tabular-nums">
               {recommendedCount}
             </span>
           ) : null}
@@ -49,8 +51,9 @@ export default function CleaningBar({
         <button
           onClick={onUndo}
           disabled={busy || applied === 0}
-          className="rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-muted transition hover:border-accent hover:text-foreground disabled:opacity-40"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-muted transition hover:border-accent hover:text-foreground disabled:opacity-40"
         >
+          <ArrowCounterClockwise size={14} weight="bold" aria-hidden />
           {t("cbUndo")}
         </button>
         <button

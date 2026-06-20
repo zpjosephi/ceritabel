@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { ChatCircleDots } from "@phosphor-icons/react";
 import type { StatsSummary } from "@/lib/types";
 import { useLang } from "./LanguageProvider";
 
@@ -52,7 +53,12 @@ export default function ChatPanel({
   return (
     <div className="rounded-xl border border-border bg-surface p-5">
       <div className="mb-3 flex items-center gap-2">
-        <span aria-hidden className="text-lg">💬</span>
+        <ChatCircleDots
+          aria-hidden
+          weight="duotone"
+          className="text-accent-strong"
+          size={18}
+        />
         <h2 className="font-semibold text-foreground">{t("chatTitle")}</h2>
       </div>
 
@@ -98,7 +104,7 @@ export default function ChatPanel({
         <button
           onClick={send}
           disabled={loading || !input.trim()}
-          className="rounded-lg bg-accent px-3 py-2 text-sm font-medium text-white hover:bg-accent-strong disabled:opacity-50"
+          className="rounded-lg bg-accent px-3 py-2 text-sm font-medium text-accent-ink hover:bg-accent-strong disabled:opacity-50"
         >
           {t("chatSend")}
         </button>

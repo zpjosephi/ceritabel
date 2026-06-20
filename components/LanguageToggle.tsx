@@ -18,7 +18,7 @@ export default function LanguageToggle() {
           aria-pressed={lang === l}
           className={`rounded-md px-2 py-1 font-semibold uppercase transition ${
             lang === l
-              ? "bg-accent text-white"
+              ? "bg-accent text-accent-ink"
               : "text-muted hover:text-foreground"
           }`}
         >

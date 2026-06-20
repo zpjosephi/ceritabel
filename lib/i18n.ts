@@ -19,9 +19,12 @@ const ID: Dict = {
 
   // landing
   heroBadge: "Auto-EDA + AI · gratis",
-  heroTitleRest: "— ngobrol sama data kamu",
+  heroTitleRest: "ngobrol sama data kamu",
+  heroH1: "Upload data kamu, pahami dalam bahasa biasa.",
+  heroLede:
+    "Upload CSV atau Excel. Statistik yang benar dihitung di browser, lalu AI menjelaskan hasilnya dengan bahasa sederhana.",
   heroDesc:
-    "Upload CSV/Excel. ceritabel mendeteksi bentuk datamu (cross-section, time series, panel), menghitung statistik yang benar di browser — EDA, uji hipotesis, regresi + uji asumsi klasik, panel FE/RE — lalu AI menjelaskannya dengan bahasa sederhana.",
+    "ceritabel mendeteksi bentuk datamu (cross-section, time series, panel), lalu menghitung statistik yang benar langsung di browser: EDA, uji hipotesis, regresi dengan uji asumsi klasik, sampai panel FE/RE. Semua angka dihitung di kode, AI cuma menjelaskan.",
   ctaTry: "Coba sekarang →",
   ctaHow: "Cara kerja",
   feat1Title: "Statistik beneran",
@@ -33,6 +36,7 @@ const ID: Dict = {
   feat3Title: "AI yang menjelaskan",
   feat3Body:
     "AI menerjemahkan angka jadi cerita + memberi 3 saran analisis lanjutan. Tidak menghitung sendiri.",
+  featTitle: "Apa yang kamu dapat",
   howTitle: "Bagaimana cara kerjanya",
   step1Title: "Upload CSV",
   step1Body: "Drag & drop file kamu. Parsing terjadi di browser.",
@@ -45,6 +49,7 @@ const ID: Dict = {
     "file diproses di memori dan tidak disimpan. Yang dikirim ke AI hanya ringkasan statistik (bukan baris data mentah).",
   previewInsight: "Pendapatan naik tren ~18% per kuartal, dengan lonjakan tiap Desember.",
   previewBadge: "contoh tampilan",
+  previewHeading: "Distribusi & korelasi",
   capTitle: "Apa yang bisa dilakukan",
   capEda: "EDA & statistik otomatis",
   capClean: "Pembersihan data (kode + AI)",
@@ -62,6 +67,10 @@ const ID: Dict = {
   fbCatIdea: "Ide",
   fbCatOther: "Lainnya",
   fbMood: "Gimana pengalamannya?",
+  fbMoodBad: "Kecewa",
+  fbMoodMeh: "Biasa aja",
+  fbMoodGood: "Senang",
+  fbMoodLove: "Suka banget",
   fbPlaceholder: "Tulis feedback kamu di sini…",
   fbEmail: "Email (opsional)",
   fbSend: "Kirim",
@@ -71,6 +80,10 @@ const ID: Dict = {
   fbFail: "Gagal mengirim. Coba lagi.",
   fbClose: "Tutup",
   footerTech: "Dibuat dengan Next.js, TypeScript & simple-statistics",
+  footerThesis:
+    "Semua statistik dihitung di browser-mu — AI hanya menjelaskannya, tidak pernah mengarang angkanya.",
+  footerSource: "Lihat source",
+  footerMadeBy: "Dibuat oleh",
 
   // upload / analyze
   uploadTitle: "Unggah data kamu",
@@ -263,7 +276,7 @@ const ID: Dict = {
   aiStale: "Data sudah dibersihkan — insight ini dari versi sebelumnya.",
   aiRefresh: "Perbarui insight",
   aiLoading: "AI sedang membaca ringkasan statistik…",
-  aiGenerate: "✨ Mulai analisis AI",
+  aiGenerate: "Mulai analisis AI",
   aiIdleDesc: "AI akan membaca ringkasan statistik & menjelaskan temuannya. Klik untuk mulai (biar hemat kuota).",
   aiStory: "Cerita data",
   aiFindings: "Temuan menarik",
@@ -280,7 +293,7 @@ const ID: Dict = {
 
   // data quality panel
   qScore: "Skor kualitas data",
-  qNoIssues: "Tidak ada masalah terdeteksi 🎉",
+  qNoIssues: "Tidak ada masalah terdeteksi",
   qIssueCount: "{n} hal yang bisa dibersihkan",
   sevHigh: "Tinggi",
   sevMedium: "Sedang",
@@ -297,7 +310,7 @@ const ID: Dict = {
   cbAuto: "Rapikan otomatis",
   cbAutoNone: "Tidak ada yang perlu dirapikan",
   cbAutoTip: "Terapkan {n} perbaikan baku",
-  cbUndo: "↩ Undo",
+  cbUndo: "Undo",
   cbReset: "Reset",
   cbShowHistory: "Lihat riwayat ({n})",
   cbHideHistory: "Sembunyikan riwayat ({n})",
@@ -309,7 +322,7 @@ const ID: Dict = {
   advAnalyzing: "Menganalisis…",
   advDesc:
     "AI membaca ringkasan masalah (bukan data mentah) lalu menyarankan aksi. Kamu yang memutuskan — kode yang menjalankan.",
-  advClean: "Data sudah bersih 🎉",
+  advClean: "Data sudah bersih",
   advNoProblems: "Tidak ada masalah untuk dianalisis",
   advNoRecs: "AI tidak menyarankan perubahan untuk data ini.",
   advApply: "Terapkan yang dicentang ({n})",
@@ -330,9 +343,12 @@ const EN: Dict = {
   cancel: "Cancel",
 
   heroBadge: "Auto-EDA + AI · free",
-  heroTitleRest: "— chat with your data",
+  heroTitleRest: "chat with your data",
+  heroH1: "Upload your data, understand it in plain English.",
+  heroLede:
+    "Upload a CSV or Excel file. Correct statistics are computed in your browser, then AI explains the results in plain language.",
   heroDesc:
-    "Upload CSV/Excel. ceritabel detects your data shape (cross-section, time series, panel), computes correct statistics in your browser — EDA, hypothesis tests, regression + classical assumptions, panel FE/RE — then AI explains it in plain language.",
+    "ceritabel detects your data shape (cross-section, time series, panel), then computes correct statistics right in your browser: EDA, hypothesis tests, regression with classical assumptions, even panel FE/RE. Every number is computed in code; the AI only explains.",
   ctaTry: "Try it now →",
   ctaHow: "How it works",
   feat1Title: "Real statistics",
@@ -344,6 +360,7 @@ const EN: Dict = {
   feat3Title: "AI that explains",
   feat3Body:
     "AI turns the numbers into a story + gives 3 follow-up analysis ideas. It never computes the numbers itself.",
+  featTitle: "What you get",
   howTitle: "How it works",
   step1Title: "Upload CSV",
   step1Body: "Drag & drop your file. Parsing happens in the browser.",
@@ -356,6 +373,7 @@ const EN: Dict = {
     "files are processed in memory and never stored. Only the statistics summary is sent to the AI (never raw data rows).",
   previewInsight: "Revenue is trending up ~18% per quarter, with a spike every December.",
   previewBadge: "preview",
+  previewHeading: "Distribution & correlation",
   capTitle: "What it can do",
   capEda: "Automatic EDA & statistics",
   capClean: "Data cleaning (code + AI)",
@@ -373,6 +391,10 @@ const EN: Dict = {
   fbCatIdea: "Idea",
   fbCatOther: "Other",
   fbMood: "How was it?",
+  fbMoodBad: "Disappointed",
+  fbMoodMeh: "Okay",
+  fbMoodGood: "Happy",
+  fbMoodLove: "Love it",
   fbPlaceholder: "Write your feedback here…",
   fbEmail: "Email (optional)",
   fbSend: "Send",
@@ -382,6 +404,10 @@ const EN: Dict = {
   fbFail: "Couldn't send. Try again.",
   fbClose: "Close",
   footerTech: "Built with Next.js, TypeScript & simple-statistics",
+  footerThesis:
+    "Every statistic is computed in your browser — the AI only explains it, never invents the numbers.",
+  footerSource: "View source",
+  footerMadeBy: "Made by",
 
   uploadTitle: "Upload your data",
   uploadDesc:
@@ -567,7 +593,7 @@ const EN: Dict = {
   aiStale: "Data was cleaned — this insight is from an earlier version.",
   aiRefresh: "Refresh insight",
   aiLoading: "AI is reading the statistics summary…",
-  aiGenerate: "✨ Generate AI insight",
+  aiGenerate: "Generate AI insight",
   aiIdleDesc: "AI will read the statistics summary and explain the findings. Click to start (saves your quota).",
   aiStory: "Data story",
   aiFindings: "Notable findings",
@@ -582,7 +608,7 @@ const EN: Dict = {
   chatFail: "Couldn't answer.",
 
   qScore: "Data quality score",
-  qNoIssues: "No issues detected 🎉",
+  qNoIssues: "No issues detected",
   qIssueCount: "{n} things to clean up",
   sevHigh: "High",
   sevMedium: "Medium",
@@ -598,7 +624,7 @@ const EN: Dict = {
   cbAuto: "Auto-clean",
   cbAutoNone: "Nothing to clean up",
   cbAutoTip: "Apply {n} standard fixes",
-  cbUndo: "↩ Undo",
+  cbUndo: "Undo",
   cbReset: "Reset",
   cbShowHistory: "Show history ({n})",
   cbHideHistory: "Hide history ({n})",
@@ -609,7 +635,7 @@ const EN: Dict = {
   advAnalyzing: "Analyzing…",
   advDesc:
     "AI reads a summary of the problems (not raw data) and suggests actions. You decide — code executes.",
-  advClean: "Data is already clean 🎉",
+  advClean: "Data is already clean",
   advNoProblems: "No problems to analyze",
   advNoRecs: "AI suggested no changes for this data.",
   advApply: "Apply selected ({n})",

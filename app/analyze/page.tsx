@@ -2,6 +2,16 @@
 
 import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
+import {
+  Gauge,
+  ChartBar,
+  Flask,
+  Broom,
+  DownloadSimple,
+  Table,
+  ChartLine,
+  GridFour,
+} from "@phosphor-icons/react";
 import { CsvParseError } from "@/lib/csv";
 import { parseUpload, type SheetData } from "@/lib/upload";
 import { analyzeDataset, detectColumnKind, type FullAnalysis } from "@/lib/stats";
@@ -34,6 +44,7 @@ import CleaningBar from "@/components/CleaningBar";
 import CleanAdvisor from "@/components/CleanAdvisor";
 import Footer from "@/components/Footer";
 import LanguageToggle from "@/components/LanguageToggle";
+import AccentPicker from "@/components/AccentPicker";
 import { useLang } from "@/components/LanguageProvider";
 import { Card, SectionTitle } from "@/components/ui";
 import { detectShape, type DataShape } from "@/lib/shape";
@@ -47,32 +58,32 @@ const SAMPLES: SampleDataset[] = [
   {
     file: "/sample-data.csv",
     name: "contoh-siswa.csv",
-    icon: "📋",
+    Icon: Table,
     labelKey: "sampleCross",
     descKey: "sampleCrossDesc",
   },
   {
     file: "/contoh-timeseries.csv",
     name: "contoh-timeseries.csv",
-    icon: "📈",
+    Icon: ChartLine,
     labelKey: "sampleTs",
     descKey: "sampleTsDesc",
   },
   {
     file: "/contoh-panel.csv",
     name: "contoh-panel.csv",
-    icon: "📊",
+    Icon: GridFour,
     labelKey: "samplePanel",
     descKey: "samplePanelDesc",
   },
 ];
 
 const RESULT_TABS = [
-  { id: "overview", icon: "📌", label: "tabOverview" },
-  { id: "charts", icon: "📊", label: "tabCharts" },
-  { id: "tests", icon: "🧪", label: "tabTests" },
-  { id: "data", icon: "🧹", label: "tabData" },
-  { id: "export", icon: "⬇️", label: "tabExport" },
+  { id: "overview", Icon: Gauge, label: "tabOverview" },
+  { id: "charts", Icon: ChartBar, label: "tabCharts" },
+  { id: "tests", Icon: Flask, label: "tabTests" },
+  { id: "data", Icon: Broom, label: "tabData" },
+  { id: "export", Icon: DownloadSimple, label: "tabExport" },
 ] as const;
 type TabId = (typeof RESULT_TABS)[number]["id"];
 
@@ -322,7 +333,17 @@ export default function AnalyzePage() {
     <>
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6">
         <header className="mb-8 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
+          <Link
+            href="/"
+            className="group flex items-center gap-2.5 transition active:scale-[0.98]"
+          >
+            <span className="grid h-7 w-7 place-items-center rounded-lg bg-accent/15 text-accent transition group-hover:bg-accent/25">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden>
+                <rect x="1" y="9" width="3" height="6" rx="1" fill="currentColor" />
+                <rect x="6.5" y="5" width="3" height="10" rx="1" fill="currentColor" />
+                <rect x="12" y="2" width="3" height="13" rx="1" fill="currentColor" />
+              </svg>
+            </span>
             <span className="text-lg font-semibold tracking-tight">
               cerita<span className="text-accent">bel</span>
             </span>
@@ -336,6 +357,7 @@ export default function AnalyzePage() {
                 {t("analyzeOther")}
               </button>
             ) : null}
+            <AccentPicker />
             <LanguageToggle />
           </div>
         </header>
@@ -357,8 +379,18 @@ export default function AnalyzePage() {
 
         {stage === "analyzing" ? (
           <div className="flex flex-col items-center justify-center py-32 text-center">
-            <div className="mb-4 h-10 w-10 animate-spin rounded-full border-2 border-border border-t-accent" />
-            <p className="text-foreground">
+            <div className="relative mb-5 h-12 w-12">
+              <div className="absolute inset-0 animate-ping rounded-full bg-accent/20" />
+              <div className="absolute inset-0 animate-spin rounded-full border-2 border-border border-t-accent" />
+              <div className="absolute inset-0 grid place-items-center text-accent">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+                  <rect x="1" y="9" width="3" height="6" rx="1" fill="currentColor" />
+                  <rect x="6.5" y="5" width="3" height="10" rx="1" fill="currentColor" />
+                  <rect x="12" y="2" width="3" height="13" rx="1" fill="currentColor" />
+                </svg>
+              </div>
+            </div>
+            <p className="font-medium text-foreground">
               {t("analyzingFile", { file: fileName })}
             </p>
             <p className="mt-1 text-sm text-muted">{t("analyzingSteps")}</p>
@@ -539,10 +571,10 @@ function Results({
   const hasNumeric2 = numericFields.length >= 2;
 
   return (
-    <div className="space-y-5">
+    <div className="fade-up space-y-5">
       {/* Global scope controls (shape + variables) — they affect every tab,
           so they live above the tabs where they're always discoverable. */}
-      <div className="rounded-xl border border-border bg-surface p-4">
+      <div className="rounded-xl border border-border bg-surface p-4 shadow-[var(--shadow-sm)]">
         <ShapeSelector
           value={shape}
           detected={detected.shape}
@@ -553,10 +585,10 @@ function Results({
       {baseColumns.length > 1 ? (
         <div>
           <div className="mb-1.5 flex flex-wrap items-center gap-x-2 px-1">
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted">
+            <span className="tele text-[11px] text-muted-strong">
               {t("secVars")}
             </span>
-            <span className="text-xs text-muted/70">{t("secVarsHint")}</span>
+            <span className="text-xs text-muted">{t("secVarsHint")}</span>
           </div>
           <ColumnSelector
             columns={baseColumns}
@@ -572,24 +604,32 @@ function Results({
         <div className="min-w-0">
           <div
             role="tablist"
-            className="mb-6 flex gap-1 overflow-x-auto border-b border-border"
+            className="mb-6 flex gap-1 overflow-x-auto rounded-xl border border-border bg-surface/60 p-1 shadow-[var(--shadow-sm)] backdrop-blur"
           >
-            {RESULT_TABS.map((tb) => (
-              <button
-                key={tb.id}
-                role="tab"
-                aria-selected={tab === tb.id}
-                onClick={() => setTab(tb.id)}
-                className={`flex shrink-0 items-center gap-1.5 border-b-2 px-3.5 py-2.5 text-sm font-medium transition ${
-                  tab === tb.id
-                    ? "border-accent text-foreground"
-                    : "border-transparent text-muted hover:text-foreground"
-                }`}
-              >
-                <span aria-hidden>{tb.icon}</span>
-                {t(tb.label)}
-              </button>
-            ))}
+            {RESULT_TABS.map((tb) => {
+              const TabIcon = tb.Icon;
+              const active = tab === tb.id;
+              return (
+                <button
+                  key={tb.id}
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setTab(tb.id)}
+                  className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition duration-200 active:scale-[0.97] ${
+                    active
+                      ? "bg-accent/15 text-accent-strong shadow-[inset_0_0_0_1px_var(--accent-soft)]"
+                      : "text-muted hover:bg-surface-2 hover:text-foreground"
+                  }`}
+                >
+                  <TabIcon
+                    aria-hidden
+                    size={15}
+                    weight={active ? "fill" : "regular"}
+                  />
+                  {t(tb.label)}
+                </button>
+              );
+            })}
           </div>
 
           <div className="space-y-8">

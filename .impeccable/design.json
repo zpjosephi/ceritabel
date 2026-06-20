@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-20T00:00:00Z",
+  "title": "Design System: ceritabel",
+  "extensions": {
+    "colorMeta": {
+      "accent-amber": {
+        "role": "primary",
+        "displayName": "Instrument Amber",
+        "canonical": "#e0a44a",
+        "tonalRamp": ["#2a1d08", "#4a330d", "#6b4912", "#9a6a1d", "#c4882f", "#e0a44a", "#f2bd6b", "#fad79b"]
+      },
+      "accent-teal": {
+        "role": "primary",
+        "displayName": "Signal Teal",
+        "canonical": "#22c0ad",
+        "tonalRamp": ["#062b27", "#0a443d", "#0f5d53", "#15806f", "#1a9d8a", "#22c0ad", "#4dd6c4", "#8ce8dc"]
+      },
+      "accent-coral": {
+        "role": "primary",
+        "displayName": "Hot Coral",
+        "canonical": "#f2603f",
+        "tonalRamp": ["#3a130a", "#5c1d10", "#7e2817", "#aa3620", "#d04a2f", "#f2603f", "#ff7d5e", "#ffac96"]
+      },
+      "accent-lime": {
+        "role": "primary",
+        "displayName": "Plot Lime",
+        "canonical": "#b5e048",
+        "tonalRamp": ["#222c0c", "#384712", "#4f6419", "#6f8a22", "#94b630", "#b5e048", "#c9ee6e", "#ddf6a0"]
+      },
+      "accent-hazard": {
+        "role": "primary",
+        "displayName": "Hazard Red",
+        "canonical": "#d62a23",
+        "tonalRamp": ["#2e0907", "#4d0f0c", "#6e1611", "#971f18", "#bd2820", "#d62a23", "#ff5d54", "#ff938c"]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Canvas",
+        "canonical": "#08080d",
+        "tonalRamp": ["#08080d", "#111119", "#181822", "#20202c", "#26262f", "#34343f", "#9a9aab", "#f0f0f5"]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#f0f0f5",
+        "tonalRamp": ["#08080d", "#26262f", "#34343f", "#6a6a78", "#9a9aab", "#b8b8c6", "#f0f0f5", "#ffffff"]
+      },
+      "chart-grid": {
+        "role": "neutral",
+        "displayName": "Chart Grid",
+        "canonical": "#2a2a38",
+        "tonalRamp": ["#111119", "#181822", "#20202c", "#26262f", "#2a2a38", "#34343f", "#4a4a58", "#6a6a78"]
+      },
+      "positive": {
+        "role": "tertiary",
+        "displayName": "Positive Green",
+        "canonical": "#34d399",
+        "tonalRamp": ["#072a1f", "#0a4030", "#0e5742", "#137a5b", "#1f9d74", "#34d399", "#6ee7b7", "#a7f3d0"]
+      },
+      "negative": {
+        "role": "tertiary",
+        "displayName": "Negative Rose",
+        "canonical": "#fb7185",
+        "tonalRamp": ["#3d1019", "#5c1825", "#7e2031", "#a82c41", "#d04256", "#fb7185", "#fda4b0", "#fecdd6"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Marketing hero H1 only. text-balance, clamp ceiling ~3.75rem." },
+      "headline": { "displayName": "Headline", "purpose": "Marketing section H2s." },
+      "title": { "displayName": "Title", "purpose": "In-app card and section headings (SectionTitle), feature titles." },
+      "body": { "displayName": "Body", "purpose": "Prose and descriptions, capped 65-75ch." },
+      "label": { "displayName": "Label", "purpose": "Metadata, hints, the one deliberate uppercase tracked label." },
+      "data": { "displayName": "Data Readout", "purpose": "Geist Mono tabular figures for every stat, table cell, axis tick." },
+      "tele": { "displayName": "Telemetry Label", "purpose": "Geist Mono, uppercase, +0.12em tracking (.tele). Instrument-style labels on data fields — Stat labels, scope control, preview tag. Borrowed from the author's portfolio. Never a section eyebrow." }
+    },
+    "shadows": [
+      { "name": "shadow-sm", "value": "0 1px 2px rgba(4,4,10,0.6)", "purpose": "Resting cards and stats — minimal separation from canvas." },
+      { "name": "shadow-md", "value": "0 4px 12px -2px rgba(4,4,10,0.55), 0 2px 6px -2px rgba(4,4,10,0.5)", "purpose": "Hover lift on interactive cards; floating preview panels." },
+      { "name": "shadow-lg", "value": "0 24px 50px -12px rgba(4,4,10,0.75), 0 8px 20px -8px var(--accent-glow)", "purpose": "Modals and the hero feature surface — only place accent-glow enters a shadow." }
+    ],
+    "motion": [
+      { "name": "ease-out-quart", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Default entrance / card-lift easing. Exponential ease-out, no bounce." },
+      { "name": "duration-state", "value": "200ms", "purpose": "Standard UI state transition (hover, tab switch, active)." },
+      { "name": "fade-up", "value": "fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both", "purpose": "Staggered content entrance; cascade via --i index." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "content-max", "value": "1152px (max-w-6xl marketing) / 1280px (max-w-7xl app)" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The main CTA. Solid accent fill with near-black ink and an accent-glow shadow.",
+      "html": "<button class=\"ds-btn-primary\">Coba sekarang</button>",
+      "css": ".ds-btn-primary { background: var(--accent, #e0a44a); color: var(--accent-ink, #20160a); font-weight: 500; font-size: 1rem; padding: 12px 24px; border: none; border-radius: 12px; box-shadow: 0 8px 24px -6px var(--accent-glow, rgba(224,164,74,0.3)); transition: background .2s, box-shadow .2s, transform .2s; cursor: pointer; } .ds-btn-primary:hover { background: var(--accent-strong, #f2bd6b); box-shadow: 0 12px 30px -6px var(--accent-glow, rgba(224,164,74,0.3)); } .ds-btn-primary:active { transform: scale(0.98); } .ds-btn-primary:focus-visible { outline: 2px solid var(--accent-strong, #f2bd6b); outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Low-emphasis control. Surface fill, hairline border, muted text that lifts on hover.",
+      "html": "<button class=\"ds-btn-secondary\">Analisis lain</button>",
+      "css": ".ds-btn-secondary { background: #111119; color: #9a9aab; font-size: .875rem; padding: 6px 12px; border: 1px solid #26262f; border-radius: 8px; transition: color .2s, border-color .2s; cursor: pointer; } .ds-btn-secondary:hover { color: #f0f0f5; border-color: var(--accent, #e0a44a); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--accent-strong, #f2bd6b); outline-offset: 2px; }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Resting container. Surface over canvas, hairline border, whisper shadow; opt-in lift on hover.",
+      "html": "<div class=\"ds-card\"><h3 class=\"ds-card-title\">Ringkasan</h3><p class=\"ds-card-body\">Konten kartu.</p></div>",
+      "css": ".ds-card { background: #111119; border: 1px solid #26262f; border-radius: 12px; padding: 20px; box-shadow: 0 1px 2px rgba(4,4,10,0.6); transition: transform .2s cubic-bezier(0.22,1,0.36,1), border-color .2s, box-shadow .2s; } .ds-card:hover { transform: translateY(-2px); border-color: #34343f; box-shadow: 0 4px 12px -2px rgba(4,4,10,0.55), 0 2px 6px -2px rgba(4,4,10,0.5); } .ds-card-title { font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; color: #f0f0f5; margin: 0 0 4px; } .ds-card-body { font-size: 1rem; line-height: 1.6; color: #9a9aab; margin: 0; }"
+    },
+    {
+      "name": "Stat Readout",
+      "kind": "custom",
+      "refersTo": "stat",
+      "description": "A single labelled metric. Mono tabular value over a muted label, on the second surface step.",
+      "html": "<div class=\"ds-stat\"><div class=\"ds-stat-label\">Baris</div><div class=\"ds-stat-value\">1,284</div></div>",
+      "css": ".ds-stat { background: #181822; border: 1px solid #26262f; border-radius: 8px; padding: 12px 16px; box-shadow: 0 1px 2px rgba(4,4,10,0.6); } .ds-stat-label { font-size: .75rem; font-weight: 500; color: #9a9aab; } .ds-stat-value { margin-top: 4px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; color: #f0f0f5; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Tab Pill",
+      "kind": "nav",
+      "refersTo": "tab-active",
+      "description": "Segmented tab control. Active pill is accent-toned with an inset ring; others are muted.",
+      "html": "<div class=\"ds-tabs\"><button class=\"ds-tab ds-tab--active\">Ikhtisar</button><button class=\"ds-tab\">Grafik</button><button class=\"ds-tab\">Uji</button></div>",
+      "css": ".ds-tabs { display: inline-flex; gap: 4px; padding: 4px; background: rgba(17,17,25,0.6); border: 1px solid #26262f; border-radius: 12px; } .ds-tab { font-size: .875rem; font-weight: 500; color: #9a9aab; padding: 8px 14px; border: none; background: transparent; border-radius: 8px; transition: background .2s, color .2s; cursor: pointer; } .ds-tab:hover { background: #181822; color: #f0f0f5; } .ds-tab--active { background: color-mix(in srgb, var(--accent, #e0a44a) 15%, transparent); color: var(--accent-strong, #f2bd6b); box-shadow: inset 0 0 0 1px var(--accent-soft, rgba(224,164,74,0.12)); } .ds-tab:focus-visible { outline: 2px solid var(--accent-strong, #f2bd6b); outline-offset: 2px; }"
+    },
+    {
+      "name": "Badge",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Inline status tag in three tones (neutral / accent / warn). Hairline border, tiny label.",
+      "html": "<span class=\"ds-badge ds-badge--accent\">numerik</span>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; font-size: .75rem; font-weight: 500; padding: 2px 8px; border-radius: 6px; border: 1px solid; } .ds-badge--accent { background: color-mix(in srgb, var(--accent, #e0a44a) 15%, transparent); color: var(--accent-strong, #f2bd6b); border-color: color-mix(in srgb, var(--accent, #e0a44a) 30%, transparent); } .ds-badge--neutral { background: #181822; color: #b8b8c6; border-color: #26262f; } .ds-badge--warn { background: rgba(251,113,133,0.15); color: #fb7185; border-color: rgba(251,113,133,0.3); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Calibrated Instrument",
+    "overview": "ceritabel looks and behaves like a precision instrument you trust because it reads true. The whole surface is a dark, low-noise canvas so the only things that glow are the data and the single accent. Nothing is decorative for its own sake: the graph-paper grid is plotting space, the tabular numerics are a readout, the diverging heatmap is a measurement. The aesthetic says the numbers are real before a word is read. The personality is sharp, modern, confident — a contemporary analyst's tool, fast and self-assured without ever being loud. Depth comes from tonal layering and tinted shadows, never pure black. A single accent — amber by default, swappable to teal, coral, or lime — carries every action, selection, and state; its rarity is the point.",
+    "keyCharacteristics": [
+      "Dark-by-default, single-accent, tonally layered.",
+      "Data-native visual language (graph-paper grids, tabular figures, diverging scales).",
+      "Restraint as confidence: glow is rationed, motion conveys state.",
+      "Themeable accent without touching the structural greys."
+    ],
+    "rules": [
+      { "name": "The One Accent Rule", "body": "Exactly one accent hue is live at a time, under ~10% of any screen's surface. Two accents on one screen means one is wrong.", "section": "colors" },
+      { "name": "The Semantic-Only Signal Rule", "body": "Positive-green and negative-rose are reserved for meaning (success, error, good/bad delta). Forbidden as decoration.", "section": "colors" },
+      { "name": "The Readout Rule", "body": "Any standalone number a user might compare or scan uses .tnum tabular figures. Numbers line up like an instrument readout.", "section": "typography" },
+      { "name": "The Fixed-Scale-In-App Rule", "body": "Fluid clamp() type is for the marketing hero only. Inside the app, type sizes are fixed rem steps on a ~1.2 ratio.", "section": "typography" },
+      { "name": "The Layered-First Rule", "body": "Reach for the next surface step before reaching for a shadow. Shadows respond to state, they don't decorate a resting surface.", "section": "elevation" },
+      { "name": "The Tinted-Shadow Rule", "body": "Every shadow uses rgba(4,4,10,…), never rgba(0,0,0,…). The canvas hue in the shadow is what makes depth read premium.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep exactly one accent live and under ~10% of the surface.",
+      "Do build depth with the surface ramp first, shadow second.",
+      "Do tint every shadow with rgba(4,4,10,…), never pure black.",
+      "Do set .tnum tabular figures on every standalone number.",
+      "Do keep muted (#9a9aab) text at or above 4.5:1; bump toward foreground if close.",
+      "Do reserve positive/negative for real meaning only.",
+      "Do give every interactive element hover + :focus-visible + active states.",
+      "Do ship a prefers-reduced-motion alternative for every animation."
+    ],
+    "donts": [
+      "Don't introduce glowing magic/AI gradients, sci-fi chrome, or purple mysticism — hype undermines the numbers-are-real premise.",
+      "Don't drift toward the generic SaaS template: no cream/indigo, no identical card grids, no tracked-uppercase eyebrow on every section.",
+      "Don't build enterprise BI bloat: no toolbar clutter, dropdown soup, or intimidating chrome density.",
+      "Don't go childish: no bouncy/elastic easing, no emoji-as-UI, no gamified flourishes.",
+      "Don't use a border-left/border-right > 1px as a colored accent stripe.",
+      "Don't use gradient text (background-clip: text).",
+      "Don't nest a bordered card inside another card; layer with surface-2.",
+      "Don't let a second accent hue appear alongside the active one."
+    ]
+  }
+}

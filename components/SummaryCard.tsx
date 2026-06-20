@@ -32,7 +32,7 @@ export default function SummaryCard({
     quality.score >= 80
       ? "text-positive"
       : quality.score >= 50
-        ? "text-amber-300"
+        ? "text-warning-strong"
         : "text-negative";
 
   const items: { label: string; value: React.ReactNode }[] = [

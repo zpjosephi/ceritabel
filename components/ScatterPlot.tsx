@@ -15,8 +15,7 @@ import {
 import { parseNumber, simpleLinearRegression, fmtNum } from "@/lib/stats";
 import type { ParsedDataset } from "@/lib/types";
 import { useLang } from "./LanguageProvider";
-
-const ACCENT = "#7c5cfc";
+import { useAccentColors } from "./AccentPicker";
 
 export default function ScatterPlot({
   dataset,
@@ -26,6 +25,7 @@ export default function ScatterPlot({
   numericFields: string[];
 }) {
   const { t } = useLang();
+  const { accent, strong } = useAccentColors();
   const [xField, setXField] = useState(numericFields[0] ?? "");
   const [yField, setYField] = useState(numericFields[1] ?? numericFields[0] ?? "");
   const [showLine, setShowLine] = useState(true);
@@ -63,7 +63,7 @@ export default function ScatterPlot({
             type="checkbox"
             checked={showLine}
             onChange={(e) => setShowLine(e.target.checked)}
-            className="accent-[#7c5cfc]"
+            className="accent-[var(--accent)]"
           />
           {t("regLine")}
         </label>
@@ -95,7 +95,7 @@ export default function ScatterPlot({
           />
           <ZAxis range={[36, 36]} />
           <Tooltip
-            cursor={{ strokeDasharray: "3 3", stroke: "#7c5cfc" }}
+            cursor={{ strokeDasharray: "3 3", stroke: accent }}
             contentStyle={{
               background: "#1c1c27",
               border: "1px solid #2a2a38",
@@ -104,10 +104,10 @@ export default function ScatterPlot({
               fontSize: 12,
             }}
           />
-          <Scatter data={points} fill={ACCENT} fillOpacity={0.6} />
+          <Scatter data={points} fill={accent} fillOpacity={0.6} />
           {showLine && regression ? (
             <ReferenceLine
-              stroke="#9a80ff"
+              stroke={strong}
               strokeWidth={2}
               ifOverflow="extendDomain"
               segment={[

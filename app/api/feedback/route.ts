@@ -61,7 +61,7 @@ export async function POST(req: Request) {
           {
             title: title.slice(0, 250),
             description: message.trim().slice(0, 1500),
-            color: 0x7c5cfc,
+            color: 0xe0a44a,
             fields: [
               { name: "Dari", value: from, inline: true },
               ...(where ? [{ name: "Halaman", value: where, inline: true }] : []),

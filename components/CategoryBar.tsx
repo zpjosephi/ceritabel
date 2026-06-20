@@ -11,8 +11,7 @@ import {
 } from "recharts";
 import type { CategoricalSummary } from "@/lib/types";
 import { useLang } from "./LanguageProvider";
-
-const ACCENT = "#7c5cfc";
+import { useAccentColors } from "./AccentPicker";
 
 export default function CategoryBar({
   summary,
@@ -20,6 +19,7 @@ export default function CategoryBar({
   summary: CategoricalSummary;
 }) {
   const { t } = useLang();
+  const { accent, soft } = useAccentColors();
   const data = summary.topCategories.map((c) => ({
     name: c.value.length > 18 ? c.value.slice(0, 17) + "…" : c.value,
     full: c.value,
@@ -48,7 +48,7 @@ export default function CategoryBar({
           tickLine={false}
         />
         <Tooltip
-          cursor={{ fill: "#7c5cfc22" }}
+          cursor={{ fill: soft }}
           contentStyle={{
             background: "#1c1c27",
             border: "1px solid #2a2a38",
@@ -63,7 +63,7 @@ export default function CategoryBar({
         />
         <Bar dataKey="count" radius={[0, 3, 3, 0]}>
           {data.map((_, i) => (
-            <Cell key={i} fill={ACCENT} fillOpacity={1 - i * 0.13} />
+            <Cell key={i} fill={accent} fillOpacity={1 - i * 0.13} />
           ))}
         </Bar>
       </BarChart>

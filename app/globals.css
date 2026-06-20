@@ -1,49 +1,176 @@
 @import "tailwindcss";
 
 /*
-  ceritabel — dark dashboard theme, single violet accent.
+  ceritabel — dark "data storytelling" theme, single violet accent.
   Dark mode is the DEFAULT (no prefers-color-scheme toggle); the whole app
   is designed around a dark data-dashboard aesthetic.
+
+  Token names and @theme mappings are stable — components depend on them.
+  This file refines *values* and layers in depth (tinted shadows, grain,
+  mesh glow, motion) without renaming anything.
 */
 
 :root {
-  --background: #0a0a0f;       /* near-black canvas */
-  --surface: #14141c;          /* cards / panels */
-  --surface-2: #1c1c27;        /* nested surfaces, table headers */
-  --border: #2a2a38;           /* hairline borders */
-  --foreground: #ededf2;       /* primary text */
+  --background: #08080d;       /* deep tinted near-black canvas */
+  --surface: #111119;          /* cards / panels */
+  --surface-2: #181822;        /* nested surfaces, table headers */
+  --surface-3: #20202c;        /* hover / raised nested */
+  --border: #26262f;           /* hairline borders */
+  --border-strong: #34343f;    /* emphasized / hover borders */
+  --chart-grid: #2a2a38;       /* gridlines / axis strokes inside charts */
+  --foreground: #f0f0f5;       /* primary text */
   --muted: #9a9aab;            /* secondary text */
-  --accent: #7c5cfc;           /* the single accent */
-  --accent-soft: #7c5cfc22;    /* accent tint for backgrounds */
-  --accent-strong: #9a80ff;    /* hover / emphasis */
+  --muted-strong: #b8b8c6;     /* labels that need a touch more presence */
+
+  /* --- Accent (themeable) ---------------------------------------------
+     The accent is swappable at runtime via html[data-accent="…"] blocks
+     below. These :root values are the DEFAULT (hazard red — the aviation-red
+     echo of the author's portfolio) so SSR + no-JS still render a complete
+     theme. --accent-ink is the readable text color on a solid accent fill
+     (white here, since hazard is saturated); --accent-glow is the tinted
+     shadow color. */
+  --accent: #d62a23;
+  --accent-soft: rgba(214, 42, 35, 0.13);
+  --accent-strong: #ff5d54;
+  --accent-ink: #ffffff;
+  --accent-glow: rgba(214, 42, 35, 0.34);
+
   --positive: #34d399;
   --negative: #fb7185;
+  /* Reserved warning signal (medium-severity, mid quality score). A fixed
+     semantic hue independent of the themeable accent. */
+  --warning: #fbbf24;
+  --warning-strong: #fcd34d;
+  --warning-soft: rgba(251, 191, 36, 0.15);
+
+  /* Tinted shadows — carry the canvas hue + a faint violet cast, never pure
+     black. This is the single biggest "premium" tell on dark surfaces. */
+  --shadow-sm: 0 1px 2px rgba(4, 4, 10, 0.6);
+  --shadow-md:
+    0 4px 12px -2px rgba(4, 4, 10, 0.55),
+    0 2px 6px -2px rgba(4, 4, 10, 0.5);
+  --shadow-lg:
+    0 24px 50px -12px rgba(4, 4, 10, 0.75),
+    0 8px 20px -8px var(--accent-glow);
+
+  /* z-index scale — no more arbitrary 9999s */
+  --z-base: 1;
+  --z-sticky: 20;
+  --z-overlay: 40;
+  --z-toast: 60;
+}
+
+/* --- Accent themes -----------------------------------------------------
+   Switched at runtime by setting data-accent on <html>. Each block only
+   overrides the accent quartet; everything else (surfaces, shadows that
+   reference --accent-glow, .glow-accent) re-derives automatically. */
+html[data-accent="amber"] {
+  --accent: #e0a44a;
+  --accent-soft: rgba(224, 164, 74, 0.12);
+  --accent-strong: #f2bd6b;
+  --accent-ink: #20160a;
+  --accent-glow: rgba(224, 164, 74, 0.3);
+}
+html[data-accent="teal"] {
+  --accent: #22c0ad;
+  --accent-soft: rgba(34, 192, 173, 0.12);
+  --accent-strong: #4dd6c4;
+  --accent-ink: #04211d;
+  --accent-glow: rgba(34, 192, 173, 0.3);
+}
+html[data-accent="coral"] {
+  --accent: #f2603f;
+  --accent-soft: rgba(242, 96, 63, 0.12);
+  --accent-strong: #ff7d5e;
+  --accent-ink: #2a0d06;
+  --accent-glow: rgba(242, 96, 63, 0.3);
+}
+html[data-accent="lime"] {
+  --accent: #b5e048;
+  --accent-soft: rgba(181, 224, 72, 0.12);
+  --accent-strong: #c9ee6e;
+  --accent-ink: #1a2207;
+  --accent-glow: rgba(181, 224, 72, 0.28);
+}
+/* Aviation / hazard red — echoes the portfolio's instrument identity. The base
+   is saturated enough that its ink is light (white), unlike the lighter accents
+   above which carry dark ink. */
+html[data-accent="hazard"] {
+  --accent: #d62a23;
+  --accent-soft: rgba(214, 42, 35, 0.13);
+  --accent-strong: #ff5d54;
+  --accent-ink: #ffffff;
+  --accent-glow: rgba(214, 42, 35, 0.34);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
+  --color-muted-strong: var(--muted-strong);
   --color-accent: var(--accent);
   --color-accent-strong: var(--accent-strong);
+  --color-accent-ink: var(--accent-ink);
   --color-positive: var(--positive);
   --color-negative: var(--negative);
+  --color-warning: var(--warning);
+  --color-warning-strong: var(--warning-strong);
+  --color-chart-grid: var(--chart-grid);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 html {
   color-scheme: dark;
+  scroll-behavior: smooth;
 }
 
 body {
+  position: relative;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Fixed grain overlay — breaks the digital flatness of large dark fields.
+   pointer-events:none so it never intercepts clicks; very low opacity. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* App content sits above the grain. Scoped to @layer base so Tailwind
+   utilities (.fixed, .z-50, .sticky, etc.) still win — an unlayered rule here
+   would override utility positioning and break fixed/sticky elements. */
+@layer base {
+  body > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Consistent, visible keyboard focus across every interactive element. */
+:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 @keyframes pop {
@@ -60,22 +187,149 @@ body {
   }
 }
 
-/* Subtle accent glow used behind hero / headings */
-.glow-accent {
-  background:
-    radial-gradient(60rem 30rem at 50% -10%, var(--accent-soft), transparent 70%);
+/* Staggered entry — content lifts in instead of mounting all at once. */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Scroll-driven reveal — native (no JS), and SAFE: content is visible by
+   default, so browsers without animation-timeline (or reduced-motion users)
+   simply see static content. Only enhanced where supported. */
+.reveal {
+  opacity: 1;
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: fade-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 38%;
+    }
+  }
+}
+
+/* Apply with inline style="--d: 60ms" to cascade a group. */
+.fade-up-stagger > * {
+  animation: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Technical graph-paper grid — an intentional, data-native backdrop (plotting
+   space) rather than the ambient AI blur-glow. Hairlines fade out via a radial
+   mask, concentrated top-right behind the chart preview, clear behind the text
+   on the left so copy stays readable. */
+.tech-grid {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--border) 55%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--border) 55%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 54px 54px;
+  -webkit-mask-image: radial-gradient(
+    125% 115% at 90% -12%,
+    #000 20%,
+    transparent 68%
+  );
+  mask-image: radial-gradient(125% 115% at 90% -12%, #000 20%, transparent 68%);
+}
+
+/* Tabular figures for any numeric run that opts in. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Telemetry / instrument label — mono, uppercase, tracked. A borrowed signature
+   from the portfolio's aviation-datasheet aesthetic. For data-field labels and
+   readouts (Stat labels, scope controls), NOT as a per-section eyebrow. */
+.tele {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+/* Reusable card-lift hover — subtle translate + tinted shadow + brighter
+   hairline. Used by the shared <Card> primitive and bespoke panels. */
+.card-lift {
+  transition:
+    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+.card-lift:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+/* Spotlight-edge hairline used for the AI / hero feature surfaces. */
+.edge-glow {
+  position: relative;
+}
+.edge-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--accent-strong) 40%, transparent),
+    color-mix(in srgb, var(--accent) 6%, transparent) 40%,
+    transparent 70%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 /* Thin custom scrollbar to match the dashboard feel */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  scrollbar-color: var(--border-strong) transparent;
 }
 *::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 *::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: var(--border-strong);
   border-radius: 4px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
 }

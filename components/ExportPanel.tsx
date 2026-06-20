@@ -44,7 +44,7 @@ export default function ExportPanel({ opts }: { opts: CodegenOptions }) {
               key={x}
               onClick={() => setTab(x)}
               className={`rounded-md px-3 py-1 font-medium transition ${
-                tab === x ? "bg-accent text-white" : "text-muted hover:text-foreground"
+                tab === x ? "bg-accent text-accent-ink" : "text-muted hover:text-foreground"
               }`}
             >
               {x === "python" ? "Python" : "R"}
@@ -60,14 +60,14 @@ export default function ExportPanel({ opts }: { opts: CodegenOptions }) {
           </button>
           <button
             onClick={download}
-            className="rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-white transition hover:bg-accent-strong"
+            className="rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-accent-ink transition hover:bg-accent-strong"
           >
             {t("exportDownload")}
           </button>
         </div>
       </div>
 
-      <pre className="max-h-96 overflow-auto rounded-lg border border-border bg-[#0d0d14] p-4 text-xs leading-relaxed text-foreground/90">
+      <pre className="max-h-96 overflow-auto rounded-lg border border-border bg-background p-4 text-xs leading-relaxed text-foreground/90">
         <code>{code}</code>
       </pre>
     </Card>
