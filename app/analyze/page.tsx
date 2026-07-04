@@ -859,6 +859,9 @@ function Results({
         quality={qualityReport}
         insight={insight}
         insightStale={insightStale}
+        dataset={dataset}
+        regTarget={regTarget}
+        changes={changes}
       />
     </div>
   );
