@@ -36,6 +36,7 @@ export const ACCENTS = [
   { id: "teal", label: "Teal", swatch: "#22c0ad" },
   { id: "coral", label: "Coral", swatch: "#f2603f" },
   { id: "lime", label: "Lime", swatch: "#b5e048" },
+  { id: "biru", label: "Blue", swatch: "#4f8ef7" },
   { id: "hazard", label: "Hazard", swatch: "#d62a23" },
 ] as const;
 

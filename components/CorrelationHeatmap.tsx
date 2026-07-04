@@ -4,10 +4,13 @@ import { useSyncExternalStore } from "react";
 import type { CorrelationMatrix } from "@/lib/types";
 import { useLang } from "./LanguageProvider";
 
-/* Negative pole = a fixed cool blue (NOT the rose --negative, which is warm and
-   reads "all red" next to the warm brand accent). A blue<->accent diverging scale
-   keeps + and - visually distinct - the whole point of a correlation heatmap. */
-const CORR_NEG = "#3b82f6";
+/* Negative pole: each accent theme ships its own best-opposing hue as
+   --corr-neg (blue for the warm accents, warm orange for teal, violet for
+   lime, ...), so + and - stay visually distinct whatever the theme. */
+const CORR_NEG = "var(--corr-neg, #3b82f6)";
+
+/* Colorblind-safe negative pole (fixed blue, paired with the fixed orange). */
+const CORR_NEG_CVD = "#3b82f6";
 
 /* Colorblind-safe positive pole: blue<->orange is the classic diverging pair
    that stays distinguishable across all common CVD types. Fixed on purpose:
@@ -56,7 +59,8 @@ function colorFor(r: number | null, cvdSafe: boolean): string {
   const mag = Math.min(1, Math.abs(r));
   const pct = (0.12 + mag * 0.78) * 100;
   const pos = cvdSafe ? CORR_POS_CVD : "var(--accent)";
-  const base = r >= 0 ? pos : CORR_NEG;
+  const neg = cvdSafe ? CORR_NEG_CVD : CORR_NEG;
+  const base = r >= 0 ? pos : neg;
   return `color-mix(in srgb, ${base} ${pct}%, transparent)`;
 }
 
@@ -74,6 +78,7 @@ export default function CorrelationHeatmap({
 
   const n = fields.length;
   const pos = cvdSafe ? CORR_POS_CVD : "var(--accent)";
+  const neg = cvdSafe ? CORR_NEG_CVD : CORR_NEG;
 
   return (
     <div className="overflow-x-auto">
@@ -112,7 +117,7 @@ export default function CorrelationHeatmap({
         <span
           className="h-2 w-32 rounded-full"
           style={{
-            background: `linear-gradient(to right, color-mix(in srgb, ${CORR_NEG} 90%, transparent), color-mix(in srgb, ${pos} 12%, transparent), color-mix(in srgb, ${pos} 90%, transparent))`,
+            background: `linear-gradient(to right, color-mix(in srgb, ${neg} 90%, transparent), color-mix(in srgb, ${pos} 12%, transparent), color-mix(in srgb, ${pos} 90%, transparent))`,
           }}
         />
         <span>+1</span>
