@@ -178,6 +178,21 @@ const ID: Dict = {
   rangeLabel: "Rentang {x}",
   corrNeed2: "Butuh minimal 2 kolom numerik untuk matriks korelasi.",
   corrUndef: "(- = tak terdefinisi)",
+  corrCvdToggle: "Warna aman buta warna",
+
+  // printable report
+  reportBtn: "Unduh laporan (PDF)",
+  reportHint: "Membuka dialog cetak; pilih 'Save as PDF'.",
+  reportTitle: "Laporan analisis data",
+  reportRows: "baris",
+  reportCols: "kolom",
+  reportNumeric: "Statistik numerik",
+  reportCategorical: "Kolom kategorikal",
+  reportCorr: "Korelasi antar kolom numerik",
+  reportInsight: "Insight AI",
+  reportTopCat: "Kategori teratas",
+  reportUnique: "unik",
+  reportMadeWith: "Dihasilkan dengan ceritabel. Semua statistik dihitung di browser; AI hanya menjelaskan.",
   scatterNeed2: "Butuh minimal 2 kolom numerik untuk scatter plot.",
   regLine: "Garis regresi",
   regUnavailable:
@@ -496,6 +511,21 @@ const EN: Dict = {
   rangeLabel: "Range {x}",
   corrNeed2: "Need at least 2 numeric columns for a correlation matrix.",
   corrUndef: "(- = undefined)",
+  corrCvdToggle: "Colorblind-safe colors",
+
+  // printable report
+  reportBtn: "Download report (PDF)",
+  reportHint: "Opens the print dialog; choose 'Save as PDF'.",
+  reportTitle: "Data analysis report",
+  reportRows: "rows",
+  reportCols: "columns",
+  reportNumeric: "Numeric statistics",
+  reportCategorical: "Categorical columns",
+  reportCorr: "Correlation between numeric columns",
+  reportInsight: "AI insight",
+  reportTopCat: "Top category",
+  reportUnique: "unique",
+  reportMadeWith: "Generated with ceritabel. Every statistic is computed in the browser; the AI only explains.",
   scatterNeed2: "Need at least 2 numeric columns for a scatter plot.",
   regLine: "Regression line",
   regUnavailable:

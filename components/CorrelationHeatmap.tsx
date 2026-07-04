@@ -1,24 +1,62 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import type { CorrelationMatrix } from "@/lib/types";
 import { useLang } from "./LanguageProvider";
 
 /* Negative pole = a fixed cool blue (NOT the rose --negative, which is warm and
-   reads "all red" next to the warm brand accent). A blue↔accent diverging scale
-   keeps + and − visually distinct - the whole point of a correlation heatmap. */
+   reads "all red" next to the warm brand accent). A blue<->accent diverging scale
+   keeps + and - visually distinct - the whole point of a correlation heatmap. */
 const CORR_NEG = "#3b82f6";
+
+/* Colorblind-safe positive pole: blue<->orange is the classic diverging pair
+   that stays distinguishable across all common CVD types. Fixed on purpose:
+   in safe mode the scale must NOT follow the themeable accent (a teal or lime
+   accent would collapse the two poles for some viewers). Orange sits near the
+   semantic warning hue, but here it encodes measurement, not caution; the
+   trade-off is deliberate and only active in safe mode. */
+const CORR_POS_CVD = "#f59e0b";
+
+/* Colorblind-safe mode is a tiny cross-component setting; persisted in
+   localStorage and broadcast with an event so every open heatmap follows. */
+const CVD_KEY = "ceritabel-cvd-safe";
+const CVD_EVENT = "ceritabel:cvdchange";
+
+function subscribeCvd(cb: () => void) {
+  window.addEventListener(CVD_EVENT, cb);
+  window.addEventListener("storage", cb);
+  return () => {
+    window.removeEventListener(CVD_EVENT, cb);
+    window.removeEventListener("storage", cb);
+  };
+}
+function readCvd(): boolean {
+  try {
+    return localStorage.getItem(CVD_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+function writeCvd(v: boolean) {
+  try {
+    localStorage.setItem(CVD_KEY, v ? "1" : "0");
+  } catch {
+    /* private mode: the toggle still works for this render via the event */
+  }
+  window.dispatchEvent(new Event(CVD_EVENT));
+}
 
 /**
  * Diverging color for a Pearson r in [-1, 1]:
- *  negative → cool blue, 0 → neutral surface, positive → the live accent.
- * Positive stays tied to --accent so it still echoes the theme; negative is a
- * fixed cool hue so the two poles always contrast.
+ *  negative -> cool blue, 0 -> neutral surface, positive -> the live accent
+ *  (or a fixed orange when colorblind-safe mode is on).
  */
-function colorFor(r: number | null): string {
+function colorFor(r: number | null, cvdSafe: boolean): string {
   if (r === null) return "transparent";
   const mag = Math.min(1, Math.abs(r));
   const pct = (0.12 + mag * 0.78) * 100;
-  const base = r >= 0 ? "var(--accent)" : CORR_NEG;
+  const pos = cvdSafe ? CORR_POS_CVD : "var(--accent)";
+  const base = r >= 0 ? pos : CORR_NEG;
   return `color-mix(in srgb, ${base} ${pct}%, transparent)`;
 }
 
@@ -28,12 +66,14 @@ export default function CorrelationHeatmap({
   cm: CorrelationMatrix;
 }) {
   const { t } = useLang();
+  const cvdSafe = useSyncExternalStore(subscribeCvd, readCvd, () => false);
   const { fields, matrix } = cm;
   if (fields.length < 2) {
     return <p className="text-sm text-muted">{t("corrNeed2")}</p>;
   }
 
   const n = fields.length;
+  const pos = cvdSafe ? CORR_POS_CVD : "var(--accent)";
 
   return (
     <div className="overflow-x-auto">
@@ -62,20 +102,33 @@ export default function CorrelationHeatmap({
             rowField={rowField}
             values={matrix[i]}
             fields={fields}
+            cvdSafe={cvdSafe}
           />
         ))}
       </div>
 
-      <div className="mt-3 flex items-center gap-2 text-xs text-muted">
+      <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted">
         <span>−1</span>
         <span
           className="h-2 w-32 rounded-full"
           style={{
-            background: `linear-gradient(to right, color-mix(in srgb, ${CORR_NEG} 90%, transparent), color-mix(in srgb, var(--accent) 12%, transparent), color-mix(in srgb, var(--accent) 90%, transparent))`,
+            background: `linear-gradient(to right, color-mix(in srgb, ${CORR_NEG} 90%, transparent), color-mix(in srgb, ${pos} 12%, transparent), color-mix(in srgb, ${pos} 90%, transparent))`,
           }}
         />
         <span>+1</span>
         <span className="ml-2">{t("corrUndef")}</span>
+        <button
+          type="button"
+          aria-pressed={cvdSafe}
+          onClick={() => writeCvd(!cvdSafe)}
+          className={`ml-auto rounded-md border px-2 py-1 text-xs font-medium transition ${
+            cvdSafe
+              ? "border-accent/40 bg-accent/15 text-accent-strong"
+              : "border-border bg-surface text-muted hover:border-border-strong hover:text-foreground"
+          }`}
+        >
+          {t("corrCvdToggle")}
+        </button>
       </div>
     </div>
   );
@@ -85,10 +138,12 @@ function Row({
   rowField,
   values,
   fields,
+  cvdSafe,
 }: {
   rowField: string;
   values: (number | null)[];
   fields: string[];
+  cvdSafe: boolean;
 }) {
   return (
     <>
@@ -102,7 +157,7 @@ function Row({
         <div
           key={`c-${rowField}-${fields[j]}`}
           className="flex aspect-square items-center justify-center rounded-[3px] tabular-nums text-foreground"
-          style={{ background: colorFor(r) }}
+          style={{ background: colorFor(r, cvdSafe) }}
           title={`${rowField} × ${fields[j]}: ${r === null ? "-" : r.toFixed(2)}`}
         >
           {r === null ? "-" : r.toFixed(2)}
