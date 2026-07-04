@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Gauge,
   ChartBar,
@@ -37,6 +37,7 @@ import ColumnSelector from "@/components/ColumnSelector";
 import SummaryCard from "@/components/SummaryCard";
 import DataPreview from "@/components/DataPreview";
 import ExportPanel from "@/components/ExportPanel";
+import ReportPrint from "@/components/ReportPrint";
 import AIInsightPanel from "@/components/AIInsightPanel";
 import ChatPanel from "@/components/ChatPanel";
 import DataQualityPanel from "@/components/DataQualityPanel";
@@ -253,6 +254,36 @@ export default function AnalyzePage() {
     },
     [startWith, t],
   );
+
+  // Deep-link demo mode: /analyze?sample=siswa|timeseries|panel loads the
+  // bundled dataset immediately, so a shared link lands inside a finished
+  // analysis instead of an empty upload screen.
+  const deepLinked = useRef(false);
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search)
+      .get("sample")
+      ?.toLowerCase();
+    if (!slug) return;
+    const idx: Record<string, number> = {
+      siswa: 0,
+      students: 0,
+      timeseries: 1,
+      ts: 1,
+      panel: 2,
+      gdp: 2,
+    };
+    const i = idx[slug];
+    if (i === undefined) return;
+    // Deferred past the effect's synchronous phase (the loader sets state).
+    // The once-guard lives INSIDE the callback so StrictMode's double effect
+    // run (schedule, clean up, schedule again) still fires exactly once.
+    const timer = setTimeout(() => {
+      if (deepLinked.current) return;
+      deepLinked.current = true;
+      void handleSample(SAMPLES[i]);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [handleSample]);
 
   const pickSheet = (sheet: SheetData) => {
     setFileName(sheet.name);
@@ -788,6 +819,16 @@ function Results({
                 <SectionTitle hint={t("secExportHint")}>
                   {t("secExport")}
                 </SectionTitle>
+                <div className="mb-4 flex flex-wrap items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => window.print()}
+                    className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-ink transition hover:bg-accent-strong active:scale-[0.98]"
+                  >
+                    {t("reportBtn")}
+                  </button>
+                  <span className="text-xs text-muted">{t("reportHint")}</span>
+                </div>
                 <ExportPanel opts={codegenOpts} />
               </section>
             ) : null}
@@ -809,6 +850,16 @@ function Results({
           <ChatPanel summary={analysis.summary} modelId={modelId} />
         </div>
       </div>
+
+      {/* Hidden on screen; becomes the whole document when printing. */}
+      <ReportPrint
+        fileName={fileName}
+        shape={shape}
+        analysis={analysis}
+        quality={qualityReport}
+        insight={insight}
+        insightStale={insightStale}
+      />
     </div>
   );
 }
