@@ -1,5 +1,5 @@
 // lib/panel.ts
-// Panel-data (longitudinal) detection & summary — computed in code.
+// Panel-data (longitudinal) detection & summary - computed in code.
 //
 // Auto-detects an (entity, time) structure, then reports the panel shape and a
 // within/between variance decomposition (à la Stata's xtsum). Detection is a
@@ -101,7 +101,7 @@ export function detectPanel(
   return { entityCol, timeCol };
 }
 
-/** Uniqueness of (entity, time) pairs — ≈1 means a proper panel grid. */
+/** Uniqueness of (entity, time) pairs - ≈1 means a proper panel grid. */
 function gridStats(ds: ParsedDataset, entityCol: string, timeCol: string) {
   const pairs = new Set<string>();
   const entities = new Set<string>();

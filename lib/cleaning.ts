@@ -2,7 +2,7 @@
 // Deterministic cleaning operations (computed in code). Each op is a pure
 // function: it takes a dataset + returns a NEW dataset and a human-readable
 // change log entry. Operations are modelled as serialisable ACTIONS so the
-// whole pipeline can be replayed from the original dataset — which gives us
+// whole pipeline can be replayed from the original dataset - which gives us
 // free, exact UNDO (just drop the last action and replay).
 
 import { isMissing, parseNumber, quantileSorted, round2 } from "./stats";

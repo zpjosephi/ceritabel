@@ -1,6 +1,6 @@
 // lib/types.ts
 // The data contract. `StatsSummary` is the ONLY thing that crosses to the
-// server — it contains computed statistics, never raw data rows.
+// server - it contains computed statistics, never raw data rows.
 
 export type ColumnType = "numeric" | "categorical";
 
@@ -12,7 +12,7 @@ export interface NumericSummary {
   type: "numeric";
   count: number; // non-missing count
   missing: number;
-  missingPct: number; // 0–100
+  missingPct: number; // 0-100
   mean: number;
   median: number;
   std: number; // sample standard deviation (n-1)

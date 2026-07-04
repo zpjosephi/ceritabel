@@ -154,7 +154,7 @@ export default function TimeSeriesAnalysis({
             <Metric label="R²" value={fmtNum(result.r2)} />
             <Metric
               label={t("tsAutocorr")}
-              value={result.autocorrLag1 !== null ? fmtNum(result.autocorrLag1) : "—"}
+              value={result.autocorrLag1 !== null ? fmtNum(result.autocorrLag1) : "-"}
             />
           </div>
           <p className="mt-3 text-xs text-muted">

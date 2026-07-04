@@ -3,7 +3,7 @@
 //
 // Includes hand-written special functions (log-gamma, regularised incomplete
 // beta & gamma) so we can compute exact p-values for the Student-t, F and
-// chi-square distributions — no stats backend needed. Verified against R in
+// chi-square distributions - no stats backend needed. Verified against R in
 // inference.test.ts.
 
 import { isMissing, parseNumber } from "./stats";

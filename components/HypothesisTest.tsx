@@ -252,7 +252,7 @@ function Metric({
 }
 
 function formatP(p: number): string {
-  if (!Number.isFinite(p)) return "—";
+  if (!Number.isFinite(p)) return "-";
   if (p < 0.0001) return "< 0.0001";
   return p.toFixed(4);
 }

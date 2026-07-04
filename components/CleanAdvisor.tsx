@@ -89,7 +89,7 @@ export default function CleanAdvisor({
     const selected = recs.filter((_, i) => checked[i]).map((r) => r.action);
     if (selected.length === 0) return;
     onApply(selected);
-    // Recommendations are stale once applied — clear and let the user re-ask.
+    // Recommendations are stale once applied - clear and let the user re-ask.
     setRecs([]);
     setChecked([]);
     setAiSummary("");

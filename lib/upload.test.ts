@@ -14,7 +14,7 @@ function makeXlsx(
   return new File([buf], "test.xlsx");
 }
 
-describe("parseUpload — Excel", () => {
+describe("parseUpload - Excel", () => {
   it("parses an .xlsx into the ParsedDataset shape", async () => {
     const file = makeXlsx([
       {

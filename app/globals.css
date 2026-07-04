@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 /*
-  ceritabel — dark "data storytelling" theme, single violet accent.
+  ceritabel - dark "data storytelling" theme, single violet accent.
   Dark mode is the DEFAULT (no prefers-color-scheme toggle); the whole app
   is designed around a dark data-dashboard aesthetic.
 
-  Token names and @theme mappings are stable — components depend on them.
+  Token names and @theme mappings are stable - components depend on them.
   This file refines *values* and layers in depth (tinted shadows, grain,
   mesh glow, motion) without renaming anything.
 */
@@ -24,7 +24,7 @@
 
   /* --- Accent (themeable) ---------------------------------------------
      The accent is swappable at runtime via html[data-accent="…"] blocks
-     below. These :root values are the DEFAULT (hazard red — the aviation-red
+     below. These :root values are the DEFAULT (hazard red - the aviation-red
      echo of the author's portfolio) so SSR + no-JS still render a complete
      theme. --accent-ink is the readable text color on a solid accent fill
      (white here, since hazard is saturated); --accent-glow is the tinted
@@ -43,7 +43,7 @@
   --warning-strong: #fcd34d;
   --warning-soft: rgba(251, 191, 36, 0.15);
 
-  /* Tinted shadows — carry the canvas hue + a faint violet cast, never pure
+  /* Tinted shadows - carry the canvas hue + a faint violet cast, never pure
      black. This is the single biggest "premium" tell on dark surfaces. */
   --shadow-sm: 0 1px 2px rgba(4, 4, 10, 0.6);
   --shadow-md:
@@ -53,7 +53,7 @@
     0 24px 50px -12px rgba(4, 4, 10, 0.75),
     0 8px 20px -8px var(--accent-glow);
 
-  /* z-index scale — no more arbitrary 9999s */
+  /* z-index scale - no more arbitrary 9999s */
   --z-base: 1;
   --z-sticky: 20;
   --z-overlay: 40;
@@ -92,7 +92,7 @@ html[data-accent="lime"] {
   --accent-ink: #1a2207;
   --accent-glow: rgba(181, 224, 72, 0.28);
 }
-/* Aviation / hazard red — echoes the portfolio's instrument identity. The base
+/* Aviation / hazard red - echoes the portfolio's instrument identity. The base
    is saturated enough that its ink is light (white), unlike the lighter accents
    above which carry dark ink. */
 html[data-accent="hazard"] {
@@ -139,7 +139,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Fixed grain overlay — breaks the digital flatness of large dark fields.
+/* Fixed grain overlay - breaks the digital flatness of large dark fields.
    pointer-events:none so it never intercepts clicks; very low opacity. */
 body::before {
   content: "";
@@ -152,7 +152,7 @@ body::before {
 }
 
 /* App content sits above the grain. Scoped to @layer base so Tailwind
-   utilities (.fixed, .z-50, .sticky, etc.) still win — an unlayered rule here
+   utilities (.fixed, .z-50, .sticky, etc.) still win - an unlayered rule here
    would override utility positioning and break fixed/sticky elements. */
 @layer base {
   body > * {
@@ -187,7 +187,7 @@ body::before {
   }
 }
 
-/* Staggered entry — content lifts in instead of mounting all at once. */
+/* Staggered entry - content lifts in instead of mounting all at once. */
 @keyframes fade-up {
   from {
     opacity: 0;
@@ -203,7 +203,7 @@ body::before {
   animation: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* Scroll-driven reveal — native (no JS), and SAFE: content is visible by
+/* Scroll-driven reveal - native (no JS), and SAFE: content is visible by
    default, so browsers without animation-timeline (or reduced-motion users)
    simply see static content. Only enhanced where supported. */
 .reveal {
@@ -225,7 +225,7 @@ body::before {
   animation-delay: calc(var(--i, 0) * 70ms);
 }
 
-/* Rotating headline word — restrained slide+fade swap (motion conveys state,
+/* Rotating headline word - restrained slide+fade swap (motion conveys state,
    not decoration). inline-grid keeps it on the text baseline; the global
    reduced-motion rule below neutralizes the entry to a static word. */
 @keyframes rotate-in {
@@ -261,7 +261,7 @@ body::before {
   }
 }
 
-/* Technical graph-paper grid — an intentional, data-native backdrop (plotting
+/* Technical graph-paper grid - an intentional, data-native backdrop (plotting
    space) rather than the ambient AI blur-glow. Hairlines fade out via a radial
    mask, concentrated top-right behind the chart preview, clear behind the text
    on the left so copy stays readable. */
@@ -292,7 +292,7 @@ body::before {
   font-feature-settings: "tnum" 1;
 }
 
-/* Telemetry / instrument label — mono, uppercase, tracked. A borrowed signature
+/* Telemetry / instrument label - mono, uppercase, tracked. A borrowed signature
    from the portfolio's aviation-datasheet aesthetic. For data-field labels and
    readouts (Stat labels, scope controls), NOT as a per-section eyebrow. */
 .tele {
@@ -301,7 +301,7 @@ body::before {
   letter-spacing: 0.12em;
 }
 
-/* Reusable card-lift hover — subtle translate + tinted shadow + brighter
+/* Reusable card-lift hover - subtle translate + tinted shadow + brighter
    hairline. Used by the shared <Card> primitive and bespoke panels. */
 .card-lift {
   transition:

@@ -13,7 +13,7 @@ export default function Footer() {
   return (
     <footer className="mt-auto border-t border-border">
       <div className="mx-auto max-w-3xl px-4 py-10 text-center sm:px-6">
-        {/* Thesis — the idea is the selling point, so it leads. */}
+        {/* Thesis - the idea is the selling point, so it leads. */}
         <p className="mx-auto max-w-md text-pretty text-sm leading-relaxed text-muted">
           {t("footerThesis")}
         </p>

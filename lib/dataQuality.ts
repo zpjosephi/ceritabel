@@ -1,5 +1,5 @@
 // lib/dataQuality.ts
-// Deterministic data-quality scan (computed in code — NOT by the LLM).
+// Deterministic data-quality scan (computed in code - NOT by the LLM).
 // Produces a structured report of issues that (a) renders in the UI and
 // (b) feeds the cleaning operations (Fase C) and the AI advisor (Fase D).
 
@@ -37,7 +37,7 @@ export interface DataQualityReport {
   totalCells: number;
   missingPct: number;
   issues: DataQualityIssue[];
-  /** 0–100 — higher is cleaner. */
+  /** 0-100 - higher is cleaner. */
   score: number;
 }
 
@@ -133,7 +133,7 @@ export function scanDataQuality(
         column: col.name,
         severity: "medium",
         title: "Kolom konstan",
-        detail: `Kolom "${col.name}" isinya satu nilai saja — tidak menambah informasi.`,
+        detail: `Kolom "${col.name}" isinya satu nilai saja - tidak menambah informasi.`,
         meta: {},
       });
     }
@@ -151,7 +151,7 @@ export function scanDataQuality(
         column: col.name,
         severity: "low",
         title: "Kemungkinan kolom ID",
-        detail: `Kolom "${col.name}" terlihat seperti pengenal unik — biasanya tidak dipakai untuk analisis statistik.`,
+        detail: `Kolom "${col.name}" terlihat seperti pengenal unik - biasanya tidak dipakai untuk analisis statistik.`,
         meta: { allUnique, looksLikeIdName },
       });
     }

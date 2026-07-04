@@ -30,7 +30,7 @@ export function useAccentColors() {
   return c;
 }
 
-/** Accent themes — id must match the html[data-accent="…"] blocks in globals.css. */
+/** Accent themes - id must match the html[data-accent="…"] blocks in globals.css. */
 export const ACCENTS = [
   { id: "amber", label: "Amber", swatch: "#e0a44a" },
   { id: "teal", label: "Teal", swatch: "#22c0ad" },
@@ -50,7 +50,7 @@ export function setAccent(id: AccentId) {
   try {
     localStorage.setItem(STORAGE_KEY, id);
   } catch {
-    /* private mode / storage disabled — theme still applies for this session */
+    /* private mode / storage disabled - theme still applies for this session */
   }
   // Let any other mounted pickers update their active state.
   window.dispatchEvent(new CustomEvent("accentchange", { detail: id }));
@@ -70,7 +70,7 @@ function getActiveAccent(): AccentId {
  * remembers the choice. Pair it with the language toggle in page headers.
  *
  * The active swatch reads straight from the live accent store (the <html>
- * data-accent attribute + accentchange event) via useSyncExternalStore — no
+ * data-accent attribute + accentchange event) via useSyncExternalStore - no
  * effect, no cascading render, and SSR renders the default cleanly.
  */
 export default function AccentPicker({ className = "" }: { className?: string }) {

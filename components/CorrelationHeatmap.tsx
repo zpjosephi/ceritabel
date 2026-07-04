@@ -5,7 +5,7 @@ import { useLang } from "./LanguageProvider";
 
 /* Negative pole = a fixed cool blue (NOT the rose --negative, which is warm and
    reads "all red" next to the warm brand accent). A blue↔accent diverging scale
-   keeps + and − visually distinct — the whole point of a correlation heatmap. */
+   keeps + and − visually distinct - the whole point of a correlation heatmap. */
 const CORR_NEG = "#3b82f6";
 
 /**
@@ -103,9 +103,9 @@ function Row({
           key={`c-${rowField}-${fields[j]}`}
           className="flex aspect-square items-center justify-center rounded-[3px] tabular-nums text-foreground"
           style={{ background: colorFor(r) }}
-          title={`${rowField} × ${fields[j]}: ${r === null ? "—" : r.toFixed(2)}`}
+          title={`${rowField} × ${fields[j]}: ${r === null ? "-" : r.toFixed(2)}`}
         >
-          {r === null ? "—" : r.toFixed(2)}
+          {r === null ? "-" : r.toFixed(2)}
         </div>
       ))}
     </>

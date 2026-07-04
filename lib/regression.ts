@@ -1,7 +1,7 @@
 // lib/regression.ts
 // Multiple linear regression (OLS), computed in code. Produces the full
 // summary: per-coefficient t-tests (partial significance), the overall F-test
-// (joint significance), R² and adjusted R² — like summary(lm(y ~ ., df)) in R.
+// (joint significance), R² and adjusted R² - like summary(lm(y ~ ., df)) in R.
 // Verified against R in regression.test.ts.
 
 import { isMissing, parseNumber } from "./stats";
@@ -34,7 +34,7 @@ export interface OlsResult {
   entityCol?: string; // FE / RE
   nEntities?: number; // FE / RE
   theta?: number; // RE quasi-demeaning factor (avg)
-  /** Slope estimates & their covariance (predictors only) — used by Hausman. */
+  /** Slope estimates & their covariance (predictors only) - used by Hausman. */
   slopeBeta?: number[];
   slopeVcov?: number[][];
 }
@@ -49,13 +49,13 @@ export interface HausmanResult {
 export interface AssumptionResult {
   kind: "assumptions";
   n: number;
-  /** Normality of residuals (Jarque–Bera). */
+  /** Normality of residuals (Jarque-Bera). */
   normality: { jb: number; df: number; p: number; ok: boolean };
   /** Multicollinearity: VIF per predictor (>10 = problematic). */
   vif: { name: string; vif: number }[];
-  /** Heteroscedasticity (Breusch–Pagan / Koenker LM). */
+  /** Heteroscedasticity (Breusch-Pagan / Koenker LM). */
   hetero: { bp: number; df: number; p: number; ok: boolean };
-  /** Autocorrelation of residuals (Durbin–Watson, ~2 = none). */
+  /** Autocorrelation of residuals (Durbin-Watson, ~2 = none). */
   durbinWatson: number;
 }
 
@@ -193,7 +193,7 @@ export function ols(
 /**
  * Fixed-effects (within) regression: demean Y and X by entity, then OLS with no
  * intercept. Coefficients show the effect of X on Y *within* an entity over
- * time — controlling for stable per-entity differences.
+ * time - controlling for stable per-entity differences.
  */
 export function fixedEffects(
   ds: ParsedDataset,
@@ -346,7 +346,7 @@ function gatherPanel(
 }
 
 /**
- * Random-effects (one-way) regression via Swamy–Arora-style quasi-demeaning.
+ * Random-effects (one-way) regression via Swamy-Arora-style quasi-demeaning.
  * θ = 1 − sqrt(σ²_e / (σ²_e + T·σ²_u)); exact for balanced panels, approximate
  * (uses mean group size) for unbalanced ones.
  */
@@ -460,8 +460,8 @@ export function randomEffects(
 
 /**
  * Classical OLS assumption tests ("uji asumsi klasik"):
- * normality (Jarque–Bera), multicollinearity (VIF), heteroscedasticity
- * (Breusch–Pagan/Koenker LM), and autocorrelation (Durbin–Watson).
+ * normality (Jarque-Bera), multicollinearity (VIF), heteroscedasticity
+ * (Breusch-Pagan/Koenker LM), and autocorrelation (Durbin-Watson).
  */
 export function classicalAssumptions(
   ds: ParsedDataset,
@@ -496,7 +496,7 @@ export function classicalAssumptions(
     return yi - pred;
   });
 
-  // --- normality: Jarque–Bera on residuals ---
+  // --- normality: Jarque-Bera on residuals ---
   const mean = resid.reduce((s, e) => s + e, 0) / n;
   let m2 = 0,
     m3 = 0,
@@ -530,14 +530,14 @@ export function classicalAssumptions(
     vif.push({ name: predictors[j], vif: r2 < 1 ? 1 / (1 - r2) : Infinity });
   }
 
-  // --- heteroscedasticity: Breusch–Pagan (Koenker LM = n * R² of e² ~ X) ---
+  // --- heteroscedasticity: Breusch-Pagan (Koenker LM = n * R² of e² ~ X) ---
   const e2 = resid.map((e) => e * e);
   const aux = ols(e2, X, "e2", predictors);
   const bpR2 = aux.kind === "ols" ? aux.r2 : 0;
   const bp = n * bpR2;
   const bpP = chiSquareUpperTail(bp, p);
 
-  // --- autocorrelation: Durbin–Watson ---
+  // --- autocorrelation: Durbin-Watson ---
   let num = 0;
   let den = 0;
   for (let i = 0; i < n; i++) {

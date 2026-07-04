@@ -1,6 +1,6 @@
 // lib/shape.ts
 // Detect the overall SHAPE of a dataset so the app can adapt which analyses it
-// offers: cross-sectional, time series, or panel. Heuristic (code) — the UI
+// offers: cross-sectional, time series, or panel. Heuristic (code) - the UI
 // lets the user override.
 
 import { detectPanel, findTimeColumn } from "./panel";

@@ -4,7 +4,7 @@
 //
 // NOTE: on serverless (Vercel) each instance has its own memory, so this is
 // best-effort (resets on cold start, not shared across instances). For strong,
-// distributed limits use Upstash Redis (free tier) — see README. This still
+// distributed limits use Upstash Redis (free tier) - see README. This still
 // stops the common case: one person hammering your endpoints.
 
 const WINDOW_MS = 60_000; // 1 minute

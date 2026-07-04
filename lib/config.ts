@@ -1,5 +1,5 @@
 // lib/config.ts
-// Small, central knobs. No secrets here — safe to import on the client.
+// Small, central knobs. No secrets here - safe to import on the client.
 
 /** Language for AI-generated insight text. Switch to "en" for English. */
 export const INSIGHT_LANG: "id" | "en" = "id";

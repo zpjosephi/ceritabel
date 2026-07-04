@@ -27,7 +27,7 @@ function stars(p: number): string {
 }
 
 function formatP(p: number): string {
-  if (!Number.isFinite(p)) return "—";
+  if (!Number.isFinite(p)) return "-";
   if (p < 0.0001) return "<0.0001";
   return p.toFixed(4);
 }
@@ -77,7 +77,7 @@ export default function MultipleRegression({
     return classicalAssumptions(dataset, yCol, xs);
   }, [dataset, usableCols, yCol]);
 
-  // Hausman test (FE vs RE) — only for panel data.
+  // Hausman test (FE vs RE) - only for panel data.
   const hausman = useMemo(() => {
     if (!panelEntity) return null;
     const xs = usableCols.filter((c) => c !== yCol);

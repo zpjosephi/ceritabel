@@ -91,7 +91,7 @@ export default function FeedbackWidget() {
     <div className="fixed bottom-5 right-5 z-50 print:hidden">
       {open ? (
         <div className="w-[min(21rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-accent/30 bg-surface/95 shadow-2xl shadow-black/50 backdrop-blur-xl">
-          {/* header — flat accent-tinted surface, hairline underline */}
+          {/* header - flat accent-tinted surface, hairline underline */}
           <div className="relative border-b border-border/70 bg-accent/[0.06] px-4 pb-3 pt-3.5">
             <div className="flex items-center gap-2">
               <h2 className="text-sm font-semibold text-foreground">

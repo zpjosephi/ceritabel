@@ -123,7 +123,7 @@ export default function AnalyzePage() {
   }>({ fileName: "data.csv", isExcel: false });
 
   // The original parsed data + the list of cleaning actions applied to it.
-  // The working dataset is derived by replaying actions — this gives exact undo.
+  // The working dataset is derived by replaying actions - this gives exact undo.
   const [baseDataset, setBaseDataset] = useState<ParsedDataset | null>(null);
   const [actions, setActions] = useState<CleaningAction[]>([]);
   // Columns the user has toggled OFF for experimentation (kept reversibly).
@@ -178,7 +178,7 @@ export default function AnalyzePage() {
       const res = await fetch("/api/insight", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // ONLY the StatsSummary crosses to the server — never raw rows.
+        // ONLY the StatsSummary crosses to the server - never raw rows.
         body: JSON.stringify({ summary: a.summary, model: mId, lang }),
       });
       const data = await res.json();
@@ -572,7 +572,7 @@ function Results({
 
   return (
     <div className="fade-up space-y-5">
-      {/* Global scope controls (shape + variables) — they affect every tab,
+      {/* Global scope controls (shape + variables) - they affect every tab,
           so they live above the tabs where they're always discoverable. */}
       <div className="rounded-xl border border-border bg-surface p-4 shadow-[var(--shadow-sm)]">
         <ShapeSelector
@@ -600,7 +600,7 @@ function Results({
       ) : null}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_380px]">
-        {/* LEFT: tabbed content (progressive disclosure — one group at a time) */}
+        {/* LEFT: tabbed content (progressive disclosure - one group at a time) */}
         <div className="min-w-0">
           <div
             role="tablist"
@@ -794,7 +794,7 @@ function Results({
           </div>
         </div>
 
-        {/* RIGHT: AI panel — persistent across tabs so there's always context. */}
+        {/* RIGHT: AI panel - persistent across tabs so there's always context. */}
         <div className="space-y-6 lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:self-start lg:overflow-y-auto lg:pr-1">
           <AIInsightPanel
             insight={insight}

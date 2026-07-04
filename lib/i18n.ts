@@ -2,7 +2,7 @@
 // Lightweight i18n: a flat string dictionary + a t() helper with {param}
 // interpolation, plus formatters for the dynamically generated data-quality
 // issues and cleaning changes (so even computed text gets localised).
-// Pure module — safe to import on client or server.
+// Pure module - safe to import on client or server.
 
 import type { DataQualityIssue } from "./dataQuality";
 import type { CleaningChange } from "./cleaning";
@@ -30,7 +30,7 @@ const ID: Dict = {
   ctaHow: "Cara kerja",
   feat1Title: "Statistik beneran",
   feat1Body:
-    "Mean, median, std (n−1), kuartil, korelasi Pearson, outlier IQR — semua dihitung di kode, bukan ditebak AI.",
+    "Mean, median, std (n−1), kuartil, korelasi Pearson, outlier IQR: semua dihitung di kode, bukan ditebak AI.",
   feat2Title: "Visual yang rapi",
   feat2Body:
     "Histogram, bar kategori, heatmap korelasi, dan scatter plot dengan garis regresi opsional.",
@@ -82,7 +82,7 @@ const ID: Dict = {
   fbClose: "Tutup",
   footerTech: "Dibuat dengan Next.js, TypeScript & simple-statistics",
   footerThesis:
-    "Semua statistik dihitung di browser-mu — AI hanya menjelaskannya, tidak pernah mengarang angkanya.",
+    "Semua statistik dihitung di browser-mu; AI hanya menjelaskannya, tidak pernah mengarang angkanya.",
   footerMadeBy: "Dibuat oleh",
 
   // upload / analyze
@@ -177,7 +177,7 @@ const ID: Dict = {
   count: "Jumlah",
   rangeLabel: "Rentang {x}",
   corrNeed2: "Butuh minimal 2 kolom numerik untuk matriks korelasi.",
-  corrUndef: "(— = tak terdefinisi)",
+  corrUndef: "(- = tak terdefinisi)",
   scatterNeed2: "Butuh minimal 2 kolom numerik untuk scatter plot.",
   regLine: "Garis regresi",
   regUnavailable:
@@ -185,7 +185,7 @@ const ID: Dict = {
 
   // hypothesis testing
   secHypo: "Uji hipotesis",
-  secHypoHint: "Pilih 2 kolom — uji statistik dipilih otomatis",
+  secHypoHint: "Pilih 2 kolom, uji statistik dipilih otomatis",
   hypoColA: "Kolom A",
   hypoColB: "Kolom B",
   hypoRun: "Jalankan uji",
@@ -273,7 +273,7 @@ const ID: Dict = {
 
   // AI insight
   aiInsight: "AI Insight",
-  aiStale: "Data sudah dibersihkan — insight ini dari versi sebelumnya.",
+  aiStale: "Data sudah dibersihkan; insight ini dari versi sebelumnya.",
   aiRefresh: "Perbarui insight",
   aiLoading: "AI sedang membaca ringkasan statistik…",
   aiGenerate: "Mulai analisis AI",
@@ -285,7 +285,7 @@ const ID: Dict = {
 
   // chat
   chatTitle: "Tanya tentang data",
-  chatExample: 'Contoh: “Kolom mana yang paling berhubungan dengan {col}?”',
+  chatExample: "Contoh: 'Kolom mana yang paling berhubungan dengan {col}?'",
   chatPlaceholder: "Tulis pertanyaanmu…",
   chatSend: "Kirim",
   chatTyping: "mengetik…",
@@ -321,14 +321,14 @@ const ID: Dict = {
   advAsk: "Minta saran AI",
   advAnalyzing: "Menganalisis…",
   advDesc:
-    "AI membaca ringkasan masalah (bukan data mentah) lalu menyarankan aksi. Kamu yang memutuskan — kode yang menjalankan.",
+    "AI membaca ringkasan masalah (bukan data mentah) lalu menyarankan aksi. Kamu yang memutuskan, kode yang menjalankan.",
   advClean: "Data sudah bersih",
   advNoProblems: "Tidak ada masalah untuk dianalisis",
   advNoRecs: "AI tidak menyarankan perubahan untuk data ini.",
   advApply: "Terapkan yang dicentang ({n})",
   advFail: "Gagal meminta saran.",
   advLabelDropDup: "Hapus baris duplikat",
-  advLabelFill: 'Kolom "{col}" — {strategy}',
+  advLabelFill: 'Kolom "{col}": {strategy}',
   advLabelNormalize: 'Normalisasi kategori "{col}"',
   advLabelDropCol: 'Buang kolom "{col}"',
   advStratMedian: "isi median",
@@ -354,7 +354,7 @@ const EN: Dict = {
   ctaHow: "How it works",
   feat1Title: "Real statistics",
   feat1Body:
-    "Mean, median, std (n−1), quartiles, Pearson correlation, IQR outliers — all computed in code, not guessed by AI.",
+    "Mean, median, std (n−1), quartiles, Pearson correlation, IQR outliers: all computed in code, not guessed by AI.",
   feat2Title: "Clean visuals",
   feat2Body:
     "Histograms, category bars, a correlation heatmap, and a scatter plot with an optional regression line.",
@@ -406,7 +406,7 @@ const EN: Dict = {
   fbClose: "Close",
   footerTech: "Built with Next.js, TypeScript & simple-statistics",
   footerThesis:
-    "Every statistic is computed in your browser — the AI only explains it, never invents the numbers.",
+    "Every statistic is computed in your browser; the AI only explains it, never invents the numbers.",
   footerMadeBy: "Made by",
 
   uploadTitle: "Upload your data",
@@ -495,7 +495,7 @@ const EN: Dict = {
   count: "Count",
   rangeLabel: "Range {x}",
   corrNeed2: "Need at least 2 numeric columns for a correlation matrix.",
-  corrUndef: "(— = undefined)",
+  corrUndef: "(- = undefined)",
   scatterNeed2: "Need at least 2 numeric columns for a scatter plot.",
   regLine: "Regression line",
   regUnavailable:
@@ -590,7 +590,7 @@ const EN: Dict = {
   panelDominWithin: "changes over time",
 
   aiInsight: "AI Insight",
-  aiStale: "Data was cleaned — this insight is from an earlier version.",
+  aiStale: "Data was cleaned; this insight is from an earlier version.",
   aiRefresh: "Refresh insight",
   aiLoading: "AI is reading the statistics summary…",
   aiGenerate: "Generate AI insight",
@@ -601,7 +601,7 @@ const EN: Dict = {
   loadFail: "Couldn't load the insight.",
 
   chatTitle: "Ask about the data",
-  chatExample: 'Example: “Which column is most related to {col}?”',
+  chatExample: "Example: 'Which column is most related to {col}?'",
   chatPlaceholder: "Type your question…",
   chatSend: "Send",
   chatTyping: "typing…",
@@ -634,14 +634,14 @@ const EN: Dict = {
   advAsk: "Ask AI for suggestions",
   advAnalyzing: "Analyzing…",
   advDesc:
-    "AI reads a summary of the problems (not raw data) and suggests actions. You decide — code executes.",
+    "AI reads a summary of the problems (not raw data) and suggests actions. You decide, code executes.",
   advClean: "Data is already clean",
   advNoProblems: "No problems to analyze",
   advNoRecs: "AI suggested no changes for this data.",
   advApply: "Apply selected ({n})",
   advFail: "Couldn't get suggestions.",
   advLabelDropDup: "Remove duplicate rows",
-  advLabelFill: 'Column "{col}" — {strategy}',
+  advLabelFill: 'Column "{col}": {strategy}',
   advLabelNormalize: 'Normalize category "{col}"',
   advLabelDropCol: 'Drop column "{col}"',
   advStratMedian: "fill median",
@@ -699,8 +699,8 @@ export function formatIssue(
       return {
         title: id ? "Kolom konstan" : "Constant column",
         detail: id
-          ? `Kolom "${col}" isinya satu nilai saja — tidak menambah informasi.`
-          : `Column "${col}" holds a single value — it adds no information.`,
+          ? `Kolom "${col}" isinya satu nilai saja, tidak menambah informasi.`
+          : `Column "${col}" holds a single value; it adds no information.`,
       };
     case "emptyColumn":
       return {
@@ -722,8 +722,8 @@ export function formatIssue(
       return {
         title: id ? "Kemungkinan kolom ID" : "Possible ID column",
         detail: id
-          ? `Kolom "${col}" terlihat seperti pengenal unik — biasanya tidak dipakai untuk analisis statistik.`
-          : `Column "${col}" looks like a unique identifier — usually not used for statistical analysis.`,
+          ? `Kolom "${col}" terlihat seperti pengenal unik, biasanya tidak dipakai untuk analisis statistik.`
+          : `Column "${col}" looks like a unique identifier, usually not used for statistical analysis.`,
       };
     case "outliers":
       return {

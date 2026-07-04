@@ -22,7 +22,7 @@ import CorrelationHeatmap from "@/components/CorrelationHeatmap";
 import { useLang } from "@/components/LanguageProvider";
 import type { HistogramBin, CorrelationMatrix } from "@/lib/types";
 
-/** Bar-chart brand mark — a simple geometric glyph (allowed per icon policy). */
+/** Bar-chart brand mark - a simple geometric glyph (allowed per icon policy). */
 function Mark({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 16 16" fill="none" aria-hidden className={className}>
@@ -327,7 +327,7 @@ function Step({
 
 /* ---- Live product preview: REAL chart components on sample data ---- */
 /* These are the actual <Histogram> and <CorrelationHeatmap> the app renders,
-   fed labeled sample data — a real component preview, not a fake screenshot. */
+   fed labeled sample data - a real component preview, not a fake screenshot. */
 
 const SAMPLE_BINS: HistogramBin[] = [
   { x0: 0, x1: 10, count: 8, label: "0-10" },

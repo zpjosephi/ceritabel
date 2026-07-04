@@ -1,7 +1,7 @@
 // lib/upload.ts
 // Unified upload entry point: accepts CSV *or* Excel and returns one or more
 // sheets parsed into the SAME ParsedDataset shape used everywhere else. Excel
-// is parsed with SheetJS entirely in the browser — nothing is uploaded.
+// is parsed with SheetJS entirely in the browser - nothing is uploaded.
 
 import * as XLSX from "xlsx";
 import type { ParsedDataset } from "./types";

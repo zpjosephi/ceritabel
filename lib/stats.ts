@@ -53,7 +53,7 @@ export function isMissing(value: string | null | undefined): boolean {
 /**
  * Parse a cell into a finite number, or null if it isn't one. Tolerant of
  * common formatting: a leading currency token (Rp/IDR/USD/$/€/£/¥/₹), thousands
- * separators, and a trailing percent sign — so "$1,200" and "5%" parse as
+ * separators, and a trailing percent sign - so "$1,200" and "5%" parse as
  * numbers (using the displayed value).
  */
 export function parseNumber(value: string | null | undefined): number | null {
@@ -96,7 +96,7 @@ const DATE_RE =
 function isDateLike(v: string): boolean {
   const s = v.trim();
   if (DATE_RE.test(s)) return true;
-  // textual dates like "Jan 2020", "2020 Q1" — require a separator/letter and
+  // textual dates like "Jan 2020", "2020 Q1" - require a separator/letter and
   // a successful Date.parse, but never a bare number (years stay numeric).
   if (parseNumber(s) !== null) return false;
   return /[-/:]/.test(s) && !Number.isNaN(Date.parse(s));
@@ -129,7 +129,7 @@ export function detectColumnKind(values: (string | null)[]): ColumnKind {
 }
 
 // ---------------------------------------------------------------------------
-// Quantiles — type-7 (R-7) linear interpolation, used everywhere consistently
+// Quantiles - type-7 (R-7) linear interpolation, used everywhere consistently
 // ---------------------------------------------------------------------------
 
 /** Quantile of an already-sorted ascending array, p in [0,1]. */
@@ -149,7 +149,7 @@ export function quantileSorted(sorted: number[], p: number): number {
 // ---------------------------------------------------------------------------
 
 export interface NumericStats extends NumericSummary {
-  /** Sample outlier values (capped) — kept client-side, not sent to AI. */
+  /** Sample outlier values (capped) - kept client-side, not sent to AI. */
   outlierExamples: number[];
   lowerFence: number;
   upperFence: number;
@@ -279,7 +279,7 @@ export function summarizeCategorical(
 }
 
 // ---------------------------------------------------------------------------
-// Histogram binning — Sturges' rule, capped to 10–30 bins
+// Histogram binning - Sturges' rule, capped to 10-30 bins
 // ---------------------------------------------------------------------------
 
 export function histogramBins(rawValues: (string | null)[]): HistogramBin[] {
@@ -318,12 +318,12 @@ export function histogramBins(rawValues: (string | null)[]): HistogramBin[] {
 }
 
 function fmtRange(a: number, b: number): string {
-  return `${fmtNum(a)}–${fmtNum(b)}`;
+  return `${fmtNum(a)}-${fmtNum(b)}`;
 }
 
 /** Compact number formatting for labels. */
 export function fmtNum(n: number): string {
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   const abs = Math.abs(n);
   if (abs !== 0 && (abs < 0.01 || abs >= 1e6)) return n.toExponential(2);
   return Number(n.toFixed(2)).toString();

@@ -1,6 +1,6 @@
 // lib/prompt.ts
 // Builds the LLM prompt from a StatsSummary. The hard rule: the model must
-// ONLY interpret the numbers we computed — never calculate or invent figures.
+// ONLY interpret the numbers we computed - never calculate or invent figures.
 
 import type { StatsSummary } from "./types";
 import { INSIGHT_LANG } from "./config";
@@ -10,7 +10,7 @@ const SYSTEM_RULES_ID = `Kamu adalah analis data yang menjelaskan temuan ke oran
 Kamu HANYA menerima ringkasan statistik yang SUDAH dihitung dengan benar oleh program.
 ATURAN KERAS:
 - JANGAN menghitung atau mengarang angka apa pun. Pakai hanya angka yang ada di ringkasan.
-- Kalau suatu angka tidak ada di ringkasan, jangan dibuat-buat — katakan tidak tersedia.
+- Kalau suatu angka tidak ada di ringkasan, jangan dibuat-buat - katakan tidak tersedia.
 - Bahasa Indonesia yang sederhana, hangat, dan mudah dipahami. Hindari jargon; kalau perlu istilah teknis, jelaskan singkat.
 - Jangan menyebut "JSON", "ringkasan", atau hal teknis internal ke pembaca.`;
 
@@ -18,18 +18,18 @@ const SYSTEM_RULES_EN = `You are a data analyst explaining findings to a non-tec
 You ONLY receive statistics that were ALREADY computed correctly by a program.
 HARD RULES:
 - Do NOT compute or invent any numbers. Use only the numbers given in the summary.
-- If a number is not in the summary, do not make it up — say it isn't available.
+- If a number is not in the summary, do not make it up - say it isn't available.
 - Use simple, warm, easy-to-read English. Avoid jargon; briefly explain any technical term you must use.
 - Do not mention "JSON", "summary", or internal technical details to the reader.`;
 
 const TASK_ID = `Tugasmu: hasilkan TEPAT 3 bagian.
-1. summary: cerita singkat "apa kira-kira isi & pesan data ini" dalam 2–4 kalimat, bahasa awam.
-2. findings: daftar temuan menarik (3–6 item). Pertimbangkan: korelasi kuat antar kolom, kolom dengan banyak missing values, outlier, dan distribusi yang kemungkinan miring (mis. kalau mean jauh lebih besar dari median → kemungkinan miring ke kanan).
+1. summary: cerita singkat "apa kira-kira isi & pesan data ini" dalam 2-4 kalimat, bahasa awam.
+2. findings: daftar temuan menarik (3-6 item). Pertimbangkan: korelasi kuat antar kolom, kolom dengan banyak missing values, outlier, dan distribusi yang kemungkinan miring (mis. kalau mean jauh lebih besar dari median → kemungkinan miring ke kanan).
 3. suggestions: TEPAT 3 saran analisis atau pertanyaan lanjutan yang masuk akal untuk data ini.`;
 
 const TASK_EN = `Your task: produce EXACTLY 3 sections.
-1. summary: a short 2–4 sentence plain-language story of what this data likely contains and its message.
-2. findings: a list of interesting findings (3–6 items). Consider: strong correlations between columns, columns with many missing values, outliers, and likely skewed distributions (e.g. if mean is much larger than median → likely right-skewed).
+1. summary: a short 2-4 sentence plain-language story of what this data likely contains and its message.
+2. findings: a list of interesting findings (3-6 items). Consider: strong correlations between columns, columns with many missing values, outliers, and likely skewed distributions (e.g. if mean is much larger than median → likely right-skewed).
 3. suggestions: EXACTLY 3 sensible follow-up analyses or questions for this data.`;
 
 const OUTPUT_FORMAT = `Balas HANYA dalam JSON valid (tanpa markdown, tanpa code fence) dengan bentuk persis:
