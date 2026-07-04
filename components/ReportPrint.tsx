@@ -1,5 +1,6 @@
 "use client";
 
+import { createPortal } from "react-dom";
 import type { FullAnalysis } from "@/lib/stats";
 import { fmtNum } from "@/lib/stats";
 import type { AIInsight } from "@/lib/types";
@@ -38,7 +39,13 @@ export default function ReportPrint({
   const { t } = useLang();
   const showInsight = insight && !insightStale && !insight.raw;
 
-  return (
+  // Rendered into <body> directly so the print stylesheet can display:none
+  // every other body child. (visibility-based isolation left the app's layout
+  // and scrollable code panels behind in the printed pages.) This component
+  // only mounts client-side, after a dataset is loaded.
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
     <div className="print-report" aria-hidden>
       <header className="mb-6 border-b border-border pb-4">
         <div className="text-lg font-semibold tracking-tight">
@@ -158,7 +165,8 @@ export default function ReportPrint({
       <footer className="mt-8 border-t border-border pt-3 text-xs text-muted">
         {t("reportMadeWith")} · ceritabel.vercel.app
       </footer>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

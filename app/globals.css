@@ -34,6 +34,9 @@
   --accent-strong: #ff5d54;
   --accent-ink: #ffffff;
   --accent-glow: rgba(214, 42, 35, 0.34);
+  /* Diverging negative pole for correlation-style scales: each accent ships
+     the hue that opposes it best, so + and - never blur together. */
+  --corr-neg: #3b82f6;
 
   --positive: #34d399;
   --negative: #fb7185;
@@ -70,6 +73,7 @@ html[data-accent="amber"] {
   --accent-strong: #f2bd6b;
   --accent-ink: #20160a;
   --accent-glow: rgba(224, 164, 74, 0.3);
+  --corr-neg: #3b82f6; /* amber <-> blue */
 }
 html[data-accent="teal"] {
   --accent: #22c0ad;
@@ -77,6 +81,7 @@ html[data-accent="teal"] {
   --accent-strong: #4dd6c4;
   --accent-ink: #04211d;
   --accent-glow: rgba(34, 192, 173, 0.3);
+  --corr-neg: #f0703f; /* teal <-> warm orange-red */
 }
 html[data-accent="coral"] {
   --accent: #f2603f;
@@ -84,6 +89,7 @@ html[data-accent="coral"] {
   --accent-strong: #ff7d5e;
   --accent-ink: #2a0d06;
   --accent-glow: rgba(242, 96, 63, 0.3);
+  --corr-neg: #38bdf8; /* coral <-> cool sky */
 }
 html[data-accent="lime"] {
   --accent: #b5e048;
@@ -91,6 +97,16 @@ html[data-accent="lime"] {
   --accent-strong: #c9ee6e;
   --accent-ink: #1a2207;
   --accent-glow: rgba(181, 224, 72, 0.28);
+  --corr-neg: #8b5cf6; /* lime <-> violet */
+}
+/* Basic blue - the everyday classic, for people who just want a normal app. */
+html[data-accent="biru"] {
+  --accent: #4f8ef7;
+  --accent-soft: rgba(79, 142, 247, 0.13);
+  --accent-strong: #7cabff;
+  --accent-ink: #0a1a3a;
+  --accent-glow: rgba(79, 142, 247, 0.32);
+  --corr-neg: #f59e0b; /* blue <-> orange */
 }
 /* Aviation / hazard red - echoes the portfolio's instrument identity. The base
    is saturated enough that its ink is light (white), unlike the lighter accents
@@ -101,6 +117,9 @@ html[data-accent="hazard"] {
   --accent-strong: #ff5d54;
   --accent-ink: #ffffff;
   --accent-glow: rgba(214, 42, 35, 0.34);
+  /* Diverging negative pole for correlation-style scales: each accent ships
+     the hue that opposes it best, so + and - never blur together. */
+  --corr-neg: #3b82f6;
 }
 
 @theme inline {
@@ -369,18 +388,17 @@ body::before {
   @page {
     margin: 14mm;
   }
-  body * {
-    visibility: hidden;
+  /* the report is a direct child of <body>; everything else disappears
+     entirely (display, not visibility, so no ghost layout or scrollbars) */
+  body > *:not(.print-report) {
+    display: none !important;
   }
-  .print-report,
-  .print-report * {
-    visibility: visible;
+  html,
+  body {
+    background: #ffffff !important;
   }
   .print-report {
     display: block;
-    position: absolute;
-    left: 0;
-    top: 0;
     width: 100%;
     --background: #ffffff;
     --surface: #ffffff;
