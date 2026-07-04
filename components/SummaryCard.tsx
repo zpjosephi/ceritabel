@@ -66,7 +66,9 @@ export default function SummaryCard({
         {items.map((it) => (
           <div key={it.label} className="min-w-0">
             <div className="text-xs text-muted">{it.label}</div>
-            <div className="truncate text-sm font-medium text-foreground">
+            {/* break-words, never truncate: cutting a statistic off mid-number
+                ("r=0...") is the one thing this product cannot do */}
+            <div className="break-words text-sm font-medium text-foreground">
               {it.value}
             </div>
           </div>
