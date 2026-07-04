@@ -356,3 +356,49 @@ body::before {
 *::-webkit-scrollbar-thumb:hover {
   background: var(--muted);
 }
+
+/* ==========================================================================
+   Printable report. Hidden on screen; when printing, it becomes the only
+   visible content and the theme tokens are re-scoped to ink-on-paper so the
+   shared components (heatmap included) print readable on white.
+   ========================================================================== */
+.print-report {
+  display: none;
+}
+@media print {
+  @page {
+    margin: 14mm;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .print-report,
+  .print-report * {
+    visibility: visible;
+  }
+  .print-report {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    --background: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #f4f4f6;
+    --surface-3: #ececef;
+    --border: #d8d8de;
+    --border-strong: #c2c2ca;
+    --chart-grid: #d8d8de;
+    --foreground: #16161d;
+    --muted: #55555f;
+    --muted-strong: #3c3c46;
+    background: #ffffff;
+    color: var(--foreground);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  /* the heatmap's colorblind toggle is an on-screen control, not report content */
+  .print-report button {
+    display: none;
+  }
+}
