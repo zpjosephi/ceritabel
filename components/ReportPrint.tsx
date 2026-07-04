@@ -50,6 +50,7 @@ export default function ReportPrint({
   dataset,
   regTarget,
   changes,
+  excludeFromModels,
   panelEntity,
   panelTime,
   tsTime,
@@ -63,6 +64,8 @@ export default function ReportPrint({
   dataset: ParsedDataset;
   regTarget: string;
   changes: CleaningChange[];
+  /** identifier-looking columns kept out of the default models */
+  excludeFromModels?: string[];
   panelEntity?: string;
   panelTime?: string;
   tsTime?: string;
@@ -75,7 +78,9 @@ export default function ReportPrint({
   // all three estimators (Pooled / FE / RE) plus the Hausman test, exactly
   // like the tab; a single pooled OLS would sell the panel analysis short.
   const models = useMemo(() => {
-    const numeric = analysis.numericStats.map((s) => s.name);
+    const raw = analysis.numericStats.map((s) => s.name);
+    const noIds = raw.filter((c) => !excludeFromModels?.includes(c));
+    const numeric = noIds.length >= 2 ? noIds : raw;
     // Mirror the tab exactly: for panel data the entity and time columns are
     // structure, not predictors (a time column is constant across entity
     // means, which makes the RE between-regression singular).
@@ -97,18 +102,20 @@ export default function ReportPrint({
       return { pooled, fe, re, hausman };
     }
     return { pooled, fe: null, re: null, hausman: null };
-  }, [dataset, regTarget, analysis, shape, panelEntity, panelTime]);
+  }, [dataset, regTarget, analysis, shape, panelEntity, panelTime, excludeFromModels]);
 
   // Classical OLS assumption checks (JB / BP / DW / VIF), shown with the
   // single-equation model; the tab computes the same set.
   const assumptions = useMemo(() => {
-    const numeric = analysis.numericStats.map((s) => s.name);
+    const raw = analysis.numericStats.map((s) => s.name);
+    const noIds = raw.filter((c) => !excludeFromModels?.includes(c));
+    const numeric = noIds.length >= 2 ? noIds : raw;
     const y = numeric.includes(regTarget) ? regTarget : numeric[0];
     if (!y || numeric.length < 2) return null;
     const xs = numeric.filter((c) => c !== y);
     const a = classicalAssumptions(dataset, y, xs);
     return a.kind === "assumptions" ? a : null;
-  }, [dataset, regTarget, analysis]);
+  }, [dataset, regTarget, analysis, excludeFromModels]);
 
   // Time-series read (trend, total change, lag-1 autocorrelation), mirroring
   // the tab's default value column: the first numeric that isn't the time.

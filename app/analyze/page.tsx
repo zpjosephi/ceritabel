@@ -545,6 +545,23 @@ function Results({
 }) {
   const { t } = useLang();
   const numericFields = analysis.numericStats.map((s) => s.name);
+  // Identifier-looking columns (flagged by the quality scan) make meaningless
+  // default predictors (student_id in a regression). They stay available via
+  // the variable chips; they just don't enter the default models.
+  const idLikeCols = useMemo(
+    () =>
+      new Set(
+        qualityReport.issues
+          .filter((i) => i.kind === "idLike" && i.column)
+          .map((i) => i.column as string),
+      ),
+    [qualityReport],
+  );
+  const modelFields = useMemo(() => {
+    const filtered = numericFields.filter((c) => !idLikeCols.has(c));
+    return filtered.length >= 2 ? filtered : numericFields;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [analysis, idLikeCols]);
 
   // Data-shape detection + user override → routes which specialized module shows.
   const detected = useMemo(() => detectShape(dataset, analysis), [dataset, analysis]);
@@ -568,7 +585,7 @@ function Results({
   const regTarget =
     regTargetOverride && numericFields.includes(regTargetOverride)
       ? regTargetOverride
-      : guessTarget(numericFields);
+      : guessTarget(modelFields);
 
   const codegenOpts: CodegenOptions = {
     fileName: exportMeta.fileName,
@@ -757,6 +774,14 @@ function Results({
                     </SectionTitle>
                     <HypothesisTest
                       key={analysis.columns.map((c) => c.name).join("|")}
+                      preferredPair={
+                        analysis.summary.strongCorrelations[0]
+                          ? [
+                              analysis.summary.strongCorrelations[0].a,
+                              analysis.summary.strongCorrelations[0].b,
+                            ]
+                          : undefined
+                      }
                       dataset={dataset}
                       columns={analysis.columns.map((c) => ({
                         name: c.name,
@@ -771,7 +796,7 @@ function Results({
                     <SectionTitle hint={t("secRegHint")}>{t("secReg")}</SectionTitle>
                     <MultipleRegression
                       dataset={dataset}
-                      numericCols={numericFields}
+                      numericCols={modelFields}
                       target={regTarget}
                       onTargetChange={setRegTargetOverride}
                       modelId={modelId}
@@ -862,6 +887,7 @@ function Results({
         dataset={dataset}
         regTarget={regTarget}
         changes={changes}
+        excludeFromModels={[...idLikeCols]}
         panelEntity={shape === "panel" ? panelEntity : undefined}
         panelTime={shape === "panel" ? panelTime : undefined}
         tsTime={shape === "timeseries" ? tsTime : undefined}

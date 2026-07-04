@@ -77,6 +77,7 @@ export default function ScatterPlot({
             dataKey="x"
             name={xField}
             domain={["dataMin", "dataMax"]}
+            tickFormatter={(v: number) => fmtNum(v)}
             tick={{ fill: "#9a9aab", fontSize: 11 }}
             axisLine={{ stroke: "#2a2a38" }}
             tickLine={false}
@@ -87,6 +88,7 @@ export default function ScatterPlot({
             dataKey="y"
             name={yField}
             domain={["dataMin", "dataMax"]}
+            tickFormatter={(v: number) => fmtNum(v)}
             tick={{ fill: "#9a9aab", fontSize: 11 }}
             axisLine={{ stroke: "#2a2a38" }}
             tickLine={false}

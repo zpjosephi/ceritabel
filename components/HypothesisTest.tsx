@@ -22,13 +22,16 @@ export default function HypothesisTest({
   dataset,
   columns,
   modelId,
+  preferredPair,
 }: {
   dataset: ParsedDataset;
   columns: Column[];
   modelId: string;
+  /** e.g. the strongest correlated pair; used as the default when valid. */
+  preferredPair?: [string, string];
 }) {
   const { t, lang } = useLang();
-  const [defA, defB] = pickDefaultPair(columns);
+  const [defA, defB] = pickDefaultPair(columns, preferredPair);
   const [a, setA] = useState(defA);
   const [b, setB] = useState(defB);
 
@@ -87,15 +90,33 @@ function FieldSelect({
   );
 }
 
-/** Choose a sensible default pair: two numerics (correlation) if possible,
- * else numeric × categorical, else the first two columns. Avoids the trivial
- * entity×time default on panel data. */
-function pickDefaultPair(columns: Column[]): [string, string] {
-  const num = columns.filter((c) => c.type === "numeric");
+/** Identifier-looking names make meaningless default tests (student_id × x). */
+const ID_NAME = /(^|_)(id|no|kode|code)($|_)/i;
+
+/** Choose a sensible default pair: the strongest correlated pair when given,
+ * else two numerics (correlation), else numeric × categorical, else the first
+ * two columns. Identifier-looking columns are skipped when possible. */
+function pickDefaultPair(
+  columns: Column[],
+  preferred?: [string, string],
+): [string, string] {
+  if (preferred) {
+    const [pa, pb] = preferred;
+    if (
+      pa !== pb &&
+      columns.some((c) => c.name === pa) &&
+      columns.some((c) => c.name === pb)
+    ) {
+      return [pa, pb];
+    }
+  }
+  const pool = columns.filter((c) => !ID_NAME.test(c.name));
+  const cols = pool.length >= 2 ? pool : columns;
+  const num = cols.filter((c) => c.type === "numeric");
   if (num.length >= 2) return [num[0].name, num[1].name];
-  const cat = columns.filter((c) => c.type === "categorical");
+  const cat = cols.filter((c) => c.type === "categorical");
   if (num.length >= 1 && cat.length >= 1) return [num[0].name, cat[0].name];
-  return [columns[0]?.name ?? "", columns[1]?.name ?? columns[0]?.name ?? ""];
+  return [cols[0]?.name ?? "", cols[1]?.name ?? cols[0]?.name ?? ""];
 }
 
 type Translate = (key: string, params?: Record<string, string | number>) => string;
