@@ -23,9 +23,9 @@ const ID: Dict = {
   heroLead: "Dari tabel ke",
   heroRotate: "cerita,insight,jawaban,keputusan",
   heroLede:
-    "Upload CSV atau Excel. Statistik yang benar dihitung di browser, lalu AI menjelaskan hasilnya dengan bahasa sederhana.",
+    "Upload file CSV atau Excel, semua angkanya dihitung langsung di browser, lalu AI menjelaskan artinya pakai bahasa sehari-hari.",
   heroDesc:
-    "ceritabel mendeteksi bentuk datamu (cross-section, time series, panel), lalu menghitung statistik yang benar langsung di browser: EDA, uji hipotesis, regresi dengan uji asumsi klasik, sampai panel FE/RE. Semua angka dihitung di kode, AI cuma menjelaskan.",
+    "ceritabel mengenali bentuk datamu (cross-section, time series, atau panel), lalu menghitung semuanya langsung di browser: EDA, uji hipotesis, regresi lengkap dengan uji asumsinya, sampai model panel FE/RE. Angkanya murni hasil hitungan kode; AI cuma kebagian menjelaskan.",
   ctaTry: "Coba sekarang →",
   ctaHow: "Cara kerja",
   feat1Title: "Statistik beneran",
@@ -36,22 +36,22 @@ const ID: Dict = {
     "Histogram, bar kategori, heatmap korelasi, dan scatter plot dengan garis regresi opsional.",
   feat3Title: "AI yang menjelaskan",
   feat3Body:
-    "AI menerjemahkan angka jadi cerita + memberi 3 saran analisis lanjutan. Tidak menghitung sendiri.",
-  featTitle: "Apa yang kamu dapat",
-  howTitle: "Bagaimana cara kerjanya",
+    "AI mengubah angka jadi cerita dan memberi 3 saran analisis lanjutan. Ngitungnya tetap kode, bukan AI.",
+  featTitle: "Yang kamu dapat",
+  howTitle: "Cara kerjanya",
   step1Title: "Upload CSV",
-  step1Body: "Drag & drop file kamu. Parsing terjadi di browser.",
+  step1Body: "Seret & lepas file-mu. Semua dibaca langsung di browser.",
   step2Title: "Hitung EDA",
   step2Body: "Statistik & korelasi dihitung langsung di perangkatmu.",
   step3Title: "AI menjelaskan",
-  step3Body: "Hanya ringkasan angka yang dikirim ke AI untuk diceritakan.",
+  step3Body: "Yang dikirim ke AI cuma ringkasan angkanya; dia yang menceritakan.",
   privacyLabel: "Privasi:",
   privacyBody:
-    "file diproses di memori dan tidak disimpan. Yang dikirim ke AI hanya ringkasan statistik (bukan baris data mentah).",
+    "file diproses di memori dan tidak pernah disimpan. Yang sampai ke AI cuma ringkasan statistik, bukan isi datamu.",
   previewInsight: "Pendapatan naik tren ~18% per kuartal, dengan lonjakan tiap Desember.",
   previewBadge: "contoh tampilan",
   previewHeading: "Distribusi & korelasi",
-  capTitle: "Apa yang bisa dilakukan",
+  capTitle: "Bisa apa aja?",
   capEda: "EDA & statistik otomatis",
   capClean: "Pembersihan data (kode + AI)",
   capShape: "Deteksi bentuk data otomatis",
@@ -82,7 +82,7 @@ const ID: Dict = {
   fbClose: "Tutup",
   footerTech: "Dibuat dengan Next.js, TypeScript & simple-statistics",
   footerThesis:
-    "Semua statistik dihitung di browser-mu; AI hanya menjelaskannya, tidak pernah mengarang angkanya.",
+    "Semua angka dihitung di browser-mu. AI cuma menjelaskan, bukan mengarang.",
   footerMadeBy: "Dibuat oleh",
 
   // upload / analyze
