@@ -862,6 +862,9 @@ function Results({
         dataset={dataset}
         regTarget={regTarget}
         changes={changes}
+        panelEntity={shape === "panel" ? panelEntity : undefined}
+        panelTime={shape === "panel" ? panelTime : undefined}
+        tsTime={shape === "timeseries" ? tsTime : undefined}
       />
     </div>
   );

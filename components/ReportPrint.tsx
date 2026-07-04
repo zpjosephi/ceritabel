@@ -8,7 +8,15 @@ import type { AIInsight, ParsedDataset } from "@/lib/types";
 import type { DataQualityReport } from "@/lib/dataQuality";
 import type { CleaningChange } from "@/lib/cleaning";
 import type { DataShape } from "@/lib/shape";
-import { runRegression } from "@/lib/regression";
+import {
+  runRegression,
+  fixedEffects,
+  randomEffects,
+  hausmanTest,
+  classicalAssumptions,
+  type OlsResult,
+} from "@/lib/regression";
+import { analyzeTimeSeries } from "@/lib/timeseries";
 import CorrelationHeatmap from "./CorrelationHeatmap";
 import { useLang } from "./LanguageProvider";
 
@@ -42,6 +50,9 @@ export default function ReportPrint({
   dataset,
   regTarget,
   changes,
+  panelEntity,
+  panelTime,
+  tsTime,
 }: {
   fileName: string;
   shape: DataShape;
@@ -52,20 +63,62 @@ export default function ReportPrint({
   dataset: ParsedDataset;
   regTarget: string;
   changes: CleaningChange[];
+  panelEntity?: string;
+  panelTime?: string;
+  tsTime?: string;
 }) {
   const { t } = useLang();
   const showInsight = insight && !insightStale && !insight.raw;
 
-  // The same default model the Tests & Models tab opens with: the guessed
-  // target explained by every other numeric column.
-  const reg = useMemo(() => {
-    const numericFields = analysis.numericStats.map((s) => s.name);
-    if (numericFields.length < 2 || !numericFields.includes(regTarget)) {
-      return null;
+  // The same default models the Tests & Models tab opens with: the guessed
+  // target explained by every other numeric column. For panel data that means
+  // all three estimators (Pooled / FE / RE) plus the Hausman test, exactly
+  // like the tab; a single pooled OLS would sell the panel analysis short.
+  const models = useMemo(() => {
+    const numeric = analysis.numericStats.map((s) => s.name);
+    // Mirror the tab exactly: for panel data the entity and time columns are
+    // structure, not predictors (a time column is constant across entity
+    // means, which makes the RE between-regression singular).
+    const usable =
+      shape === "panel"
+        ? numeric.filter((c) => c !== panelEntity && c !== panelTime)
+        : numeric;
+    const y = usable.includes(regTarget) ? regTarget : usable[0];
+    if (!y || usable.length < 2) return null;
+    const xs = usable.filter((c) => c !== y);
+    const pooled = runRegression(dataset, y, xs);
+    if (pooled.kind !== "ols") return null;
+    if (shape === "panel" && panelEntity) {
+      const feR = fixedEffects(dataset, y, xs, panelEntity);
+      const reR = randomEffects(dataset, y, xs, panelEntity);
+      const fe = feR.kind === "ols" ? feR : null;
+      const re = reR.kind === "ols" ? reR : null;
+      const hausman = fe && re ? hausmanTest(fe, re) : null;
+      return { pooled, fe, re, hausman };
     }
-    const r = runRegression(dataset, regTarget, numericFields);
-    return r.kind === "ols" ? r : null;
+    return { pooled, fe: null, re: null, hausman: null };
+  }, [dataset, regTarget, analysis, shape, panelEntity, panelTime]);
+
+  // Classical OLS assumption checks (JB / BP / DW / VIF), shown with the
+  // single-equation model; the tab computes the same set.
+  const assumptions = useMemo(() => {
+    const numeric = analysis.numericStats.map((s) => s.name);
+    const y = numeric.includes(regTarget) ? regTarget : numeric[0];
+    if (!y || numeric.length < 2) return null;
+    const xs = numeric.filter((c) => c !== y);
+    const a = classicalAssumptions(dataset, y, xs);
+    return a.kind === "assumptions" ? a : null;
   }, [dataset, regTarget, analysis]);
+
+  // Time-series read (trend, total change, lag-1 autocorrelation), mirroring
+  // the tab's default value column: the first numeric that isn't the time.
+  const ts = useMemo(() => {
+    if (shape !== "timeseries" || !tsTime) return null;
+    const valueCol = analysis.numericStats
+      .map((s) => s.name)
+      .find((c) => c !== tsTime);
+    return valueCol ? analyzeTimeSeries(dataset, tsTime, valueCol) : null;
+  }, [shape, tsTime, dataset, analysis]);
 
   const topCorr = analysis.summary.strongCorrelations[0];
   const topOut = analysis.summary.notableOutliers[0];
@@ -232,42 +285,176 @@ export default function ReportPrint({
         </section>
       )}
 
-      {reg && (
+      {ts && (
         <section className="mb-6">
-          <h2 className="mb-2 text-base font-semibold">{t("reportReg")}</h2>
-          <p className="text-sm text-muted">
-            {t("reportRegNote").replace("{y}", reg.y)}
+          <h2 className="mb-2 text-base font-semibold">{t("secTs")}</h2>
+          <p className="tnum text-sm">
+            {ts.valueCol} · {ts.startLabel} → {ts.endLabel} · n={ts.n}
           </p>
           <p className="tnum mt-1 text-sm">
-            n={reg.n} · R²={fmtNum(reg.r2)} · adj. R²={fmtNum(reg.adjR2)} · F(
-            {reg.fDf1}, {reg.fDf2})={fmtNum(reg.fStat)} · p={fmtP(reg.fPValue)}
+            {t("tsTrend")}:{" "}
+            {t(
+              ts.trend === "up"
+                ? "tsUp"
+                : ts.trend === "down"
+                  ? "tsDown"
+                  : "tsFlat",
+            )}{" "}
+            (R²={fmtNum(ts.r2)}) · {t("tsTotalChange")}: {fmtNum(ts.totalChange)}
+            {ts.totalChangePct !== null
+              ? ` (${fmtNum(ts.totalChangePct)}%)`
+              : ""}{" "}
+            · {t("tsAutocorr")}:{" "}
+            {ts.autocorrLag1 !== null ? fmtNum(ts.autocorrLag1) : "-"}
           </p>
-          <table className="mt-2 w-full border-collapse text-xs">
-            <thead>
-              <tr className="text-left text-muted">
-                <th className="border-b border-border px-2 py-1.5 font-medium">
-                  {t("regCoef")}
-                </th>
-                <Th>coef</Th>
-                <Th>SE</Th>
-                <Th>t</Th>
-                <Th>p</Th>
-              </tr>
-            </thead>
-            <tbody>
-              {reg.terms.map((term) => (
-                <tr key={term.name}>
-                  <td className="border-b border-border px-2 py-1.5 font-medium">
-                    {term.name}
-                  </td>
-                  <Td>{fmtNum(term.coef)}</Td>
-                  <Td>{fmtNum(term.se)}</Td>
-                  <Td>{fmtNum(term.t)}</Td>
-                  <Td>{fmtP(term.p)}</Td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        </section>
+      )}
+
+      {models && (
+        <section className="mb-6">
+          <h2 className="mb-2 text-base font-semibold">
+            {models.fe && models.re ? t("reportPanelModels") : t("reportReg")}
+          </h2>
+          <p className="text-sm text-muted">
+            {t("reportRegNote").replace("{y}", models.pooled.y)}
+            {models.fe && panelEntity
+              ? ` · ${t("panelEntityLabel")}: ${panelEntity}${
+                  panelTime ? ` · ${t("panelTimeLabel")}: ${panelTime}` : ""
+                }`
+              : ""}
+          </p>
+
+          {models.fe && models.re ? (
+            <>
+              <table className="mt-2 w-full border-collapse text-xs">
+                <thead>
+                  <tr className="text-left text-muted">
+                    <th className="border-b border-border px-2 py-1.5 font-medium">
+                      Model
+                    </th>
+                    <Th>n</Th>
+                    <Th>R²</Th>
+                    <Th>adj. R²</Th>
+                    <Th>F</Th>
+                    <Th>p</Th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <FitRow label="Pooled OLS" m={models.pooled} />
+                  <FitRow label="Fixed Effects *" m={models.fe} />
+                  <FitRow label="Random Effects" m={models.re} />
+                </tbody>
+              </table>
+              <p className="mt-1 text-xs text-muted">
+                * Fixed Effects: {t("regWithinR2")}
+              </p>
+
+              <table className="mt-3 w-full border-collapse text-xs">
+                <thead>
+                  <tr className="text-left text-muted">
+                    <th className="border-b border-border px-2 py-1.5 font-medium">
+                      {t("regCoef")}
+                    </th>
+                    <Th>Pooled</Th>
+                    <Th>FE</Th>
+                    <Th>RE</Th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {models.pooled.terms.map((term) => (
+                    <tr key={term.name}>
+                      <td className="border-b border-border px-2 py-1.5 font-medium">
+                        {term.name}
+                      </td>
+                      <Td>
+                        {fmtNum(term.coef)} (p={fmtP(term.p)})
+                      </Td>
+                      <Td>{coefCell(models.fe, term.name)}</Td>
+                      <Td>{coefCell(models.re, term.name)}</Td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {models.hausman && (
+                <p className="tnum mt-2 text-sm">
+                  {t("hausman")}: stat={fmtNum(models.hausman.stat)} · df=
+                  {models.hausman.df} · p={fmtP(models.hausman.pValue)} ·{" "}
+                  <span className="font-medium">
+                    {models.hausman.prefer === "fe"
+                      ? t("hausmanFe")
+                      : t("hausmanRe")}
+                  </span>
+                </p>
+              )}
+            </>
+          ) : (
+            <>
+              <p className="tnum mt-1 text-sm">
+                n={models.pooled.n} · R²={fmtNum(models.pooled.r2)} · adj. R²=
+                {fmtNum(models.pooled.adjR2)} · F({models.pooled.fDf1},{" "}
+                {models.pooled.fDf2})={fmtNum(models.pooled.fStat)} · p=
+                {fmtP(models.pooled.fPValue)}
+              </p>
+              <table className="mt-2 w-full border-collapse text-xs">
+                <thead>
+                  <tr className="text-left text-muted">
+                    <th className="border-b border-border px-2 py-1.5 font-medium">
+                      {t("regCoef")}
+                    </th>
+                    <Th>coef</Th>
+                    <Th>SE</Th>
+                    <Th>t</Th>
+                    <Th>p</Th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {models.pooled.terms.map((term) => (
+                    <tr key={term.name}>
+                      <td className="border-b border-border px-2 py-1.5 font-medium">
+                        {term.name}
+                      </td>
+                      <Td>{fmtNum(term.coef)}</Td>
+                      <Td>{fmtNum(term.se)}</Td>
+                      <Td>{fmtNum(term.t)}</Td>
+                      <Td>{fmtP(term.p)}</Td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {assumptions && (
+                <div className="mt-3">
+                  <h3 className="text-sm font-semibold">{t("assumTitle")}</h3>
+                  <ul className="tnum mt-1 list-disc space-y-0.5 pl-5 text-sm">
+                    <li>
+                      {t("assumNormality")}: JB=
+                      {fmtNum(assumptions.normality.jb)} · p=
+                      {fmtP(assumptions.normality.p)}
+                    </li>
+                    <li>
+                      {t("assumHetero")}: BP={fmtNum(assumptions.hetero.bp)} ·
+                      p={fmtP(assumptions.hetero.p)}
+                    </li>
+                    <li>
+                      {t("assumAutocorr")}: DW=
+                      {fmtNum(assumptions.durbinWatson)}
+                    </li>
+                    {assumptions.vif.length > 0 && (
+                      <li>
+                        {t("assumVifMax")}:{" "}
+                        {(() => {
+                          const top = [...assumptions.vif].sort(
+                            (a, b) => b.vif - a.vif,
+                          )[0];
+                          return `${top.name} (${fmtNum(top.vif)})`;
+                        })()}
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              )}
+            </>
+          )}
         </section>
       )}
 
@@ -305,6 +492,26 @@ export default function ReportPrint({
       </footer>
     </div>,
     document.body,
+  );
+}
+
+function coefCell(m: OlsResult | null, name: string): string {
+  const term = m?.terms.find((x) => x.name === name);
+  return term ? `${fmtNum(term.coef)} (p=${fmtP(term.p)})` : "-";
+}
+
+function FitRow({ label, m }: { label: string; m: OlsResult }) {
+  return (
+    <tr>
+      <td className="border-b border-border px-2 py-1.5 font-medium">
+        {label}
+      </td>
+      <Td>{m.n}</Td>
+      <Td>{fmtNum(m.r2)}</Td>
+      <Td>{fmtNum(m.adjR2)}</Td>
+      <Td>{fmtNum(m.fStat)}</Td>
+      <Td>{fmtP(m.fPValue)}</Td>
+    </tr>
   );
 }
 
