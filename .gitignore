@@ -46,3 +46,8 @@ GEMINI.md
 .cursor/
 .cursorrules
 .aider*
+
+# internal planning / tooling artifacts (not for public repo)
+PRODUCT.md
+DESIGN.md
+.impeccable/
