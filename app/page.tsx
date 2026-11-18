@@ -1,8 +1,10 @@
 "use client";
 
+import { useMemo } from "react";
 import Link from "next/link";
 import Footer from "@/components/Footer";
 import LanguageToggle from "@/components/LanguageToggle";
+import Rotating from "@/components/Rotating";
 import { Mark } from "@/components/ui";
 import { useLang } from "@/components/LanguageProvider";
 
@@ -18,6 +20,7 @@ const EXAMPLE_ROWS = [
 
 export default function Home() {
   const { t } = useLang();
+  const rotateWords = useMemo(() => t("heroRotate").split(","), [t]);
 
   return (
     <div className="flex flex-1 flex-col">
@@ -43,8 +46,15 @@ export default function Home() {
       <main className="flex flex-1 flex-col">
         <section className="gutter grid gap-14 pb-20 pt-14 sm:pt-20 lg:grid-cols-12 lg:gap-8 lg:pb-28 lg:pt-24">
           <div className="min-w-0 lg:col-span-6">
-            <h1 className="font-serif text-[clamp(3rem,7.4vw,6.75rem)] font-semibold leading-[0.98] tracking-[-0.018em] text-balance">
-              {t("heroTitle")}
+            <h1
+              aria-label={t("heroTitle")}
+              className="font-serif text-[clamp(3rem,7.4vw,6.75rem)] font-semibold leading-[0.98] tracking-[-0.018em]"
+            >
+              <span aria-hidden className="block">{t("heroLine1")}</span>
+              <span aria-hidden className="block whitespace-nowrap">
+                {t("heroLine2")}{" "}
+                <Rotating words={rotateWords} className="font-medium italic" />
+              </span>
             </h1>
             <p className="measure mt-7 text-pretty text-lg leading-relaxed text-muted-strong">
               {t("heroLede")}

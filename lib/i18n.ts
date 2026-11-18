@@ -19,6 +19,9 @@ const ID: Dict = {
 
   // landing
   heroTitle: "Dari tabel ke cerita.",
+  heroLine1: "Dari tabel",
+  heroLine2: "ke",
+  heroRotate: "cerita.,jawaban.,makna.",
   heroLede:
     "Unggah file CSV atau Excel. ceritabel menghitung statistiknya langsung di browser, lalu AI menjelaskan hasilnya pakai bahasa sehari-hari.",
   ctaSample: "Coba dengan data contoh",
@@ -357,6 +360,9 @@ const EN: Dict = {
   cancel: "Cancel",
 
   heroTitle: "From table to story.",
+  heroLine1: "From table",
+  heroLine2: "to",
+  heroRotate: "story.,answers.,meaning.",
   heroLede:
     "Upload a CSV or Excel file. ceritabel computes the statistics right in your browser, then AI explains the results in plain language.",
   ctaSample: "Try it with sample data",
