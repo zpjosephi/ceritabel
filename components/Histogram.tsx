@@ -15,7 +15,7 @@ import { useAccentColors } from "./AccentPicker";
 
 export default function Histogram({ bins }: { bins: HistogramBin[] }) {
   const { t } = useLang();
-  const { accent, soft } = useAccentColors();
+  const { data: barFill, soft, grid, axis, fg, tooltipBg, border } = useAccentColors();
   if (bins.length === 0) {
     return <p className="text-sm text-muted">{t("noNumeric")}</p>;
   }
@@ -24,26 +24,26 @@ export default function Histogram({ bins }: { bins: HistogramBin[] }) {
   return (
     <ResponsiveContainer width="100%" height={180}>
       <BarChart data={data} margin={{ top: 5, right: 8, bottom: 0, left: -18 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#2a2a38" vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke={grid} vertical={false} />
         <XAxis
           dataKey="i"
           tick={false}
-          axisLine={{ stroke: "#2a2a38" }}
+          axisLine={{ stroke: grid }}
           tickLine={false}
         />
         <YAxis
           allowDecimals={false}
-          tick={{ fill: "#9a9aab", fontSize: 11 }}
-          axisLine={{ stroke: "#2a2a38" }}
+          tick={{ fill: axis, fontSize: 11 }}
+          axisLine={{ stroke: grid }}
           tickLine={false}
         />
         <Tooltip
           cursor={{ fill: soft }}
           contentStyle={{
-            background: "#1c1c27",
-            border: "1px solid #2a2a38",
+            background: tooltipBg,
+            border: `1px solid ${border}`,
             borderRadius: 8,
-            color: "#ededf2",
+            color: fg,
             fontSize: 12,
           }}
           labelFormatter={(_, payload) =>
@@ -51,7 +51,7 @@ export default function Histogram({ bins }: { bins: HistogramBin[] }) {
           }
           formatter={(value) => [value as number, t("count")]}
         />
-        <Bar dataKey="count" fill={accent} radius={[3, 3, 0, 0]} />
+        <Bar dataKey="count" fill={barFill} radius={[2, 2, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

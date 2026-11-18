@@ -32,7 +32,7 @@ export default function CleaningBar({
         <button
           onClick={onAuto}
           disabled={busy || recommendedCount === 0}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-accent-ink transition hover:bg-accent-strong disabled:opacity-40"
+          className="inline-flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-strong active:translate-y-px disabled:cursor-not-allowed disabled:opacity-40"
           title={
             recommendedCount === 0
               ? t("cbAutoNone")
@@ -51,7 +51,7 @@ export default function CleaningBar({
         <button
           onClick={onUndo}
           disabled={busy || applied === 0}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-muted transition hover:border-accent hover:text-foreground disabled:opacity-40"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-muted transition hover:border-border-strong hover:text-foreground disabled:opacity-40"
         >
           <ArrowCounterClockwise size={14} weight="bold" aria-hidden />
           {t("cbUndo")}
@@ -67,7 +67,7 @@ export default function CleaningBar({
         {applied > 0 ? (
           <button
             onClick={() => setOpen((v) => !v)}
-            className="ml-auto text-xs text-accent-strong hover:underline"
+            className="ml-auto rounded-sm text-xs text-muted-strong underline underline-offset-4 hover:text-foreground"
           >
             {open
               ? t("cbHideHistory", { n: applied })
@@ -82,7 +82,7 @@ export default function CleaningBar({
         <ol className="mt-3 space-y-1.5 border-t border-border pt-3">
           {changes.map((c, i) => (
             <li key={i} className="flex gap-2 text-xs text-muted">
-              <span className="tabular-nums text-accent-strong">{i + 1}.</span>
+              <span className="tabular-nums text-muted">{i + 1}.</span>
               <span>{formatChange(lang, c)}</span>
             </li>
           ))}

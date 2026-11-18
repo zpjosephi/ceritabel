@@ -3,22 +3,26 @@
 
 import type { ReactNode } from "react";
 
+/** The ceritabel bar-chart mark. */
+export function Mark({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" aria-hidden className={className}>
+      <rect x="1" y="9" width="3" height="6" rx="1" fill="currentColor" />
+      <rect x="6.5" y="5" width="3" height="10" rx="1" fill="currentColor" />
+      <rect x="12" y="2" width="3" height="13" rx="1" fill="currentColor" />
+    </svg>
+  );
+}
+
 export function Card({
   children,
   className = "",
-  hover = false,
 }: {
   children: ReactNode;
   className?: string;
-  /** Opt-in lift-on-hover for interactive / clickable cards. */
-  hover?: boolean;
 }) {
   return (
-    <div
-      className={`rounded-xl border border-border bg-surface p-5 shadow-[var(--shadow-sm)] ${
-        hover ? "card-lift" : ""
-      } ${className}`}
-    >
+    <div className={`rounded-lg border border-border bg-surface p-5 ${className}`}>
       {children}
     </div>
   );
@@ -32,18 +36,11 @@ export function SectionTitle({
   hint?: string;
 }) {
   return (
-    <div className="mb-3 flex items-baseline gap-2.5">
-      {/* Accent tick replaces the generic all-caps-muted label pattern. */}
-      <span
-        aria-hidden
-        className="mt-1 h-3.5 w-0.5 shrink-0 rounded-full bg-accent/70"
-      />
-      <div>
-        <h2 className="text-sm font-semibold tracking-tight text-foreground">
-          {children}
-        </h2>
-        {hint ? <p className="mt-0.5 text-xs text-muted">{hint}</p> : null}
-      </div>
+    <div className="mb-4">
+      <h2 className="font-serif text-xl font-semibold leading-tight text-foreground">
+        {children}
+      </h2>
+      {hint ? <p className="mt-1 text-sm text-muted">{hint}</p> : null}
     </div>
   );
 }
@@ -58,10 +55,10 @@ export function Stat({
   accent?: boolean;
 }) {
   return (
-    <div className="card-lift rounded-lg border border-border bg-surface-2 px-4 py-3 shadow-[var(--shadow-sm)]">
-      <div className="tele text-[11px] text-muted">{label}</div>
+    <div className="border-t border-border pt-3">
+      <div className="text-sm text-muted">{label}</div>
       <div
-        className={`tnum mt-1 text-2xl font-semibold tracking-tight ${
+        className={`tnum mt-1.5 font-mono text-[1.75rem] leading-none ${
           accent ? "text-accent-strong" : "text-foreground"
         }`}
       >
@@ -80,7 +77,7 @@ export function Badge({
 }) {
   const tones: Record<string, string> = {
     neutral: "bg-surface-2 text-muted-strong border-border",
-    accent: "bg-accent/15 text-accent-strong border-accent/30",
+    accent: "bg-surface-3 text-foreground border-border-strong",
     warn: "bg-warning/15 text-warning-strong border-warning/30",
     danger: "bg-negative/15 text-negative border-negative/30",
   };

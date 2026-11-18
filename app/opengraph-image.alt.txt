@@ -1,1 +1,1 @@
-Dari tabel ke cerita. ceritabel: a correct statistical EDA in your browser, with a histogram and correlation heatmap on a dark plotting grid, ceritabel.vercel.app
+ceritabel home page: the headline "Dari tabel ke cerita." next to a real regression table from the student sample data, with the significant p-values highlighted

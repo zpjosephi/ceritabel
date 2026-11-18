@@ -44,7 +44,7 @@ export default function ExportPanel({ opts }: { opts: CodegenOptions }) {
               key={x}
               onClick={() => setTab(x)}
               className={`rounded-md px-3 py-1 font-medium transition ${
-                tab === x ? "bg-accent text-accent-ink" : "text-muted hover:text-foreground"
+                tab === x ? "bg-surface-3 text-foreground shadow-[inset_0_0_0_1px_var(--border-strong)]" : "text-muted hover:text-foreground"
               }`}
             >
               {x === "python" ? "Python" : "R"}
@@ -54,20 +54,20 @@ export default function ExportPanel({ opts }: { opts: CodegenOptions }) {
         <div className="ml-auto flex gap-2">
           <button
             onClick={copy}
-            className="rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-foreground transition hover:border-accent"
+            className="rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-foreground transition hover:border-border-strong"
           >
             {copied ? t("exportCopied") : t("exportCopy")}
           </button>
           <button
             onClick={download}
-            className="rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-accent-ink transition hover:bg-accent-strong"
+            className="rounded-md border border-border-strong px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-muted active:translate-y-px disabled:cursor-not-allowed disabled:opacity-40"
           >
             {t("exportDownload")}
           </button>
         </div>
       </div>
 
-      <pre className="max-h-96 overflow-auto rounded-lg border border-border bg-background p-4 text-xs leading-relaxed text-foreground/90">
+      <pre className="max-h-96 overflow-auto rounded-md bg-background p-4 font-mono text-xs leading-relaxed text-foreground/90">
         <code>{code}</code>
       </pre>
     </Card>

@@ -19,11 +19,10 @@ export default function DatasetOverview({
     totalCells > 0 ? (totalMissing / totalCells) * 100 : 0;
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4">
       <Stat
         label={t("ovRows")}
         value={analysis.rowCount.toLocaleString(lang === "en" ? "en-US" : "id-ID")}
-        accent
       />
       <Stat label={t("ovCols")} value={analysis.columnCount} />
       <Stat

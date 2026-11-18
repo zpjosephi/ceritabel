@@ -1,13 +1,11 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import type { Icon } from "@phosphor-icons/react";
 import { useLang } from "./LanguageProvider";
 
 export interface SampleDataset {
   file: string; // public path
   name: string; // download/display name
-  Icon: Icon;
   labelKey: string;
   descKey: string;
 }
@@ -78,10 +76,10 @@ export default function FileUpload({
           if (disabled) return;
           handleFile(e.dataTransfer.files?.[0]);
         }}
-        className={`flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed px-6 py-14 text-center transition ${
+        className={`flex cursor-pointer items-start gap-4 rounded-lg border border-dashed px-6 py-10 transition-colors sm:px-8 sm:py-12 ${
           dragging
-            ? "border-accent bg-accent/10"
-            : "border-border bg-surface hover:border-accent/60 hover:bg-surface-2"
+            ? "border-accent bg-accent/[0.06]"
+            : "border-border-strong bg-surface hover:border-muted hover:bg-surface-2"
         } ${disabled ? "pointer-events-none opacity-60" : ""}`}
       >
         <input
@@ -92,13 +90,13 @@ export default function FileUpload({
           onChange={(e) => handleFile(e.target.files?.[0] ?? undefined)}
         />
         <svg
-          width="40"
-          height="40"
+          width="28"
+          height="28"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="1.5"
-          className="mb-3 text-accent"
+          className="mt-0.5 shrink-0 text-muted-strong"
           aria-hidden
         >
           <path
@@ -107,11 +105,13 @@ export default function FileUpload({
             d="M12 16V4m0 0L8 8m4-4l4 4M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2"
           />
         </svg>
-        <p className="text-base font-medium text-foreground">
-          {t("dropTitle")}
-        </p>
-        <p className="mt-1 text-sm text-muted">{t("dropOr")}</p>
-        <p className="mt-3 text-xs text-muted">{t("dropPrivacy")}</p>
+        <div>
+          <p className="text-lg font-medium text-foreground">
+            {t("dropTitle")}
+          </p>
+          <p className="mt-1 text-muted">{t("dropOr")}</p>
+          <p className="mt-4 text-sm text-muted">{t("dropPrivacy")}</p>
+        </div>
       </div>
 
       {localError ? (
@@ -119,34 +119,28 @@ export default function FileUpload({
       ) : null}
 
       {samples && samples.length > 0 && onSample ? (
-        <div className="mt-5">
-          <p className="mb-2.5 text-center text-xs uppercase tracking-wider text-muted">
+        <div className="mt-10">
+          <h2 className="font-serif text-xl font-semibold text-foreground">
             {t("sampleTitle")}
-          </p>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+          </h2>
+          <ul className="mt-3 divide-y divide-border border-y border-border">
             {samples.map((s) => (
-              <button
-                key={s.file}
-                type="button"
-                onClick={() => onSample(s)}
-                disabled={disabled}
-                className="group flex items-center gap-3 rounded-xl border border-border bg-surface p-3 text-left transition hover:border-accent hover:bg-surface-2 disabled:opacity-50 sm:flex-col sm:items-start sm:gap-1.5"
-              >
-                <span
-                  aria-hidden
-                  className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-accent/15 text-accent transition group-hover:bg-accent/25"
+              <li key={s.file}>
+                <button
+                  type="button"
+                  onClick={() => onSample(s)}
+                  disabled={disabled}
+                  className="group grid w-full gap-x-6 gap-y-1 py-3.5 text-left transition-colors hover:bg-surface disabled:opacity-50 sm:grid-cols-[14rem_1fr_auto] sm:items-baseline sm:px-2"
                 >
-                  <s.Icon size={18} weight="duotone" />
-                </span>
-                <span className="min-w-0">
-                  <span className="block truncate text-sm font-medium text-foreground">
-                    {t(s.labelKey)}
+                  <span className="font-medium text-foreground">{t(s.labelKey)}</span>
+                  <span className="text-sm text-muted">{t(s.descKey)}</span>
+                  <span className="hidden font-mono text-xs text-muted transition-colors group-hover:text-foreground sm:inline">
+                    {s.name}
                   </span>
-                  <span className="block text-xs text-muted">{t(s.descKey)}</span>
-                </span>
-              </button>
+                </button>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       ) : null}
     </div>

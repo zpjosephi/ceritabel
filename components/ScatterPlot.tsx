@@ -25,7 +25,7 @@ export default function ScatterPlot({
   numericFields: string[];
 }) {
   const { t } = useLang();
-  const { accent, strong } = useAccentColors();
+  const { data: dotFill, strong, grid, axis, fg, tooltipBg, border } = useAccentColors();
   const [xField, setXField] = useState(numericFields[0] ?? "");
   const [yField, setYField] = useState(numericFields[1] ?? numericFields[0] ?? "");
   const [showLine, setShowLine] = useState(true);
@@ -71,17 +71,17 @@ export default function ScatterPlot({
 
       <ResponsiveContainer width="100%" height={300}>
         <ScatterChart margin={{ top: 8, right: 16, bottom: 16, left: 0 }}>
-          <CartesianGrid stroke="#2a2a38" />
+          <CartesianGrid stroke={grid} />
           <XAxis
             type="number"
             dataKey="x"
             name={xField}
             domain={["dataMin", "dataMax"]}
             tickFormatter={(v: number) => fmtNum(v)}
-            tick={{ fill: "#9a9aab", fontSize: 11 }}
-            axisLine={{ stroke: "#2a2a38" }}
+            tick={{ fill: axis, fontSize: 11 }}
+            axisLine={{ stroke: grid }}
             tickLine={false}
-            label={{ value: xField, position: "insideBottom", offset: -8, fill: "#9a9aab", fontSize: 12 }}
+            label={{ value: xField, position: "insideBottom", offset: -8, fill: axis, fontSize: 12 }}
           />
           <YAxis
             type="number"
@@ -89,24 +89,24 @@ export default function ScatterPlot({
             name={yField}
             domain={["dataMin", "dataMax"]}
             tickFormatter={(v: number) => fmtNum(v)}
-            tick={{ fill: "#9a9aab", fontSize: 11 }}
-            axisLine={{ stroke: "#2a2a38" }}
+            tick={{ fill: axis, fontSize: 11 }}
+            axisLine={{ stroke: grid }}
             tickLine={false}
             width={56}
-            label={{ value: yField, angle: -90, position: "insideLeft", fill: "#9a9aab", fontSize: 12 }}
+            label={{ value: yField, angle: -90, position: "insideLeft", fill: axis, fontSize: 12 }}
           />
           <ZAxis range={[36, 36]} />
           <Tooltip
-            cursor={{ strokeDasharray: "3 3", stroke: accent }}
+            cursor={{ strokeDasharray: "3 3", stroke: axis }}
             contentStyle={{
-              background: "#1c1c27",
-              border: "1px solid #2a2a38",
+              background: tooltipBg,
+              border: `1px solid ${border}`,
               borderRadius: 8,
-              color: "#ededf2",
+              color: fg,
               fontSize: 12,
             }}
           />
-          <Scatter data={points} fill={accent} fillOpacity={0.6} />
+          <Scatter data={points} fill={dotFill} fillOpacity={0.7} />
           {showLine && regression ? (
             <ReferenceLine
               stroke={strong}
@@ -126,7 +126,7 @@ export default function ScatterPlot({
           <span className="font-mono text-foreground">
             ŷ = {fmtNum(regression.intercept)} + {fmtNum(regression.slope)}·x
           </span>{" "}
-          · R² = <span className="text-accent-strong">{fmtNum(regression.r2)}</span> · n ={" "}
+          · R² = <span className="text-foreground">{fmtNum(regression.r2)}</span> · n ={" "}
           {regression.n}
         </p>
       ) : (
@@ -153,7 +153,7 @@ function FieldSelect({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="rounded-lg border border-border bg-surface-2 px-2 py-1 text-foreground outline-none focus:border-accent"
+        className="rounded-lg border border-border bg-surface-2 px-2 py-1 text-foreground focus:border-muted"
       >
         {fields.map((f) => (
           <option key={f} value={f}>

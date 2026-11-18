@@ -3,7 +3,7 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 
 /**
- * Resolved accent colors for use in JS-driven contexts (Recharts fills, canvas,
+ * Resolved theme colors (accent plus the chart neutrals) for JS-driven contexts (Recharts fills, canvas,
  * inline SVG) that can't read CSS variables directly. Re-reads on every accent
  * switch so charts recolor in real time.
  */
@@ -12,15 +12,28 @@ export function useAccentColors() {
     accent: "#d62a23",
     strong: "#ff5d54",
     soft: "rgba(214,42,35,0.13)",
+    data: "#aeaca3",
+    grid: "#2e2e2b",
+    axis: "#9e9c94",
+    fg: "#ecebe6",
+    tooltipBg: "#222220",
+    border: "#3c3c38",
   });
   useEffect(() => {
     const read = () => {
       const s = getComputedStyle(document.documentElement);
+      const v = (name: string, fallback: string) =>
+        s.getPropertyValue(name).trim() || fallback;
       setC({
-        accent: s.getPropertyValue("--accent").trim() || "#d62a23",
-        strong: s.getPropertyValue("--accent-strong").trim() || "#ff5d54",
-        soft:
-          s.getPropertyValue("--accent-soft").trim() || "rgba(214,42,35,0.13)",
+        accent: v("--accent", "#d62a23"),
+        strong: v("--accent-strong", "#ff5d54"),
+        soft: v("--accent-soft", "rgba(214,42,35,0.13)"),
+        data: v("--data", "#aeaca3"),
+        grid: v("--chart-grid", "#2e2e2b"),
+        axis: v("--muted", "#9e9c94"),
+        fg: v("--foreground", "#ecebe6"),
+        tooltipBg: v("--tooltip-bg", "#222220"),
+        border: v("--border-strong", "#3c3c38"),
       });
     };
     read();
@@ -74,7 +87,13 @@ function getActiveAccent(): AccentId {
  * data-accent attribute + accentchange event) via useSyncExternalStore - no
  * effect, no cascading render, and SSR renders the default cleanly.
  */
-export default function AccentPicker({ className = "" }: { className?: string }) {
+export default function AccentPicker({
+  className = "",
+  label = "Warna aksen",
+}: {
+  className?: string;
+  label?: string;
+}) {
   const active = useSyncExternalStore(
     subscribeAccent,
     getActiveAccent,
@@ -84,8 +103,8 @@ export default function AccentPicker({ className = "" }: { className?: string })
   return (
     <div
       role="radiogroup"
-      aria-label="Warna aksen"
-      className={`flex items-center gap-1.5 rounded-lg border border-border bg-surface/60 px-2 py-1.5 backdrop-blur ${className}`}
+      aria-label={label}
+      className={`flex items-center gap-1 ${className}`}
     >
       {ACCENTS.map((a) => {
         const isActive = a.id === active;
@@ -97,7 +116,7 @@ export default function AccentPicker({ className = "" }: { className?: string })
             aria-label={a.label}
             title={a.label}
             onClick={() => setAccent(a.id)}
-            className="relative grid h-5 w-5 place-items-center rounded-full transition active:scale-90"
+            className="relative grid h-6 w-6 place-items-center rounded-full transition-transform active:scale-90"
           >
             <span
               className="h-3.5 w-3.5 rounded-full transition-transform"

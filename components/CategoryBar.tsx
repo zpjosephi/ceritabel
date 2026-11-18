@@ -19,7 +19,7 @@ export default function CategoryBar({
   summary: CategoricalSummary;
 }) {
   const { t } = useLang();
-  const { accent, soft } = useAccentColors();
+  const { data: barFill, soft, axis, fg, tooltipBg, border } = useAccentColors();
   const data = summary.topCategories.map((c) => ({
     name: c.value.length > 18 ? c.value.slice(0, 17) + "…" : c.value,
     full: c.value,
@@ -43,17 +43,17 @@ export default function CategoryBar({
           type="category"
           dataKey="name"
           width={96}
-          tick={{ fill: "#9a9aab", fontSize: 11 }}
+          tick={{ fill: axis, fontSize: 11 }}
           axisLine={false}
           tickLine={false}
         />
         <Tooltip
           cursor={{ fill: soft }}
           contentStyle={{
-            background: "#1c1c27",
-            border: "1px solid #2a2a38",
+            background: tooltipBg,
+            border: `1px solid ${border}`,
             borderRadius: 8,
-            color: "#ededf2",
+            color: fg,
             fontSize: 12,
           }}
           formatter={(value, _name, item) => [
@@ -63,7 +63,7 @@ export default function CategoryBar({
         />
         <Bar dataKey="count" radius={[0, 3, 3, 0]}>
           {data.map((_, i) => (
-            <Cell key={i} fill={accent} fillOpacity={1 - i * 0.13} />
+            <Cell key={i} fill={barFill} fillOpacity={Math.max(0.45, 1 - i * 0.1)} />
           ))}
         </Bar>
       </BarChart>

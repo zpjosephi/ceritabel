@@ -2,49 +2,52 @@
 
 import { LinkedinLogo, Envelope } from "@phosphor-icons/react";
 import { useLang } from "./LanguageProvider";
+import AccentPicker from "./AccentPicker";
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/joseph-irawan";
 const EMAIL = "josephirawan07@gmail.com";
+
+const linkClass =
+  "inline-flex items-center gap-1.5 rounded-sm text-muted-strong transition-colors hover:text-foreground";
 
 export default function Footer() {
   const { t } = useLang();
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto border-t border-border">
-      <div className="mx-auto max-w-3xl px-4 py-10 text-center sm:px-6">
-        {/* Thesis - the idea is the selling point, so it leads. */}
-        <p className="mx-auto max-w-md text-pretty text-sm leading-relaxed text-muted">
+    <footer className="gutter mt-auto grid gap-8 border-t border-border py-10 text-sm md:grid-cols-12">
+      <div className="md:col-span-6">
+        <p className="measure font-serif text-base leading-relaxed text-muted-strong text-pretty">
           {t("footerThesis")}
         </p>
-
-        {/* Contact */}
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm">
-          <a
-            href={LINKEDIN_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-muted-strong transition hover:text-accent-strong"
-          >
-            <LinkedinLogo size={16} weight="bold" aria-hidden />
-            LinkedIn
-          </a>
-          <a
-            href={`mailto:${EMAIL}`}
-            className="inline-flex items-center gap-1.5 text-muted-strong transition hover:text-accent-strong"
-          >
-            <Envelope size={16} weight="bold" aria-hidden />
-            Email
-          </a>
-        </div>
-
-        {/* Colophon + credit */}
-        <p className="mt-6 text-xs text-muted">{t("footerTech")}</p>
-        <p className="mt-1 text-xs text-muted">
+        <p className="mt-4 text-muted">
           {t("footerMadeBy")}{" "}
-          <span className="font-medium text-accent-strong">Joseph Irawan</span> ·
-          © {year}
+          <span className="text-foreground">Joseph Irawan</span>, {year}.{" "}
+          {t("footerTech")}
         </p>
+      </div>
+
+      <div className="flex flex-wrap items-start gap-x-6 gap-y-3 md:col-span-6 md:justify-end">
+        <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className={linkClass}>
+          <LinkedinLogo size={16} aria-hidden />
+          LinkedIn
+        </a>
+        <a href={`mailto:${EMAIL}`} className={linkClass}>
+          <Envelope size={16} aria-hidden />
+          Email
+        </a>
+        {/* the floating button is hidden on small screens, this is its stand-in */}
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new Event("open-feedback"))}
+          className={`${linkClass} md:hidden`}
+        >
+          {t("fbButton")}
+        </button>
+        <div className="flex items-center gap-2 text-muted">
+          <span>{t("accentLabel")}</span>
+          <AccentPicker label={t("accentLabel")} />
+        </div>
       </div>
     </footer>
   );

@@ -2,16 +2,6 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  Gauge,
-  ChartBar,
-  Flask,
-  Broom,
-  DownloadSimple,
-  Table,
-  ChartLine,
-  GridFour,
-} from "@phosphor-icons/react";
 import { CsvParseError } from "@/lib/csv";
 import { parseUpload, type SheetData } from "@/lib/upload";
 import { analyzeDataset, detectColumnKind, type FullAnalysis } from "@/lib/stats";
@@ -45,9 +35,8 @@ import CleaningBar from "@/components/CleaningBar";
 import CleanAdvisor from "@/components/CleanAdvisor";
 import Footer from "@/components/Footer";
 import LanguageToggle from "@/components/LanguageToggle";
-import AccentPicker from "@/components/AccentPicker";
 import { useLang } from "@/components/LanguageProvider";
-import { Card, SectionTitle } from "@/components/ui";
+import { Card, Mark, SectionTitle } from "@/components/ui";
 import { detectShape, type DataShape } from "@/lib/shape";
 import { findTimeColumn } from "@/lib/panel";
 import type { CodegenOptions } from "@/lib/codegen";
@@ -59,32 +48,29 @@ const SAMPLES: SampleDataset[] = [
   {
     file: "/sample-data.csv",
     name: "contoh-siswa.csv",
-    Icon: Table,
     labelKey: "sampleCross",
     descKey: "sampleCrossDesc",
   },
   {
     file: "/contoh-timeseries.csv",
     name: "contoh-timeseries.csv",
-    Icon: ChartLine,
     labelKey: "sampleTs",
     descKey: "sampleTsDesc",
   },
   {
     file: "/contoh-panel.csv",
     name: "contoh-panel.csv",
-    Icon: GridFour,
     labelKey: "samplePanel",
     descKey: "samplePanelDesc",
   },
 ];
 
 const RESULT_TABS = [
-  { id: "overview", Icon: Gauge, label: "tabOverview" },
-  { id: "charts", Icon: ChartBar, label: "tabCharts" },
-  { id: "tests", Icon: Flask, label: "tabTests" },
-  { id: "data", Icon: Broom, label: "tabData" },
-  { id: "export", Icon: DownloadSimple, label: "tabExport" },
+  { id: "overview", label: "tabOverview" },
+  { id: "charts", label: "tabCharts" },
+  { id: "tests", label: "tabTests" },
+  { id: "data", label: "tabData" },
+  { id: "export", label: "tabExport" },
 ] as const;
 type TabId = (typeof RESULT_TABS)[number]["id"];
 
@@ -362,41 +348,32 @@ export default function AnalyzePage() {
 
   return (
     <>
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6">
-        <header className="mb-8 flex items-center justify-between">
-          <Link
-            href="/"
-            className="group flex items-center gap-2.5 transition active:scale-[0.98]"
-          >
-            <span className="grid h-7 w-7 place-items-center rounded-lg bg-accent/15 text-accent transition group-hover:bg-accent/25">
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden>
-                <rect x="1" y="9" width="3" height="6" rx="1" fill="currentColor" />
-                <rect x="6.5" y="5" width="3" height="10" rx="1" fill="currentColor" />
-                <rect x="12" y="2" width="3" height="13" rx="1" fill="currentColor" />
-              </svg>
-            </span>
-            <span className="text-lg font-semibold tracking-tight">
-              cerita<span className="text-accent">bel</span>
-            </span>
-          </Link>
-          <div className="flex items-center gap-2">
-            {stage === "result" ? (
-              <button
-                onClick={reset}
-                className="rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-muted hover:border-accent hover:text-foreground"
-              >
-                {t("analyzeOther")}
-              </button>
-            ) : null}
-            <AccentPicker />
-            <LanguageToggle />
-          </div>
-        </header>
-
+      <header className="gutter flex min-h-16 flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-border py-3">
+        <Link href="/" className="flex items-center gap-2 rounded-sm text-foreground">
+          <Mark className="h-4 w-4 text-accent" />
+          <span className="text-[17px] font-semibold">ceritabel</span>
+        </Link>
+        <div className="flex items-center gap-5">
+          {stage === "result" ? (
+            <button
+              onClick={reset}
+              className="text-sm font-medium text-muted-strong underline-offset-4 transition-colors hover:text-foreground hover:underline"
+            >
+              {t("analyzeOther")}
+            </button>
+          ) : null}
+          <LanguageToggle />
+        </div>
+      </header>
+      <main className="gutter w-full flex-1 py-8 lg:py-10">
         {stage === "upload" ? (
-          <div className="mx-auto max-w-2xl py-10">
-            <h1 className="mb-2 text-2xl font-semibold">{t("uploadTitle")}</h1>
-            <p className="mb-6 text-muted">{t("uploadDesc")}</p>
+          <div className="max-w-3xl py-6 lg:py-10">
+            <h1 className="font-serif text-[clamp(2.25rem,4.5vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.012em]">
+              {t("uploadTitle")}
+            </h1>
+            <p className="measure mb-8 mt-4 text-pretty text-lg leading-relaxed text-muted-strong">
+              {t("uploadDesc")}
+            </p>
             <FileUpload
               onFile={handleFile}
               samples={SAMPLES}
@@ -409,17 +386,9 @@ export default function AnalyzePage() {
         ) : null}
 
         {stage === "analyzing" ? (
-          <div className="flex flex-col items-center justify-center py-32 text-center">
-            <div className="relative mb-5 h-12 w-12">
-              <div className="absolute inset-0 animate-ping rounded-full bg-accent/20" />
-              <div className="absolute inset-0 animate-spin rounded-full border-2 border-border border-t-accent" />
-              <div className="absolute inset-0 grid place-items-center text-accent">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-                  <rect x="1" y="9" width="3" height="6" rx="1" fill="currentColor" />
-                  <rect x="6.5" y="5" width="3" height="10" rx="1" fill="currentColor" />
-                  <rect x="12" y="2" width="3" height="13" rx="1" fill="currentColor" />
-                </svg>
-              </div>
+          <div className="py-24" role="status">
+            <div className="mb-5 h-1 w-48 overflow-hidden rounded-full bg-surface-3">
+              <div className="h-full w-1/3 animate-[loading-bar_1.1s_ease-in-out_infinite] rounded-full bg-accent" />
             </div>
             <p className="font-medium text-foreground">
               {t("analyzingFile", { file: fileName })}
@@ -429,8 +398,8 @@ export default function AnalyzePage() {
         ) : null}
 
         {stage === "sheets" && sheets ? (
-          <div className="mx-auto max-w-2xl py-10">
-            <h1 className="mb-1 text-2xl font-semibold">{t("sheetTitle")}</h1>
+          <div className="max-w-2xl py-6 lg:py-10">
+            <h1 className="mb-1 font-serif text-3xl font-semibold">{t("sheetTitle")}</h1>
             <p className="mb-6 text-muted">
               {t("sheetHint", { n: sheets.length })}
             </p>
@@ -439,7 +408,7 @@ export default function AnalyzePage() {
                 <li key={s.name}>
                   <button
                     onClick={() => pickSheet(s)}
-                    className="group flex w-full items-center justify-between rounded-xl border border-border bg-surface px-4 py-3 text-left transition hover:border-accent hover:bg-surface-2"
+                    className="group flex w-full items-center justify-between rounded-md border border-border bg-surface px-4 py-3 text-left transition-colors hover:border-muted hover:bg-surface-2"
                   >
                     <span className="font-medium text-foreground">{s.name}</span>
                     <span className="text-xs text-muted">
@@ -619,24 +588,29 @@ function Results({
   const hasNumeric2 = numericFields.length >= 2;
 
   return (
-    <div className="fade-up space-y-5">
+    <div className="animate-[fade-in_0.3s_ease-out] space-y-6">
       {/* Global scope controls (shape + variables) - they affect every tab,
           so they live above the tabs where they're always discoverable. */}
-      <div className="rounded-xl border border-border bg-surface p-4 shadow-[var(--shadow-sm)]">
-        <ShapeSelector
-          value={shape}
-          detected={detected.shape}
-          onChange={setShapeOverride}
-        />
+      <div>
+        <h1 className="break-words font-serif text-[clamp(1.9rem,3.2vw,2.6rem)] font-semibold leading-tight tracking-[-0.01em]">
+          {fileName}
+        </h1>
+        <div className="mt-4">
+          <ShapeSelector
+            value={shape}
+            detected={detected.shape}
+            onChange={setShapeOverride}
+          />
+        </div>
       </div>
 
       {baseColumns.length > 1 ? (
-        <div>
-          <div className="mb-1.5 flex flex-wrap items-center gap-x-2 px-1">
-            <span className="tele text-[11px] text-muted-strong">
+        <div className="border-y border-border py-4">
+          <div className="mb-2.5 flex flex-wrap items-baseline gap-x-3">
+            <span className="text-sm font-semibold text-foreground">
               {t("secVars")}
             </span>
-            <span className="text-xs text-muted">{t("secVarsHint")}</span>
+            <span className="text-sm text-muted">{t("secVarsHint")}</span>
           </div>
           <ColumnSelector
             columns={baseColumns}
@@ -647,15 +621,14 @@ function Results({
         </div>
       ) : null}
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_380px]">
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,26rem)] lg:gap-12">
         {/* LEFT: tabbed content (progressive disclosure - one group at a time) */}
         <div className="min-w-0">
           <div
             role="tablist"
-            className="mb-6 flex gap-1 overflow-x-auto rounded-xl border border-border bg-surface/60 p-1 shadow-[var(--shadow-sm)] backdrop-blur"
+            className="mb-8 flex gap-6 overflow-x-auto border-b border-border"
           >
             {RESULT_TABS.map((tb) => {
-              const TabIcon = tb.Icon;
               const active = tab === tb.id;
               return (
                 <button
@@ -663,24 +636,19 @@ function Results({
                   role="tab"
                   aria-selected={active}
                   onClick={() => setTab(tb.id)}
-                  className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition duration-200 active:scale-[0.97] ${
+                  className={`-mb-px flex shrink-0 items-center border-b-2 px-0.5 pb-3 pt-1 text-[0.95rem] font-medium transition-colors ${
                     active
-                      ? "bg-accent/15 text-accent-strong shadow-[inset_0_0_0_1px_var(--accent-soft)]"
-                      : "text-muted hover:bg-surface-2 hover:text-foreground"
+                      ? "border-accent text-foreground"
+                      : "border-transparent text-muted hover:border-border-strong hover:text-foreground"
                   }`}
                 >
-                  <TabIcon
-                    aria-hidden
-                    size={15}
-                    weight={active ? "fill" : "regular"}
-                  />
                   {t(tb.label)}
                 </button>
               );
             })}
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-12">
             {/* ---------- Overview ---------- */}
             {tab === "overview" ? (
               <>
@@ -861,7 +829,7 @@ function Results({
         </div>
 
         {/* RIGHT: AI panel - persistent across tabs so there's always context. */}
-        <div className="space-y-6 lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:self-start lg:overflow-y-auto lg:pr-1">
+        <div className="space-y-8 lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:self-start lg:overflow-y-auto lg:pr-1">
           <AIInsightPanel
             insight={insight}
             loading={aiLoading}

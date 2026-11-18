@@ -28,7 +28,7 @@ export default function TimeSeriesAnalysis({
   analysis: FullAnalysis;
   timeCol: string;
 }) {
-  const { accent: ACCENT, strong: ACCENT_STRONG } = useAccentColors();
+  const { data: SERIES, strong: ACCENT_STRONG, grid, axis, fg, tooltipBg, border } = useAccentColors();
   const { t } = useLang();
   const numericCols = analysis.numericStats
     .map((s) => s.name)
@@ -57,7 +57,7 @@ export default function TimeSeriesAnalysis({
           <select
             value={valueCol}
             onChange={(e) => setValueCol(e.target.value)}
-            className="rounded-lg border border-border bg-surface-2 px-2 py-1 text-foreground outline-none focus:border-accent"
+            className="rounded-lg border border-border bg-surface-2 px-2 py-1 text-foreground focus:border-muted"
           >
             {numericCols.map((c) => (
               <option key={c} value={c}>
@@ -96,26 +96,26 @@ export default function TimeSeriesAnalysis({
               data={result.points}
               margin={{ top: 5, right: 12, bottom: 0, left: -10 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#2a2a38" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke={grid} vertical={false} />
               <XAxis
                 dataKey="label"
-                tick={{ fill: "#9a9aab", fontSize: 10 }}
-                axisLine={{ stroke: "#2a2a38" }}
+                tick={{ fill: axis, fontSize: 10 }}
+                axisLine={{ stroke: grid }}
                 tickLine={false}
                 minTickGap={24}
               />
               <YAxis
-                tick={{ fill: "#9a9aab", fontSize: 11 }}
-                axisLine={{ stroke: "#2a2a38" }}
+                tick={{ fill: axis, fontSize: 11 }}
+                axisLine={{ stroke: grid }}
                 tickLine={false}
                 width={48}
               />
               <Tooltip
                 contentStyle={{
-                  background: "#1c1c27",
-                  border: "1px solid #2a2a38",
+                  background: tooltipBg,
+                  border: `1px solid ${border}`,
                   borderRadius: 8,
-                  color: "#ededf2",
+                  color: fg,
                   fontSize: 12,
                 }}
               />
@@ -123,7 +123,7 @@ export default function TimeSeriesAnalysis({
                 type="monotone"
                 dataKey="value"
                 name={t("tsValueLabel")}
-                stroke={ACCENT}
+                stroke={SERIES}
                 strokeWidth={2}
                 dot={false}
               />
@@ -178,7 +178,7 @@ function Metric({
   return (
     <div>
       <div className="text-xs text-muted">{label}</div>
-      <div className={`tabular-nums ${accent ? "font-semibold text-accent" : "text-foreground"}`}>
+      <div className={`tabular-nums ${accent ? "font-semibold text-foreground" : "text-foreground/85"}`}>
         {value}
       </div>
     </div>

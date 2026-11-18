@@ -19,7 +19,7 @@ export default function ModelPicker({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
-        className="max-w-[10rem] truncate rounded-md border border-accent/30 bg-surface-2 px-2 py-1 text-xs font-medium text-accent-strong outline-none transition focus:border-accent disabled:opacity-50"
+        className="max-w-[11rem] truncate rounded-md border border-border bg-surface px-2 py-1 text-sm text-muted-strong transition-colors hover:border-border-strong disabled:opacity-50"
       >
         {MODELS.map((m) => (
           <option key={m.id} value={m.id} className="bg-surface text-foreground">

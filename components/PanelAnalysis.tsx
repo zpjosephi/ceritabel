@@ -69,7 +69,7 @@ export default function PanelAnalysis({
 
       {result.decomposition.length > 0 ? (
         <div>
-          <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-accent-strong">
+          <h4 className="mb-2 text-sm font-semibold text-foreground">
             {t("panelDecomp")}
           </h4>
           <div className="space-y-2">
@@ -86,7 +86,7 @@ export default function PanelAnalysis({
               return (
                 <div
                   key={d.column}
-                  className="grid grid-cols-[1fr_auto] items-center gap-3 rounded-lg border border-transparent bg-surface-2/40 px-3 py-2 transition hover:border-accent/40"
+                  className="grid grid-cols-[1fr_auto] items-center gap-3 rounded-lg border border-transparent bg-surface-2/40 px-3 py-2 transition hover:border-border-strong"
                 >
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
@@ -98,12 +98,12 @@ export default function PanelAnalysis({
                     {/* stacked bar: between vs within share */}
                     <div className="mt-1.5 flex h-2 w-full overflow-hidden rounded-full bg-surface">
                       <div
-                        className="bg-accent"
+                        className="bg-data"
                         style={{ width: `${(d.betweenSd / maxSd) * 50}%` }}
                         title={`between SD ${fmtNum(d.betweenSd)}`}
                       />
                       <div
-                        className="bg-accent/40"
+                        className="bg-data/35"
                         style={{ width: `${(d.withinSd / maxSd) * 50}%` }}
                         title={`within SD ${fmtNum(d.withinSd)}`}
                       />
@@ -141,7 +141,7 @@ function ColSelect({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="rounded-lg border border-border bg-surface-2 px-2 py-1 text-foreground outline-none focus:border-accent"
+        className="rounded-lg border border-border bg-surface-2 px-2 py-1 text-foreground focus:border-muted"
       >
         {cols.map((c) => (
           <option key={c} value={c}>

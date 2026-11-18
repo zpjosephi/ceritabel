@@ -1,26 +1,27 @@
 @import "tailwindcss";
 
 /*
-  ceritabel - dark "data storytelling" theme, single violet accent.
-  Dark mode is the DEFAULT (no prefers-color-scheme toggle); the whole app
-  is designed around a dark data-dashboard aesthetic.
-
-  Token names and @theme mappings are stable - components depend on them.
-  This file refines *values* and layers in depth (tinted shadows, grain,
-  mesh glow, motion) without renaming anything.
+  ceritabel theme. Dark by default, neutral greys with a faint warm cast, one
+  themeable accent. Type is Source Serif 4 for headings and narrative text,
+  Atkinson Hyperlegible Next for interface text, Atkinson Hyperlegible Mono
+  for numbers, because a stats tool lives or dies on numbers you can't misread.
 */
 
 :root {
-  --background: #08080d;       /* deep tinted near-black canvas */
-  --surface: #111119;          /* cards / panels */
-  --surface-2: #181822;        /* nested surfaces, table headers */
-  --surface-3: #20202c;        /* hover / raised nested */
-  --border: #26262f;           /* hairline borders */
-  --border-strong: #34343f;    /* emphasized / hover borders */
-  --chart-grid: #2a2a38;       /* gridlines / axis strokes inside charts */
-  --foreground: #f0f0f5;       /* primary text */
-  --muted: #9a9aab;            /* secondary text */
-  --muted-strong: #b8b8c6;     /* labels that need a touch more presence */
+  --background: #0f0f0e;
+  --surface: #161615;
+  --surface-2: #1d1d1b;
+  --surface-3: #252522;
+  --border: #2b2b28;
+  --border-strong: #3c3c38;
+  --chart-grid: #2e2e2b;
+  --foreground: #ecebe6;
+  --muted: #9e9c94;
+  --muted-strong: #c3c1b8;
+  /* neutral ink for chart marks, so the accent stays free for selection and
+     emphasis instead of painting every bar red */
+  --data: #aeaca3;
+  --tooltip-bg: #222220;
 
   /* --- Accent (themeable) ---------------------------------------------
      The accent is swappable at runtime via html[data-accent="…"] blocks
@@ -46,15 +47,11 @@
   --warning-strong: #fcd34d;
   --warning-soft: rgba(251, 191, 36, 0.15);
 
-  /* Tinted shadows - carry the canvas hue + a faint violet cast, never pure
-     black. This is the single biggest "premium" tell on dark surfaces. */
-  --shadow-sm: 0 1px 2px rgba(4, 4, 10, 0.6);
+  --shadow-sm: 0 1px 2px rgba(6, 6, 5, 0.6);
   --shadow-md:
-    0 4px 12px -2px rgba(4, 4, 10, 0.55),
-    0 2px 6px -2px rgba(4, 4, 10, 0.5);
-  --shadow-lg:
-    0 24px 50px -12px rgba(4, 4, 10, 0.75),
-    0 8px 20px -8px var(--accent-glow);
+    0 4px 12px -2px rgba(6, 6, 5, 0.55),
+    0 2px 6px -2px rgba(6, 6, 5, 0.5);
+  --shadow-lg: 0 24px 50px -12px rgba(6, 6, 5, 0.75);
 
   /* z-index scale - no more arbitrary 9999s */
   --z-base: 1;
@@ -140,8 +137,10 @@ html[data-accent="hazard"] {
   --color-warning: var(--warning);
   --color-warning-strong: var(--warning-strong);
   --color-chart-grid: var(--chart-grid);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-data: var(--data);
+  --font-sans: var(--font-atkinson);
+  --font-serif: var(--font-source-serif);
+  --font-mono: var(--font-atkinson-mono);
 }
 
 html {
@@ -192,79 +191,23 @@ body::before {
   border-radius: 4px;
 }
 
-@keyframes pop {
-  0% {
-    transform: scale(0.6);
-    opacity: 0;
-  }
-  60% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
 /* Staggered entry - content lifts in instead of mounting all at once. */
-@keyframes fade-up {
+@keyframes fade-in {
   from {
     opacity: 0;
-    transform: translateY(12px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
-.fade-up {
-  animation: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-/* Scroll-driven reveal - native (no JS), and SAFE: content is visible by
-   default, so browsers without animation-timeline (or reduced-motion users)
-   simply see static content. Only enhanced where supported. */
-.reveal {
-  opacity: 1;
-}
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .reveal {
-      animation: fade-up linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 38%;
-    }
-  }
-}
-
-/* Apply with inline style="--d: 60ms" to cascade a group. */
-.fade-up-stagger > * {
-  animation: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: calc(var(--i, 0) * 70ms);
-}
-
-/* Rotating headline word - restrained slide+fade swap (motion conveys state,
-   not decoration). inline-grid keeps it on the text baseline; the global
-   reduced-motion rule below neutralizes the entry to a static word. */
-@keyframes rotate-in {
+@keyframes loading-bar {
   from {
-    opacity: 0;
-    transform: translateY(0.5em);
+    transform: translateX(-100%);
   }
   to {
-    opacity: 1;
-    transform: translateY(0);
+    transform: translateX(300%);
   }
-}
-.rotating {
-  display: inline-grid;
-  vertical-align: baseline;
-}
-.rotating-word {
-  grid-area: 1 / 1;
-  white-space: nowrap;
-  animation: rotate-in 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -280,83 +223,19 @@ body::before {
   }
 }
 
-/* Technical graph-paper grid - an intentional, data-native backdrop (plotting
-   space) rather than the ambient AI blur-glow. Hairlines fade out via a radial
-   mask, concentrated top-right behind the chart preview, clear behind the text
-   on the left so copy stays readable. */
-.tech-grid {
-  background-image:
-    linear-gradient(
-      to right,
-      color-mix(in srgb, var(--border) 55%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--border) 55%, transparent) 1px,
-      transparent 1px
-    );
-  background-size: 54px 54px;
-  -webkit-mask-image: radial-gradient(
-    125% 115% at 90% -12%,
-    #000 20%,
-    transparent 68%
-  );
-  mask-image: radial-gradient(125% 115% at 90% -12%, #000 20%, transparent 68%);
+/* Page edge. Content runs full width with a fluid margin instead of sitting
+   in a centered box; only running text gets a measure (see .measure). */
+.gutter {
+  padding-inline: clamp(1.25rem, 5vw, 5rem);
+}
+.measure {
+  max-width: 62ch;
 }
 
 /* Tabular figures for any numeric run that opts in. */
 .tnum {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
-}
-
-/* Telemetry / instrument label - mono, uppercase, tracked. A borrowed signature
-   from the portfolio's aviation-datasheet aesthetic. For data-field labels and
-   readouts (Stat labels, scope controls), NOT as a per-section eyebrow. */
-.tele {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
-
-/* Reusable card-lift hover - subtle translate + tinted shadow + brighter
-   hairline. Used by the shared <Card> primitive and bespoke panels. */
-.card-lift {
-  transition:
-    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background-color 0.2s ease;
-}
-.card-lift:hover {
-  transform: translateY(-2px);
-  border-color: var(--border-strong);
-  box-shadow: var(--shadow-md);
-}
-
-/* Spotlight-edge hairline used for the AI / hero feature surfaces. */
-.edge-glow {
-  position: relative;
-}
-.edge-glow::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(
-    160deg,
-    color-mix(in srgb, var(--accent-strong) 40%, transparent),
-    color-mix(in srgb, var(--accent) 6%, transparent) 40%,
-    transparent 70%
-  );
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
 }
 
 /* Thin custom scrollbar to match the dashboard feel */

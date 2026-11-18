@@ -1,14 +1,13 @@
 "use client";
 
 import type { ColumnKind } from "@/lib/types";
-import { Card } from "./ui";
 import { useLang } from "./LanguageProvider";
 
 const KIND_DOT: Record<ColumnKind, string> = {
-  numeric: "bg-accent",
+  numeric: "bg-data",
   categorical: "bg-muted",
-  datetime: "bg-sky-400",
-  boolean: "bg-positive",
+  datetime: "ring-1 ring-inset ring-data",
+  boolean: "ring-1 ring-inset ring-muted",
 };
 
 export default function ColumnSelector({
@@ -26,15 +25,15 @@ export default function ColumnSelector({
   const used = columns.length - excluded.size;
 
   return (
-    <Card className="!p-4">
+    <div>
       <div className="mb-3 flex items-center gap-2">
-        <span className="text-xs text-muted">
+        <span className="text-sm text-muted">
           {t("varsUsed", { used, total: columns.length })}
         </span>
         {excluded.size > 0 ? (
           <button
             onClick={onUseAll}
-            className="ml-auto text-xs text-accent-strong hover:underline"
+            className="ml-auto rounded-sm text-sm text-muted-strong underline underline-offset-4 hover:text-foreground"
           >
             {t("varsUseAll")}
           </button>
@@ -49,21 +48,21 @@ export default function ColumnSelector({
               key={c.name}
               onClick={() => onToggle(c.name)}
               aria-pressed={!off}
-              className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs transition ${
+              className={`inline-flex items-center gap-2 rounded-md border px-2.5 py-1 font-mono text-[0.8rem] transition-colors ${
                 off
-                  ? "border-border bg-surface text-muted line-through opacity-60 hover:opacity-90"
-                  : "border-accent/40 bg-accent/10 text-foreground hover:border-accent"
+                  ? "border-border text-muted line-through hover:border-border-strong hover:text-muted-strong"
+                  : "border-border-strong bg-surface-2 text-foreground hover:border-muted"
               }`}
               title={c.kind}
             >
               <span
-                className={`h-1.5 w-1.5 rounded-full ${off ? "bg-border" : KIND_DOT[c.kind]}`}
+                className={`h-2 w-2 rounded-full ${off ? "bg-border" : KIND_DOT[c.kind]}`}
               />
               {c.name}
             </button>
           );
         })}
       </div>
-    </Card>
+    </div>
   );
 }

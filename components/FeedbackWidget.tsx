@@ -36,6 +36,14 @@ export default function FeedbackWidget() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
 
+  // the footer has a plain "Feedback" link for small screens, where a floating
+  // button would sit on top of the content
+  useEffect(() => {
+    const show = () => setOpen(true);
+    window.addEventListener("open-feedback", show);
+    return () => window.removeEventListener("open-feedback", show);
+  }, []);
+
   // auto-close shortly after a successful send
   useEffect(() => {
     if (status !== "done") return;
@@ -90,9 +98,9 @@ export default function FeedbackWidget() {
   return (
     <div className="fixed bottom-5 right-5 z-50 print:hidden">
       {open ? (
-        <div className="w-[min(21rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-accent/30 bg-surface/95 shadow-2xl shadow-black/50 backdrop-blur-xl">
+        <div className="w-[min(21rem,calc(100vw-2rem))] overflow-hidden rounded-lg border border-border-strong bg-surface shadow-[var(--shadow-lg)]">
           {/* header - flat accent-tinted surface, hairline underline */}
-          <div className="relative border-b border-border/70 bg-accent/[0.06] px-4 pb-3 pt-3.5">
+          <div className="relative border-b border-border px-4 pb-3 pt-3.5">
             <div className="flex items-center gap-2">
               <h2 className="text-sm font-semibold text-foreground">
                 {t("fbTitle")}
@@ -111,7 +119,7 @@ export default function FeedbackWidget() {
           <div className="px-4 pb-4 pt-1">
             {status === "done" ? (
               <div className="flex flex-col items-center gap-2 py-6">
-                <div className="grid h-12 w-12 animate-[pop_0.3s_ease-out] place-items-center rounded-full bg-accent/20 text-accent-strong">
+                <div className="grid h-12 w-12 animate-[fade-in_0.25s_ease-out] place-items-center rounded-full bg-accent/20 text-accent-strong">
                   <Check size={24} weight="bold" aria-hidden />
                 </div>
                 <p className="text-sm font-medium text-foreground">
@@ -136,7 +144,7 @@ export default function FeedbackWidget() {
                         onClick={() => setMood(selected ? null : value)}
                         aria-label={t(labelKey)}
                         title={t(labelKey)}
-                        className={`grid h-10 flex-1 place-items-center rounded-xl border transition ${
+                        className={`grid h-10 flex-1 place-items-center rounded-lg border transition ${
                           selected
                             ? "scale-105 border-accent bg-accent/15 text-accent-strong"
                             : "border-border bg-surface-2 text-muted hover:text-foreground"
@@ -180,13 +188,13 @@ export default function FeedbackWidget() {
                   rows={4}
                   maxLength={1500}
                   autoFocus
-                  className="w-full resize-none rounded-xl border border-border bg-surface-2 px-3 py-2.5 text-sm text-foreground outline-none transition focus:border-accent"
+                  className="w-full resize-none rounded-lg border border-border bg-surface-2 px-3 py-2.5 text-sm text-foreground transition focus:border-muted"
                 />
                 <input
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t("fbEmail")}
-                  className="mt-2 w-full rounded-xl border border-border bg-surface-2 px-3 py-2 text-sm text-foreground outline-none transition focus:border-accent"
+                  className="mt-2 w-full rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm text-foreground transition focus:border-muted"
                 />
                 {error ? (
                   <p className="mt-2 text-xs text-negative">{error}</p>
@@ -194,7 +202,7 @@ export default function FeedbackWidget() {
                 <button
                   onClick={send}
                   disabled={status === "sending"}
-                  className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-accent px-3 py-2.5 text-sm font-semibold text-accent-ink shadow-[0_8px_24px_-6px_var(--accent-glow)] transition duration-200 hover:bg-accent-strong active:scale-[0.99] disabled:opacity-60"
+                  className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-lg bg-accent px-3 py-2.5 text-sm font-semibold text-accent-ink shadow-[0_8px_24px_-6px_var(--accent-glow)] transition duration-200 hover:bg-accent-strong active:scale-[0.99] disabled:opacity-60"
                 >
                   {status === "sending" ? (
                     t("fbSending")
@@ -212,14 +220,9 @@ export default function FeedbackWidget() {
       ) : (
         <button
           onClick={() => setOpen(true)}
-          className="group flex items-center gap-2 rounded-full border border-accent/50 bg-surface-2/95 py-2 pl-2 pr-4 text-sm font-medium text-foreground shadow-[0_10px_30px_-8px_var(--accent-glow)] backdrop-blur transition duration-200 hover:-translate-y-0.5 hover:border-accent active:scale-[0.98]"
+          className="hidden items-center gap-2 rounded-md border border-border-strong bg-surface px-3 py-2 text-sm font-medium text-muted-strong shadow-[var(--shadow-md)] transition-colors hover:border-muted hover:text-foreground active:translate-y-px md:flex"
         >
-          <span
-            aria-hidden
-            className="grid h-8 w-8 place-items-center rounded-full bg-accent text-accent-ink transition group-hover:bg-accent-strong"
-          >
-            <ChatCircleDots size={17} weight="fill" />
-          </span>
+          <ChatCircleDots size={16} aria-hidden />
           {t("fbButton")}
         </button>
       )}

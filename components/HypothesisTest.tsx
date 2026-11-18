@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Sparkle } from "@phosphor-icons/react";
 import {
   runHypothesisTest,
   type ColType,
@@ -78,7 +77,7 @@ function FieldSelect({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="rounded-lg border border-border bg-surface-2 px-2 py-1 text-foreground outline-none focus:border-accent"
+        className="rounded-lg border border-border bg-surface-2 px-2 py-1 text-foreground focus:border-muted"
       >
         {columns.map((c) => (
           <option key={c.name} value={c.name}>
@@ -197,13 +196,12 @@ function ResultView({
           <button
             onClick={explain}
             disabled={explaining}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-accent/40 bg-accent/10 px-3 py-1.5 text-sm font-medium text-accent-strong transition hover:bg-accent/20 disabled:opacity-50"
+            className="rounded-md border border-border-strong px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-muted active:translate-y-px disabled:cursor-not-allowed disabled:opacity-40"
           >
-            <Sparkle weight="fill" size={15} aria-hidden />
             {explaining ? t("hypoExplaining") : t("hypoExplain")}
           </button>
         ) : (
-          <p className="rounded-lg border border-accent/20 bg-accent/[0.06] px-3.5 py-3 text-sm leading-relaxed text-foreground/90">
+          <p className="text-pretty font-serif text-[1.02rem] leading-relaxed text-foreground/90">
             {explanation}
           </p>
         )}
@@ -265,7 +263,7 @@ function Metric({
   return (
     <div>
       <div className="text-xs text-muted">{label}</div>
-      <div className={`tabular-nums ${accent ? "font-semibold text-accent" : "text-foreground"}`}>
+      <div className={`tabular-nums ${accent ? "font-semibold text-foreground" : "text-foreground/85"}`}>
         {value}
       </div>
     </div>

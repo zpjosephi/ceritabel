@@ -37,7 +37,7 @@ export default function DataPreview({
         </span>
         <button
           onClick={download}
-          className="ml-auto rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-accent-ink transition hover:bg-accent-strong"
+          className="ml-auto rounded-md border border-border-strong px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-muted active:translate-y-px disabled:cursor-not-allowed disabled:opacity-40"
         >
           {t("downloadCsv")}
         </button>

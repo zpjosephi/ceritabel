@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ChatCircleDots } from "@phosphor-icons/react";
 import type { StatsSummary } from "@/lib/types";
 import { useLang } from "./LanguageProvider";
 
@@ -51,16 +50,10 @@ export default function ChatPanel({
   }
 
   return (
-    <div className="rounded-xl border border-border bg-surface p-5">
-      <div className="mb-3 flex items-center gap-2">
-        <ChatCircleDots
-          aria-hidden
-          weight="duotone"
-          className="text-accent-strong"
-          size={18}
-        />
-        <h2 className="font-semibold text-foreground">{t("chatTitle")}</h2>
-      </div>
+    <section className="border-t border-border pt-4">
+      <h2 className="mb-3 font-serif text-xl font-semibold text-foreground">
+        {t("chatTitle")}
+      </h2>
 
       <div
         ref={listRef}
@@ -75,17 +68,17 @@ export default function ChatPanel({
         {messages.map((m, i) => (
           <div
             key={i}
-            className={`max-w-[90%] rounded-lg px-3 py-2 text-sm transition-all duration-150 ${
+            className={`max-w-[90%] rounded-md px-3 py-2 text-sm leading-relaxed ${
               m.role === "user"
-                ? "ml-auto bg-accent/20 text-foreground"
-                : "border border-transparent bg-surface-2 text-foreground/90 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/10"
+                ? "ml-auto bg-surface-3 text-foreground"
+                : "bg-surface text-foreground/90"
             }`}
           >
             {m.text}
           </div>
         ))}
         {loading ? (
-          <div className="bg-surface-2 max-w-[90%] rounded-lg px-3 py-2 text-sm text-muted">
+          <div className="max-w-[90%] rounded-md bg-surface px-3 py-2 text-sm text-muted">
             {t("chatTyping")}
           </div>
         ) : null}
@@ -99,16 +92,17 @@ export default function ChatPanel({
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && send()}
           placeholder={t("chatPlaceholder")}
-          className="flex-1 rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm text-foreground outline-none focus:border-accent"
+          aria-label={t("chatPlaceholder")}
+          className="min-w-0 flex-1 rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-muted focus-visible:outline-offset-0"
         />
         <button
           onClick={send}
           disabled={loading || !input.trim()}
-          className="rounded-lg bg-accent px-3 py-2 text-sm font-medium text-accent-ink hover:bg-accent-strong disabled:opacity-50"
+          className="rounded-md border border-border-strong px-3 py-2 text-sm font-medium text-foreground transition-colors hover:border-muted active:translate-y-px disabled:cursor-not-allowed disabled:opacity-40"
         >
           {t("chatSend")}
         </button>
       </div>
-    </div>
+    </section>
   );
 }

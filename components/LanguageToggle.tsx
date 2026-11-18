@@ -7,7 +7,7 @@ export default function LanguageToggle() {
   const { lang, setLang } = useLang();
   return (
     <div
-      className="inline-flex rounded-lg border border-border bg-surface p-0.5 text-xs"
+      className="inline-flex items-center gap-1 text-sm"
       role="group"
       aria-label="Bahasa / Language"
     >
@@ -16,9 +16,9 @@ export default function LanguageToggle() {
           key={l}
           onClick={() => setLang(l)}
           aria-pressed={lang === l}
-          className={`rounded-md px-2 py-1 font-semibold uppercase transition ${
+          className={`rounded-sm px-1.5 py-1 font-medium uppercase transition-colors ${
             lang === l
-              ? "bg-accent text-accent-ink"
+              ? "text-foreground underline decoration-accent decoration-2 underline-offset-[6px]"
               : "text-muted hover:text-foreground"
           }`}
         >
