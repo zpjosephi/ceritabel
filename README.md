@@ -7,17 +7,17 @@ EDA (exploratory data analysis) **in your browser**, then an AI explains the
 findings in plain language and suggests follow-up analyses.
 
 The key idea: **all numbers are computed in code (TypeScript), never by the
-LLM.** The AI only *interprets* numbers the code already calculated — so it
+LLM.** The AI only *interprets* numbers the code already calculated, so it
 never invents figures.
 
 ---
 
 ## Features
 
-- **Drag & drop CSV upload** — parsed in-browser with PapaParse.
+- **Drag & drop CSV upload**: parsed in-browser with PapaParse.
 - **Auto-EDA**, computed in code:
   - Per-column summary: type detection (numeric / categorical), count, missing
-    values, and — for numeric — mean, median, **sample std (n−1)**, min, max,
+    values, and for numeric columns the mean, median, **sample std (n−1)**, min, max,
     Q1/Q3, skewness, outlier count.
   - **Pearson correlation matrix** (pairwise-complete, with guards).
   - **IQR outlier detection** (1.5× fence).
@@ -26,12 +26,12 @@ never invents figures.
   - Histogram (Sturges binning) per numeric column, bar chart per categorical.
   - Correlation **heatmap** (custom CSS grid, diverging color scale).
   - **Scatter plot** with optional regression line.
-- **AI Insight (Google Gemini)** — receives only the computed `StatsSummary`
+- **AI explanation (Google Gemini)**: receives only the computed `StatsSummary`
   (JSON), returns a plain-language story, notable findings, and exactly 3
   follow-up suggestions.
-- **Chat** — ask questions about your data; answers are grounded in the same
+- **Chat**: ask questions about your data; answers are grounded in the same
   computed summary.
-- **Privacy first** — files are processed in memory and never stored; only the
+- **Privacy first**: files are processed in memory and never stored; only the
   statistics summary (never raw rows) is sent to the server.
 
 ---
@@ -150,4 +150,4 @@ lib/
 
 ---
 
-Portfolio project — Computer Science × Statistics.
+Portfolio project, Computer Science × Statistics.
